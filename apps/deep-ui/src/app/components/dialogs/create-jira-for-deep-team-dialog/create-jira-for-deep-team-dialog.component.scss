@@ -1,0 +1,15 @@
+.group-icon {
+  font-size: 5.75rem;
+  height: 5.75rem;
+  width: 5.75rem;
+  --mat-icon-color: var(--sys-seconday);
+}
+
+table {
+  border-spacing: 1rem;
+}
+:host ::ng-deep {
+  display: block;
+  height: 100%;
+  width: 100%;
+}

@@ -1,0 +1,15 @@
+.mest-form-container {
+  me-drag-drop-list {
+    .drag-drop-list-container-scrollable-content {
+      max-height: 7.813rem;
+    }
+  }
+  .valid-root-path {
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+      border-color: var(--sys-primary);
+      border-width: 2px;
+    }
+  }
+}

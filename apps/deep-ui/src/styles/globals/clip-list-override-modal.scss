@@ -1,0 +1,8 @@
+.dialog-clip-list-override {
+  .mat-mdc-dialog-container {
+    ol {
+      overflow-y: auto;
+      max-height: 10rem;
+    }
+  }
+}

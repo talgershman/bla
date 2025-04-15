@@ -1,0 +1,180 @@
+<main class="p-6 box-border max-h-[100vh]">
+  <header class="min-h-[480px] min-w-[600px] mb-4 flex flex-col">
+    <div mat-dialog-close class="cursor-pointer w-full flex flex-row justify-end">
+      <mat-icon>close</mat-icon>
+    </div>
+    <mat-icon class="m-auto group-icon">groups</mat-icon>
+    <section class="mb-4 mat-headline-small flex justify-center">
+      {{ userTeams.length ? 'Assign users to a DEEP team' : 'Welcome to DEEP' }}
+    </section>
+    @if (!userTeams.length) {
+      <section class="mat-body-medium mt-2">
+        1. Join the DEEP <b>teams channel</b> -
+        <a
+          class="text-sys-primary underline underline-offset-2 visited:text-sys-primary"
+          target="_blank"
+          [href]="TEAMS_CHANNEL_URL"
+        >
+          click here</a
+        >
+        to join, the channels are used for Q&A and to keep track of DEEP feature announcements and
+        release notes.
+      </section>
+      <section class="mat-body-medium mt-2">
+        2. It looks like your user isn't associated with any <b>DEEP team</b>, in order to work with
+        DEEP please create/assign a team for your user.
+      </section>
+      <section class="mat-body-medium mt-2">
+        3. Please fill out the form below, and click the "open a ticket" button.
+      </section>
+    }
+    @if (userTeams.length) {
+      <section class="mat-body-medium mt-2">
+        Please fill out the form below, and click the "open a ticket" button.
+      </section>
+    }
+    @if (isReady$ | async) {
+      <section class="box-border p-6">
+        <mat-radio-group
+          color="primary"
+          class="flex flex-col gap-2"
+          [(ngModel)]="selectOption"
+          (change)="onOptionChanged($event)"
+        >
+          <mat-radio-button
+            disableRipple
+            [checked]="selectOption === FLOW_OPTIONS_ENUM.EXISTING"
+            [value]="FLOW_OPTIONS_ENUM.EXISTING"
+          >
+            <div class="max-h-40 overflow-y-auto overflow-x-hidden">
+              <div>
+                <me-control-list
+                  [listTitle]="
+                    !userTeams.length
+                      ? 'Add me and the users below to an existing team:'
+                      : 'Add the users below to an existing team:'
+                  "
+                  class="team-list"
+                  (addItemClicked)="addNewEmptyTeam()"
+                >
+                  @for (
+                    teamControl of form.controls.existingTeams.controls;
+                    track i;
+                    let i = $index;
+                    let first = $first
+                  ) {
+                    <div class="flex flex-row gap-2 items-center">
+                      <div class="w-[33rem]">
+                        <me-autocomplete
+                          placeholder="Select a team"
+                          class="team-control"
+                          [formControl]="teamControl"
+                          [options]="validTeamOptions()"
+                        >
+                          <div class="flex flex-row items-center">
+                            @if (!first) {
+                              <mat-icon
+                                class="cursor-pointer"
+                                aria-label="Delete"
+                                (click)="onDeleteItem(form.controls.existingTeams, i)"
+                              >
+                                delete
+                              </mat-icon>
+                            }
+                          </div>
+                        </me-autocomplete>
+                      </div>
+                    </div>
+                  }
+                </me-control-list>
+              </div>
+            </div>
+          </mat-radio-button>
+          <mat-radio-button
+            disableRipple
+            [checked]="selectOption === FLOW_OPTIONS_ENUM.NEW"
+            [value]="FLOW_OPTIONS_ENUM.NEW"
+          >
+            <div class="ml-2 mat-body-medium">
+              {{
+                userTeams.length
+                  ? 'Create a new team and add the users below to it:'
+                  : 'Create a new team and add me and the users below to it:'
+              }}
+            </div>
+            <div class="w-[33rem] mt-2">
+              <me-input
+                placeholder="format: deep-[department-placeholder]-[team-name-placeholder]"
+                updateOn="blur"
+                [formControl]="form.controls.newTeam"
+              />
+            </div>
+          </mat-radio-button>
+        </mat-radio-group>
+        <section class="mt-4 mat-body-medium">
+          <div class="w-[33rem]">
+            <mat-slide-toggle color="primary" [formControl]="form.controls.gitLabAccess">
+              Require Gitlab access to DEEP projects
+            </mat-slide-toggle>
+          </div>
+        </section>
+        <section class="max-h-40 overflow-y-auto overflow-x-hidden mt-4 mat-body-medium">
+          <div class="w-[34.5rem]">
+            <me-control-list
+              [listTitle]="
+                userTeams.length
+                  ? 'Users to be added:'
+                  : 'Additional users from my team to be added:'
+              "
+              class="user-list"
+              (addItemClicked)="addNewUser()"
+            >
+              <div class="flex flex-col gap-1">
+                @for (
+                  userControl of form.controls.users.controls;
+                  track i;
+                  let i = $index;
+                  let first = $first
+                ) {
+                  <div class="flex flex-row gap-2 items-center justify-start">
+                    <me-user-control
+                      placeholder="Enter the user name"
+                      propertyToDisplay="userPrincipalName"
+                      width="34.7rem"
+                      [formControl]="userControl"
+                    >
+                      @if (!first && !userControl.disabled) {
+                        <button
+                          disableRipple
+                          mat-icon-button
+                          aria-label="Clear"
+                          matSuffix
+                          type="button"
+                          class="mat-icon-button-dense"
+                          (click)="onDeleteItem(form.controls.users, i)"
+                        >
+                          <mat-icon title="" fontSet=" material-icons-outlined">delete</mat-icon>
+                        </button>
+                      }
+                    </me-user-control>
+                  </div>
+                }
+              </div>
+            </me-control-list>
+          </div>
+        </section>
+      </section>
+    } @else {
+      <section class="flex-1 flex flex-row items-center justify-center">
+        <mat-progress-spinner diameter="40" mode="indeterminate" color="primary" />
+      </section>
+    }
+  </header>
+  <footer class="w-full flex justify-center">
+    <div>
+      <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="onCreateTicket()">
+        Open a ticket
+      </button>
+    </div>
+  </footer>
+</main>

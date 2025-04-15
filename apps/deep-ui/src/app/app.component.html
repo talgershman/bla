@@ -1,0 +1,34 @@
+<div style="display: none">packageVersion:{{ environment.packageVersion }}</div>
+@switch (isLoggedIn$ | async) {
+  @case (LoginTemplateTypes.Loading) {
+    Loading ...
+  }
+  @case (LoginTemplateTypes.InApp) {
+    <me-layout
+      [user]="user"
+      [linksItems]="linkItems"
+      [tourItems]="tourItems"
+      [class.custom-header]="window.location.host.split('.')[0] !== 'deep'"
+      [headerText]="
+        window.location.host.split('.')[0] !== 'deep' ? window.location.host.split('.')[0] : ''
+      "
+      [menuItems]="menuItems"
+      [userMenuItems]="userMenuItems$ | async"
+      [isUpdateAvailable]="isUpdateAvailable$ | async"
+      [isSupportedBrowser]="isSupportedBrowser"
+      [errorWarningText]="errorHeaderMsg"
+      [isAdminUser]="isAdminUser"
+      (adminSettingsClicked)="onAdminSettingClicked()"
+    >
+      @if (!isIframe) {
+        <router-outlet class="main" />
+      }
+    </me-layout>
+  }
+  @case (LoginTemplateTypes.LoginIn) {
+    <de-login />
+  }
+  @case (LoginTemplateTypes.Error) {
+    <mat-error>{{ msalError }}</mat-error>
+  }
+}

@@ -1,0 +1,91 @@
+.cdk-overlay-pane {
+  .mat-mdc-menu-panel {
+    max-width: 18.75rem;
+    &.width-23 {
+      max-width: 23.75rem;
+    }
+  }
+}
+
+.cdk-overlay-pane:has(.mat-option.multiple-option-item) {
+  transform: translateX(-15px) !important;
+  div[role='listbox'] {
+    min-width: calc(100% + 32px) !important;
+  }
+}
+
+.uuid-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: var(--sys-secondary);
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 24px;
+    padding: 0;
+    .mat-icon {
+      color: var(--sys-secondary);
+      font-size: 12px;
+      width: 12px;
+      height: 16px;
+    }
+  }
+
+  .text-uuid {
+    font-size: 0.625rem;
+  }
+}
+
+.tooltip-container {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--mdc-plain-tooltip-container-color);
+  color: var(--mdc-plain-tooltip-supporting-text-color);
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 32px;
+    padding: 4px;
+    .mat-icon {
+      --mat-icon-color: color-mix(
+        in srgb,
+        var(--mdc-plain-tooltip-supporting-text-color) 38%,
+        transparent
+      );
+      &:hover {
+        --mat-icon-color: var(--mdc-plain-tooltip-supporting-text-color);
+      }
+    }
+  }
+  .text-tooltip {
+    vertical-align: text-bottom;
+  }
+}
+
+.main-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(auto-fit, 60px);
+  grid-auto-flow: column;
+  grid-gap: 0.875rem 2rem;
+  overflow-y: auto;
+}
+
+:not(.row-disabled) {
+  .column-status-value-inactive,
+  .column-status-value-deleted,
+  .column-status-value-deleting,
+  .column-status-value-failed_to_delete,
+  .column-status-value-broken,
+  .column-status-value-inactive,
+  .column-status-value-stuck,
+  .column-status-value-failed {
+    color: var(--sys-error);
+  }
+
+  .column-status-value-active {
+    color: var(--emerald);
+  }
+}
+
+.mat-headline-small.step-label {
+  margin: 0;
+}

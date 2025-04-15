@@ -1,0 +1,18 @@
+<form class="h-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <main class="flex flex-col p-6 box-border h-50">
+    <header>
+      <div class="flex flex-row gap-2">
+        <label class="mat-headline-small">Admin settings</label>
+      </div>
+    </header>
+    <section class="flex-1 mt-4">
+      <div class="flex flex-row mt-2 space-x-1">
+        <me-chips placeholder="My Teams" [formControl]="form.controls.team" />
+      </div>
+    </section>
+    <footer class="mt-4 flex items-center justify-end gap-4">
+      <button mat-button mat-dialog-close type="button" color="primary">Close</button>
+      <button mat-flat-button type="submit" color="primary">Apply</button>
+    </footer>
+  </main>
+</form>

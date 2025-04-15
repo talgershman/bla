@@ -1,0 +1,153 @@
+{
+  "name": "deep-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/deep-ui/src",
+  "prefix": "de",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": {
+          "base": "dist/apps/deep-ui",
+          "browser": ""
+        },
+        "index": "apps/deep-ui/src/index.html",
+        "browser": "apps/deep-ui/src/main.ts",
+        "polyfills": ["apps/deep-ui/src/polyfills.ts"],
+        "tsConfig": "apps/deep-ui/tsconfig.app.json",
+        "assets": ["apps/deep-ui/src/favicon.ico", "apps/deep-ui/src/assets"],
+        "allowedCommonJsDependencies": [
+          "adblock-detector",
+          "property-watch-decorator",
+          "typewriter-effect/dist/core",
+          "is-valid-path",
+          "md5",
+          "copy-to-clipboard",
+          "query-string",
+          "stringify-object",
+          "lodash-decorators/once",
+          "lodash-decorators/memoize",
+          "lodash-decorators/debounce",
+          "lodash-decorators/throttle",
+          "jszip",
+          "json-source-map",
+          "natural-compare-lite",
+          "ajv",
+          "jmespath"
+        ],
+        "styles": ["apps/deep-ui/src/styles/main.scss"],
+        "scripts": [],
+        "sourceMap": {
+          "styles": true,
+          "vendor": true,
+          "scripts": true
+        },
+        "extractLicenses": false,
+        "optimization": false,
+        "statsJson": true,
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/me-material/style", "libs/me-material/assets"]
+        }
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "libs/deep-ui/shared/environments/src/lib/environment.ts",
+              "with": "libs/deep-ui/shared/environments/src/lib/environment.production.ts"
+            }
+          ],
+          "outputHashing": "all",
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": true,
+          "extractLicenses": true,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "5.5mb",
+              "maximumError": "6mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "12kb",
+              "maximumError": "20kb"
+            }
+          ]
+        },
+        "staging": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "4mb",
+              "maximumError": "5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "12kb",
+              "maximumError": "20kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "libs/deep-ui/shared/environments/src/lib/environment.ts",
+              "with": "libs/deep-ui/shared/environments/src/lib/environment.staging.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": true,
+          "extractLicenses": true,
+          "buildOptimizer": true
+        },
+        "development": {
+          "fileReplacements": [
+            {
+              "replace": "libs/deep-ui/shared/environments/src/lib/environment.ts",
+              "with": "libs/deep-ui/shared/environments/src/lib/environment.local.ts"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "buildTarget": "deep-ui:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "deep-ui:build:production"
+        },
+        "staging": {
+          "buildTarget": "deep-ui:build:staging"
+        }
+      },
+      "defaultConfiguration": ""
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "apps/deep-ui/src/test.ts",
+        "polyfills": "apps/deep-ui/src/polyfills.ts",
+        "tsConfig": "apps/deep-ui/tsconfig.spec.json",
+        "karmaConfig": "apps/deep-ui/karma.conf.js",
+        "assets": ["apps/deep-ui/src/favicon.ico", "apps/deep-ui/src/assets"],
+        "styles": ["libs/deep-ui/shared/components/src/lib/testing/testing-main.scss"],
+        "scripts": [],
+        "stylePreprocessorOptions": {
+          "includePaths": ["node_modules", "libs/me-material/style", "libs/me-material/assets"]
+        }
+      }
+    }
+  }
+}
