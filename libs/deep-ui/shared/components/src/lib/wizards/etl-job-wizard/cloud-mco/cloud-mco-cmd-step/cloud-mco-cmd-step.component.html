@@ -1,0 +1,31 @@
+<form class="w-full h-full" [formGroup]="form">
+  <main class="h-full w-full px-6 py-5 box-border flex flex-col gap-4">
+    <div class="flex-1 cloud-mco-container flex flex-col box-border gap-4">
+      <div class="flex-1">
+        <me-textarea
+          class="w-full h-full"
+          type="text"
+          [title]="isCompareVersionsFlow() ? 'Main Version' : ''"
+          [placeholder]="
+            isCompareVersionsFlow()
+              ? ''
+              : 'Example: /mobileye/tools/clips2logs/envs/conda/env_4.0.1/bin/cloud-mco --output-uri=s3://mobileye-av-runs/runs/ -m /mobileye/EPG_stack/APP/release/APP_24.12.10/ME.Develop/out/EyeQ5sw_tbb_dbg/applications/CV/CV_BPP.s5 /mobileye/algo_ci4/algo/av-psw/bundle/MR-19690/5/output_folder/eyeq5/sw_tbb/dbg/BPP_SRD8/EyeQ5sw_tbb_dbg/applications/GVPI/brain/libSRD8.so /mobileye/algo_ci4/algo/av-psw/bundle/MR-19690/5/output_folder/eyeq5/sw_tbb/dbg/BPP_SRD8/EyeQ5sw_tbb_dbg/applications/GVPI/brain --config-file /mobileye/Tools_FPA/rachelg/dev/cloud_mco/c2l_core_hunt_dbg_multi_chip_full/mco/mco_config.json -o /mobileye/Tools_FPA/rachelg/dev/cloud_mco/c2l_core_hunt_dbg_multi_chip_full/mco -n MCO_C2L_c2l_core_hunt_dbg_multi_chip_full_routeless_2025-03-09_100824 --sync=include_failures --timeout=240 --output-struct=by_clip,output_as_is --disk-quota 36000 --container-memory 24000 --vcpus 16 --dumpcores --timeout 240  --s3-asset s3://mobileye-av-pc/1/Auto_Veh_11/,/mobileye/Auto_Veh_11 --s3-asset s3://mobileye-av-pc/1/Bundle_8/,/mobileye/Bundle_8 --s3-asset s3://mobileye-av-pc/1/PC/,/mobileye/PC --s3-asset s3://mobileye-av-pc/1/PerfectsData_TSR_01/,/mobileye/PerfectsData_TSR_01 --s3-asset s3://mobileye-av-pc/1/REM_Data_Tools/,/mobileye/REM_Data_Tools --s3-asset s3://mobileye-av-pc/1/Versions/,/mobileye/Versions --s3-asset s3://mobileye-av-pc/1/algo_REM_03/,/mobileye/algo_REM_03 --s3-asset s3://mobileye-av-pc/0/libs/linux/lib64/swsdk/curr/,/mobileye/libs/linux/lib64/swsdk/curr/  --deps /mobileye/algo_ci4/algo/av-psw/bundle/MR-19690/5/output_folder/eyeq5/sw_tbb/dbg/BPP_SRD8/EyeQ5sw_tbb_dbg/applications/GVPI/brain/libPolicyPC.so,/mobileye/algo_ci4/algo/av-psw/bundle/MR-19690/5/output_folder/eyeq5/sw_tbb/dbg/BPP_SRD8/EyeQ5sw_tbb_dbg/applications/GVPI/brain/libFastmap.so --post /mobileye/Tools_FPA/rachelg/dev/cloud_mco/c2l_core_hunt_dbg_multi_chip_full/mco/posthook_runner.tar.gz --post-hook-trigger always'
+          "
+          [cdkAutosizeMaxRows]="0"
+          [formControl]="form.controls.mainCmd"
+        />
+      </div>
+      @if (isCompareVersionsFlow()) {
+        <div class="flex-1">
+          <me-textarea
+            class="w-full h-full"
+            type="text"
+            title="Dependent Version"
+            [cdkAutosizeMaxRows]="0"
+            [formControl]="form.controls.dependentCmd"
+          />
+        </div>
+      }
+    </div>
+  </main>
+</form>

@@ -1,0 +1,59 @@
+<div class="feedback-items">
+  @for (item of viewItems(); track i; let i = $index) {
+    <div class="feedback-item">
+      @if (item.mestNickName) {
+        <div class="mest-caption">
+          MEST Nickname: {{ item.mestNickName }}
+          @if (item.version) {
+            <span>, Version :{{ item.version }}</span>
+          }
+          @if (item.error) {
+            <mat-error>&nbsp; Failed ! <br /></mat-error>
+          }
+        </div>
+      }
+      @if (!item.mestNickName) {
+        <div class="mest-caption">
+          Job :
+          @if (item.error) {
+            <mat-error>&nbsp; Failed ! <br /></mat-error>
+          }
+        </div>
+      }
+      <ng-container [ngTemplateOutlet]="item.template" [ngTemplateOutletContext]="{item: item}" />
+    </div>
+  }
+</div>
+
+<ng-template #jobExistsTmpl let-item="item">
+  @if (castToSubmitJobFeedbackItem(item); as jobFeedbackItem) {
+    <div class="job-exists">
+      This job is already created: jobUuid - {{ jobFeedbackItem.jobUuid }}, press the link to view -
+      <a
+        (click)="closeDialog()"
+        class="link-color"
+        [queryParams]="{
+          jobUuid: jobFeedbackItem.jobUuid,
+          tabView: DataSourceDynamicViewEnum.ETL_RESULTS,
+        }"
+        [routerLink]="['./jobs']"
+      >
+        Navigate to Job </a
+      >.
+    </div>
+  }
+</ng-template>
+
+<ng-template #successTmpl let-item="item">
+  @if (castToSubmitJobFeedbackItem(item); as jobFeedbackItem) {
+    <div class="job-success">Job was created successfully! no further action is needed.</div>
+  }
+</ng-template>
+
+<ng-template #errorTmpl let-item="item">
+  @if (castToSubmitJobFeedbackItem(item); as jobFeedbackItem) {
+    <div class="job-error">
+      <me-error-feedback [error]="item.error" />
+    </div>
+  }
+</ng-template>

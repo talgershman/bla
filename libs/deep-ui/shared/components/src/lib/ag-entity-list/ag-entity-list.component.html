@@ -1,0 +1,65 @@
+<div *mePortalSrc="'breadcrumbs-actions-container'" class="actions-bar border-box border-0">
+  <div class="buttons-container">
+    @for (button of actionsButtons; track button.id) {
+      @if (button.isPrimary) {
+        <div
+          [meTooltipDisabled]="!primaryButton.disabled"
+          [meTooltip]="
+            button.disableTooltip ? button.disableTooltip(selected?.length && selected[0]) : ''
+          "
+        >
+          <button
+            #primaryButton
+            mat-flat-button
+            color="primary"
+            class="{{ button.id }}-button"
+            [disabled]="
+              button.selectedRequired &&
+              (button?.isDisabled
+                ? button.isDisabled(selected?.length && selected[0])
+                : !selected?.length)
+            "
+            (click)="actionButtonClicked.emit(button.id)"
+          >
+            <div class="flex flex-row items-center">
+              <mat-icon class="mr-1">{{ button.icon }}</mat-icon
+              >{{ button.label }}
+            </div>
+          </button>
+        </div>
+      } @else {
+        <div
+          [meTooltip]="
+            button.disableTooltip
+              ? button.disableTooltip(selected?.length && selected[0])
+              : selected?.length && button.tooltip
+                ? button.tooltip(selected[0])
+                : ''
+          "
+        >
+          <button
+            #secondaryButton
+            mat-button
+            color="primary"
+            class="{{ button.id }}-button"
+            [disabled]="
+              button.selectedRequired &&
+              (button?.isDisabled
+                ? button.isDisabled(selected?.length && selected[0])
+                : !selected?.length)
+            "
+            (click)="actionButtonClicked.emit(button.id)"
+          >
+            <div class="flex flex-row items-center">
+              <mat-icon class="mr-1">{{ button.icon }}</mat-icon
+              >{{ button.label }}
+            </div>
+          </button>
+        </div>
+      }
+    }
+  </div>
+</div>
+<div class="main-content flex-1">
+  <ng-content select=".entity-table" />
+</div>

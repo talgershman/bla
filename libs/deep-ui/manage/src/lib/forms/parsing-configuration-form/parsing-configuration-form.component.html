@@ -1,0 +1,213 @@
+<form class="h-full" [formGroup]="parsingConfigurationForm" (ngSubmit)="onSubmit()">
+  <div class="h-full w-full flex flex-col">
+    <div class="controls flex-1 px-4 box-border parsing-form-grid">
+      <div class="mt-4">
+        <me-input title="Name" [formControl]="parsingConfigurationForm.controls.name" />
+      </div>
+      <div class="mt-4">
+        <me-select
+          title="Team"
+          [options]="deepTeamOptions"
+          [formControl]="parsingConfigurationForm.controls.group"
+        />
+      </div>
+      <div class="folder-control mt-4">
+        <me-autocomplete
+          title="Folder"
+          placeholder="Select existing or add new"
+          [addNewItemOption]="true"
+          [options]="folderOptions"
+          [formControl]="parsingConfigurationForm.controls.folder"
+        />
+      </div>
+      <div class="mt-4">
+        <me-textarea
+          title="Description"
+          [formControl]="parsingConfigurationForm.controls.description"
+        />
+      </div>
+      <div class="config-control">
+        <me-json-editor
+          class="h-20"
+          title="JSON Config"
+          [formControl]="parsingConfigurationForm.controls.config"
+          [isTouched]="parsingConfigurationForm.controls.config.touched"
+          [errors]="parsingConfigurationForm.controls.config.errors"
+          [initialUpdate]="true"
+        >
+          <p class="title-extra mat-body-medium config-tooltip">
+            <label
+              class="underline cursor-pointer"
+              [meTooltipProps]="{
+                interactive: true,
+              }"
+              meTooltipClass="no-truncate-tooltip tooltip-json"
+              meTooltip='Please note that in order to merge parsed data, you have to provide type hints for the data fields in the itrk section,
+in the form <field name>:<numpy type> (for example: "classificationScore:float32").
+For the pext section, type hints should not be provided.
+
+DEEP does not support the extraction of gfi column as it creates conflicts.
+
+To retrieve all fields, please use "*" in the category and sub-category sections, example:
+{
+  "itrk": {
+      "VD3D_2": "*",// all fields in the category
+      "VD3D": {
+          "MF": "*",//all fields in the sub-category
+          "MOMO": [
+              "camPort:int32",
+              "id:int32",
+          ],
+      }
+  }
+}
+
+For retrieval of additional MEST data to use in DEEP ETLs please define the files to be extracted in the "extra-files" section in the below manner:
+"extra-files": ["*.info","time"]
+
+**Default ITRK Rows in DEEP**
+
+By default, DEEP includes some fundamental ITRK rows even if they are not explicitly specified in your configuration.
+DEEP will parse all columns in these lines. However, you have the option to provide a specific column list for these lines,
+and DEEP will adhere to your defined columns.
+The default rows are as follows:
+- MetaData MetaData
+- MetaData FrameData
+- MetaData General
+- Mapping MAP_PING
+- PrepSys PyramidL0
+'
+            >
+              - constraints and information,</label
+            >
+          </p>
+        </me-json-editor>
+      </div>
+    </div>
+    <ng-content />
+    <footer
+      class="p-6 flex gap-4 items-center flex-row border-0 border-t border-solid border-sys-outline-variant"
+    >
+      <div class="grow"></div>
+      <div>
+        <button mat-button type="button" color="primary" (click)="onBackClicked()">Back</button>
+      </div>
+      <div>
+        @if (showCreateButton) {
+          <button mat-flat-button type="submit" color="primary">Create Configuration</button>
+        }
+      </div>
+    </footer>
+  </div>
+</form>
+
+<ng-template
+  meCustomTourStep
+  [tourId]="PARSING_CONFIGURATION_FORM_TOUR_ID"
+  [stepId]="PARSING_CONFIGURATION_CUSTOM_STEP_ID"
+>
+  <main class="custom-tour-step space-y-2 w-[800px] h-[525px]">
+    <section>
+      <div class="mb-2">Please see use cases:</div>
+      <div class="space-y-2 mx-2">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Itrk with partial types + pext and ‘*’ wildcard</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <div>
+              <me-json-editor title="JSON Config" [formControl]="jsonExampleControl1" />
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>itrk without types + ‘*’ wildcard + extra files</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <div>
+              <me-json-editor title="JSON Config" [formControl]="jsonExampleControl2" />
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>itrk with types</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <div>
+              <me-json-editor title="JSON Config" [formControl]="jsonExampleControl3" />
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>use formatType lines to define types</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <div>
+              Instead of specifying types in the parsing configuration, you can add formatType rows
+              within the itrk.
+              <ul>
+                <li>
+                  Itrk content for example:
+                  <pre
+                    class="px-2 pt-4 bg-sys-surface-container-highest text-sys-on-surface box-border border-solid border-sys-outline-variant rounded-lg"
+                  >
+                  format: VCL BASIC camID speed isApproved
+                  formatType: VCL BASIC int8 float32 bool
+                </pre
+                  >
+                </li>
+                <li>
+                  Type options: 'int', 'int8', 'uint8', 'int16', 'uint16', 'int32', 'uint32',
+                  'int64', 'uint64', 'float', 'float16', 'float32', 'float64', 'float128', 'bool'.
+                </li>
+                <li>
+                  Ensure this feature is enabled in the settings section of the config:
+                  <div class="mt-2">
+                    <me-json-editor title="JSON Config" [formControl]="jsonExampleControl4" />
+                  </div>
+                </li>
+                <li>
+                  If a row in the itrk lacks a formatType, DEEP will fallback to using the types
+                  specified in the parsing configuration.
+                </li>
+              </ul>
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+      </div>
+    </section>
+    <section>
+      <div><b>Please note:</b></div>
+      <ul>
+        <li>Types definition is irrelevant for PEXTs.</li>
+        <li>
+          If the MEST outputs are required to be accessible in the Data Lake, it is necessary to
+          specify the appropriate Type for each column (refer to the use cases mentioned earlier).
+        </li>
+        <li>
+          The MEST outputs reside in the Data Lake as data sources therefore the schema is required
+          to cast values from itrk.
+        </li>
+        <li>
+          Type should be provided in the following form: &lt;field name&gt;:&lt;numpy type&gt; (for
+          example: "ClassificationScroe:float32").
+        </li>
+        <li>
+          Using "*" for retrieval of all fields in category/sub category sections is supported but
+          will prevent the MEST outputs from being available in the Data Lake.
+        </li>
+        <li>
+          To fetch additional MEST data please use the extra files section in the parsing conf (see
+          use case above) .<br />You can choose to extract:
+        </li>
+        <ul>
+          <li>Files with a specific extension (*.info).</li>
+          <li>Files where its path contains specific string (*time*).</li>
+        </ul>
+      </ul>
+    </section>
+  </main>
+</ng-template>

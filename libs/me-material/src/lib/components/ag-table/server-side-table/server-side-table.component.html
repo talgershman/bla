@@ -1,0 +1,93 @@
+@if (viewState()) {}
+<div class="table-wrapper">
+  <me-ag-table-actions-bar
+    [componentId]="componentId"
+    [isDefaultColumnState]="isDefaultColumnState"
+    [chipsFilterData]="chipsFilterData"
+    [searchPlaceHolder]="searchPlaceHolder"
+    [searchFilterByField]="searchFilterByField"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [hideTeamFilterState]="hideTeamFilterState"
+    [teamFilterState]="teamFilterState"
+    [groupByOptions]="viewState().groupBy.optionsWithKeys()"
+    [initialGroupByParam]="initialGroupByParam"
+    [ignoreSavingTeamFilterState]="ignoreSavingTeamFilterState"
+    (teamFilterClicked)="teamFilterClicked.emit($event)"
+    (refreshButtonClicked)="onRefreshButtonClicked()"
+    (resetFiltersClicked)="onResetFiltersClicked()"
+    (restoreDefaultClicked)="onRestoreDefault()"
+    (filterChipRemoved)="onFilterChipRemoved($event)"
+    (groupChanged)="onGroupByChanged($event)"
+    (fitClicked)="onFitClicked()"
+  />
+  @if (isLoading$ | async) {
+    <div class="loading-shade-container">
+      <mat-spinner class="relative top-[18px]" diameter="40" color="primary" />
+    </div>
+  }
+  <div class="table-container">
+    @if (isReady$ | async) {
+      <ag-grid-angular
+        #grid
+        class="ag-theme-alpine w-full h-full"
+        [localeText]="localeText"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [pinnedTopRowData]="pinnedTopRowData()"
+        [rowModelType]="rowModelType"
+        [rowGroupPanelShow]="rowGroupPanelShow"
+        [sideBar]="sideBarDef()"
+        [groupDisplayType]="groupDisplayType"
+        [autoGroupColumnDef]="autoGroupColumnDef"
+        [isServerSideGroupOpenByDefault]="isServerSideGroupOpenByDefault"
+        [getChildCount]="getChildCount"
+        [masterDetail]="masterDetail"
+        [detailCellRenderer]="detailCellRenderer"
+        [detailRowAutoHeight]="detailRowAutoHeight"
+        [detailCellRendererParams]="detailCellRendererParams"
+        [keepDetailRows]="keepDetailRows"
+        [pagination]="pagination"
+        [paginationPageSizeSelector]="paginationPageSizeSelector"
+        [paginationPageSize]="paginationPageSize"
+        [cacheBlockSize]="cacheBlockSize"
+        [deltaSort]="deltaSort"
+        [loadingOverlayComponent]="loadingOverlayComponent"
+        [loadingCellRenderer]="loadingCellRenderer"
+        [noRowsOverlayComponent]="noRowsOverlayComponent"
+        [getRowId]="getRowId"
+        [rowSelection]="selectionOptions()"
+        [rowClass]="rowClass"
+        [rowClassRules]="rowClassRules"
+        [animateRows]="animateRows"
+        [getRowHeight]="getRowHeight"
+        [rowHeight]="rowHeight"
+        [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
+        [serverSideSortAllLevels]="serverSideSortAllLevels"
+        [serverSideOnlyRefreshFilteredGroups]="serverSideOnlyRefreshFilteredGroups"
+        [gridOptions]="gridOptions"
+        [context]="context"
+        [icons]="icons"
+        [components]="components"
+        [modules]="modules"
+        (storeRefreshed)="onStoreRefreshed($event)"
+        (gridReady)="onGridReady($event)"
+        (firstDataRendered)="onFirstDataRendered($event)"
+        (modelUpdated)="onModelUpdated($event)"
+        (sortChanged)="onSortChanged($event)"
+        (filterChanged)="onFilterChanged($event)"
+        (rowSelected)="onRowSelected($event)"
+        (selectionChanged)="onSelectionChanged($event)"
+        (rowClicked)="onRowClicked($event)"
+        (rowGroupOpened)="onRowGroupOpened($event)"
+        (toolPanelVisibleChanged)="onToolPanelVisibleChanged($event)"
+        (displayedColumnsChanged)="onDisplayedColumnsChanged($event)"
+        (dragStarted)="onDragStarted($event)"
+        (dragStopped)="onDragStopped($event)"
+        (columnVisible)="onColumnVisible($event)"
+        (columnPinned)="onColumnPinned($event)"
+        (columnMoved)="onColumnMoved($event)"
+      />
+    }
+  </div>
+</div>

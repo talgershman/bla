@@ -1,0 +1,31 @@
+<de-stepper-container class="block h-full flex flex-col" #stepper>
+  <cdk-step>
+    <de-dataset-form
+      [formMode]="mode"
+      [dataset]="dataset"
+      [(selectedDataSources)]="selectedDataSources"
+      [(subQueries)]="subQueries"
+      (editSubQuery)="handleEditSubQueryClicked($event)"
+      (addSubQueryClicked)="handleAddSubQueryClicked()"
+      (fromValueChanged)="fromValueChanged.emit($event)"
+    >
+      <ng-content />
+    </de-dataset-form>
+  </cdk-step>
+  <cdk-step>
+    @defer (when stepper?.selectedIndex === 1; prefetch on timer(5s)) {
+      @if (stepper?.selectedIndex === 1) {
+        <de-query-stepper
+          [isReadOnlyMode]="dataset?.source === 'dataset_client'"
+          [(selectedDataSources)]="selectedDataSources"
+          [(subQueries)]="subQueries"
+          [triggerEditSubQuery$]="triggerEditSubQuery$"
+          [triggerFirstStep$]="triggerFirstStep$"
+          (movedBackedFromStepper)="handleMoveBackedFromStepper()"
+        />
+      }
+    } @placeholder {
+      <div></div>
+    }
+  </cdk-step>
+</de-stepper-container>

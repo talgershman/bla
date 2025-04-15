@@ -1,0 +1,25 @@
+<div class="p-6 box-border min-h-[262px] min-w-[520px] flex flex-col gap-6">
+  <header class="mat-headline-small">Datasource URL</header>
+  <main class="flex-1 flex flex-col gap-4">
+    <section class="flex flex-row items-center">
+      <me-textarea [(ngModel)]="ishowUrl" />
+      <button
+        mat-icon-button
+        color="primary"
+        aria-label="Copy To Clipboard"
+        class="copy-button"
+        (click)="copyToClipboard(ishowUrl)"
+      >
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </section>
+    @if (!!shortUrl) {
+      <section>
+        <span> <b>Note:</b> you can also use - {{ shortUrl }} </span>
+      </section>
+    }
+  </main>
+  <footer class="w-full flex justify-end">
+    <button mat-button mat-dialog-close color="primary" type="button">Close</button>
+  </footer>
+</div>

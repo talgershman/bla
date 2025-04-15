@@ -1,0 +1,35 @@
+img {
+  border-radius: 50%;
+  width: 2.563rem;
+  height: 2.563rem;
+  display: flex;
+}
+
+.mat-divider {
+  --mat-divider-color: var(--sys-outline-variant);
+}
+
+.menu-item--profile {
+  --mdc-outlined-card-container-color: var(--mat-menu-container-color);
+  --mdc-outlined-card-container-shape: 0;
+  box-shadow: none;
+  border: none;
+  .mat-mdc-card-header {
+    padding: 1rem;
+  }
+}
+
+.circle {
+  @apply bg-sys-secondary-container text-sys-primary;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .initials {
+    font: var(--sys-title-medium);
+    letter-spacing: var(--sys-title-medium-tracking);
+    @apply text-sys-primary;
+  }
+}

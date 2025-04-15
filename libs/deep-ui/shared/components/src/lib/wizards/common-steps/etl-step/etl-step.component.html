@@ -1,0 +1,13 @@
+@if (viewState().derivedLogic()) {}
+
+@if (wasShown) {
+  <de-select-etl-list
+    [tableComponentId]="tableComponentId"
+    [isReTriggerFlow]="isReTriggerFlow"
+    [initialTableFilters]="initialTableFilters()"
+    [initialSelectionId]="initialSelectionId"
+    [disabledRowCallback]="stepInvalidCallback"
+    (selectionChanged)="onEtlsChanged($event)"
+  />
+}
+<ng-content />

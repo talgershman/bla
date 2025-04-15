@@ -1,0 +1,10 @@
+:host {
+  .no-data-message {
+    font: var(--sys-headline-medium);
+    letter-spacing: var(--sys-headline-medium-tracking);
+    //color: mat.get-color-from-palette(palettes.$me-grey-palette, 400);
+    display: flex;
+    justify-content: center;
+    border: none;
+  }
+}

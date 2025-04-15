@@ -1,0 +1,29 @@
+{
+  "name": "deep-ui-shared-common",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/deep-ui/shared/common/src",
+  "prefix": "de",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/libs/deep-ui/shared/common"],
+      "options": {
+        "project": "libs/deep-ui/shared/common/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/deep-ui/shared/common/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/deep-ui/shared/common/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+:host {
+  .loading-shade-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: color-mix(in srgb, var(--sys-surface) 70%, transparent);
+    opacity: 0.8;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+}

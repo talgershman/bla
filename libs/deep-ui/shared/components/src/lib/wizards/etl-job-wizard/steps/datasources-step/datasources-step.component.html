@@ -1,0 +1,44 @@
+@if (wasShown) {
+  <div class="box-border flex flex-col gap-4 h-full">
+    @if (perfectsOptions.length > 1) {
+      <mat-radio-group
+        color="primary"
+        class="ml-4 flex flex-row gap-2"
+        (change)="onPerfectOptionChange($event)"
+      >
+        @for (button of perfectsOptions; track button.id) {
+          <mat-radio-button
+            disableRipple
+            [checked]="button.id === selectedPerfectOption"
+            [value]="button"
+          >
+            <span class="ml-2 mat-body-medium text-sys-on-surface">
+              {{ button.label }}
+            </span>
+          </mat-radio-button>
+        }
+      </mat-radio-group>
+    }
+    @if (!initialized()) {
+      <div class="flex justify-center items-center h-full">
+        <mat-progress-spinner diameter="50" mode="indeterminate" color="primary" />
+      </div>
+    } @else if (selectedPerfectOption === 'FPA perfects') {
+      <div class="w-[30%] mt-1 ml-4">
+        <me-select
+          placeholder="Select FPA perfects"
+          class="fpa-perfects-control"
+          [formControl]="dataSourcesForm.controls.fpaPerfects"
+          [options]="fpaPerfectsOptions"
+          (selectionChanged)="onFpaPerfectsChanged($event)"
+        />
+      </div>
+    } @else if (selectedPerfectOption === 'Data sources') {
+      <de-datasource-tables-control
+        class="flex-1"
+        [datasourcesOptions]="datasourcesOptions"
+        [formControl]="dataSourcesForm.controls.dataSources"
+      />
+    }
+  </div>
+}

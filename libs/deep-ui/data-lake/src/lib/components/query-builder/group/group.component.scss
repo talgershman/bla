@@ -1,0 +1,94 @@
+.group-container {
+  width: fit-content;
+}
+
+.operators {
+  --mdc-outlined-button-label-text-color: var(--sys-on-surface);
+  button {
+    height: 28px;
+    > button {
+      height: 100%;
+    }
+    &.and-button {
+      position: relative;
+      width: 104px;
+      border-radius: 28px 0 0 28px;
+    }
+    &.or-button {
+      width: 104px;
+      border-left: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    &.selected-operator {
+      @apply text-sys-on-secondary-container;
+      @apply bg-sys-secondary-container;
+      @apply border-sys-outline;
+    }
+  }
+}
+
+.and-button:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -1px;
+  top: 18px;
+  height: 50%;
+  width: 100%;
+  border-left: 2px solid var(--sys-outline-variant);
+}
+
+.spacer {
+  border-left: 2px solid var(--sys-outline-variant);
+}
+
+.horizontal-spacer {
+  position: relative;
+  top: 27px;
+  border-top: 2px solid var(--sys-outline-variant);
+  width: 1rem;
+}
+
+.is-even-group {
+  @apply bg-sys-surface-container-highest;
+}
+
+.show-icons {
+  @apply visible;
+}
+
+.group-container-hover {
+  @apply border-sys-primary;
+}
+
+.rules-container {
+  border-left: 2px solid var(--sys-outline-variant);
+  .last {
+    position: relative;
+    .hide {
+      position: absolute;
+      bottom: 0;
+      left: -0.5rem;
+      height: calc(100% - 29px);
+      width: 1rem;
+    }
+    .hide-even {
+      @apply bg-sys-surface-container-highest;
+    }
+
+    .hide-odd {
+      @apply bg-sys-surface-container;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .delete-button {
+    min-width: 26px;
+    padding: 0;
+    .mat-icon {
+      margin: 0;
+    }
+  }
+}

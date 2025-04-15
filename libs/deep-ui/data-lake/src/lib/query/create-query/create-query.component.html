@@ -1,0 +1,33 @@
+<div class="h-full flex flex-col">
+  <div>
+    <me-breadcrumbs [breadcrumbs]="breadcrumbs" />
+  </div>
+  <div class="h-full">
+    <de-stepper-container class="block h-full flex flex-col" #stepper>
+      <cdk-step>
+        <de-standalone-query
+          [class.invisible]="hideDashboardView"
+          [(selectedDataSources)]="selectedDataSources"
+          [(subQueries)]="subQueries"
+          (editSubQuery)="handleEditSubQueryClicked($event)"
+          (addSubQueryClicked)="handleAddSubQueryClicked()"
+        />
+      </cdk-step>
+      <cdk-step>
+        @defer (when stepper?.selectedIndex === 1; prefetch on idle) {
+          @if (stepper?.selectedIndex === 1) {
+            <de-query-stepper
+              [(selectedDataSources)]="selectedDataSources"
+              [(subQueries)]="subQueries"
+              [triggerEditSubQuery$]="triggerEditSubQuery$"
+              [triggerFirstStep$]="triggerFirstStep$"
+              (movedBackedFromStepper)="handleMoveBackedFromStepper()"
+            />
+          }
+        } @placeholder {
+          <div></div>
+        }
+      </cdk-step>
+    </de-stepper-container>
+  </div>
+</div>

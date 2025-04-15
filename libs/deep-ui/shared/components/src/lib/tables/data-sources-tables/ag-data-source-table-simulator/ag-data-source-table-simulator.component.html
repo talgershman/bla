@@ -1,0 +1,29 @@
+<div class="flex flex-col h-full">
+  <div class="flex-1">
+    <de-ag-data-source-table-simulator-standalone
+      [selectionMode]="selectionMode"
+      [tableFilters]="{}"
+      [triggerTableRefresh]="triggerTableRefresh"
+      [selectedDataSources]="selectedDataSources"
+      (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+      (filtersParamsChanged)="onFiltersParamsChanged($event)"
+      (gridReady)="onGridReady($event)"
+    />
+  </div>
+</div>
+
+<div *mePortalSrc="'data-source-action-bar'">
+  @if (showCRUDButtons) {
+    <div>
+      <div class="flex flex-row gap-6 justify-end items-center">
+        <div>
+          <button mat-button color="primary" class="preview-button" (click)="onPreviewClicked()">
+            <div class="flex flex-row items-center">
+              <mat-icon class="mr-1">preview</mat-icon>Preview GT
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

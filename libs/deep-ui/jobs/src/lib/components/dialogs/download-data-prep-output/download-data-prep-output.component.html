@@ -1,0 +1,29 @@
+<form [formGroup]="form" (ngSubmit)="onSaveClicked()">
+  <div class="p-6 box-border">
+    <div class="mat-headline-small center">
+      Insert clip name to download data preparation output
+    </div>
+    <div>
+      Please note that the data preparation output is retained for a duration of two weeks<br />
+      starting from the moment the job is executed.<br />
+      After this period, the saved output will no longer be accessible.
+    </div>
+    <div class="clip-name-control my-8">
+      <me-input type="text" [formControl]="form.controls.clipName" />
+      @if (loading$ | async) {
+        <div class="flex-align-row mt-2">
+          <mat-progress-spinner diameter="40" mode="indeterminate" color="primary" />
+        </div>
+      }
+    </div>
+    @if (errorMsg) {
+      <div class="my-2">
+        <me-error-feedback [error]="errorMsg" />
+      </div>
+    }
+    <div class="dialog-buttons-container">
+      <button mat-button mat-dialog-close type="button" color="primary">Cancel</button>
+      <button mat-flat-button type="submit" color="primary">Download</button>
+    </div>
+  </div>
+</form>

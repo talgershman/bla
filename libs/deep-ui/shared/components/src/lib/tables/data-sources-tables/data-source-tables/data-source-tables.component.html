@@ -1,0 +1,122 @@
+<div class="flex flex-col gap-4 h-full w-full">
+  <div class="px-6 box-border w-ful flex flex-row items-center">
+    <div class="flex-1">
+      <me-chips-group-buttons
+        [options]="groupButtons"
+        [(selectedOption)]="selectedGroupButton"
+        (selectedOptionChange)="onGroupButtonChanged($event)"
+      />
+    </div>
+    <div *mePortalTarget="'data-source-action-bar'"></div>
+    <div *mePortalTarget="'select-datasource-buttons'"></div>
+  </div>
+  <div class="h-0 flex-1">
+    @switch (selectedGroupButton) {
+      @case (DataSourceDynamicViewEnum.DE_SEARCH) {
+        @defer (
+          when (selectedGroupButton ===DataSourceDynamicViewEnum.DE_SEARCH);
+          prefetch on timer(10s)
+        ) {
+          <de-ag-data-source-table-de-search
+            [selectedDataSources]="selectedDataSources"
+            [selectionMode]="selectionMode"
+            (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+          />
+        } @placeholder {
+          <div></div>
+        }
+      }
+      @case (DataSourceDynamicViewEnum.PERFECTS) {
+        @defer (
+          when (selectedGroupButton ===DataSourceDynamicViewEnum.PERFECTS);
+          prefetch on timer(10s)
+        ) {
+          <de-ag-data-source-table-perfects
+            [selectedDataSources]="selectedDataSources"
+            [selectionMode]="selectionMode"
+            [showCRUDButtons]="!selectionMode"
+            (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+          />
+        } @placeholder {
+          <div></div>
+        }
+      }
+      @case (DataSourceDynamicViewEnum.GOLDEN_LABELS) {
+        @defer (
+          when (selectedGroupButton ===DataSourceDynamicViewEnum.GOLDEN_LABELS);
+          prefetch on timer(10s)
+        ) {
+          <de-ag-data-source-table-golden-labels
+            [selectedDataSources]="selectedDataSources"
+            [selectionMode]="selectionMode"
+            [showCRUDButtons]="!selectionMode"
+            (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+          />
+        } @placeholder {
+          <div></div>
+        }
+      }
+      @case (DataSourceDynamicViewEnum.SIMULATOR) {
+        @defer (
+          when (selectedGroupButton ===DataSourceDynamicViewEnum.SIMULATOR);
+          prefetch on timer(10s)
+        ) {
+          <de-ag-data-source-table-simulator
+            [selectedDataSources]="selectedDataSources"
+            [selectionMode]="selectionMode"
+            [showCRUDButtons]="!selectionMode"
+            (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+          />
+        } @placeholder {
+          <div></div>
+        }
+      }
+      @case (DataSourceDynamicViewEnum.MESTS) {
+        @defer (
+          when (selectedGroupButton ===DataSourceDynamicViewEnum.MESTS);
+          prefetch on timer(10s)
+        ) {
+          <de-ag-data-source-table-mests
+            [selectedDataSources]="selectedDataSources"
+            [selectionMode]="selectionMode"
+            [showCRUDButtons]="!selectionMode"
+            (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+          />
+        } @placeholder {
+          <div></div>
+        }
+      }
+      @case (DataSourceDynamicViewEnum.OFFICIAL_DRIVES) {
+        @defer (
+          when (selectedGroupButton ===DataSourceDynamicViewEnum.OFFICIAL_DRIVES);
+          prefetch on timer(10s)
+        ) {
+          <de-ag-data-source-table-official-drives
+            [selectedDataSources]="selectedDataSources"
+            [selectionMode]="selectionMode"
+            [showCRUDButtons]="false"
+            (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+          />
+        } @placeholder {
+          <div></div>
+        }
+      }
+      @case (DataSourceDynamicViewEnum.ETL_RESULTS) {
+        @defer (
+          when (selectedGroupButton ===DataSourceDynamicViewEnum.ETL_RESULTS);
+          prefetch on timer(10s)
+        ) {
+          <de-ag-data-source-table-etl-results
+            [selectedDataSources]="selectedDataSources"
+            [selectionMode]="selectionMode"
+            [showCRUDButtons]="!selectionMode"
+            (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+          />
+        } @placeholder {
+          <div></div>
+        }
+      }
+      @default {}
+    }
+  </div>
+</div>

@@ -1,0 +1,9 @@
+:host::ng-deep {
+  display: block;
+  height: 100%;
+  de-data-source-table-de-search {
+    .table-container {
+      height: calc(100vh - 21.3rem);
+    }
+  }
+}

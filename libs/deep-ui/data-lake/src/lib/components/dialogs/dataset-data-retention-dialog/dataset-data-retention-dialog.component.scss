@@ -1,0 +1,19 @@
+:host ::ng-deep {
+  .data-retention-container:has(.table-side-container) {
+    min-width: 80vw;
+    .table-side-container {
+      me-enrich-table {
+        .table-wrapper {
+          max-height: 58vh;
+        }
+      }
+    }
+  }
+  de-dataset-data-retention-control {
+    .retention-container {
+      max-height: 58vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+}

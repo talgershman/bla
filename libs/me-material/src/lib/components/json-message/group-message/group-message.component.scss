@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.triangle-wrapper {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+.triangle-wrapper:hover {
+  background: var(--sys-inverse-on-surface);
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 10px;
+  border-color: transparent transparent transparent var(--sys-on-surface);
+  transform: rotate(0deg);
+  transition-duration: 0.2s;
+  transition-property: transform;
+}
+
+.rotate-triangle {
+  transform: rotate(90deg);
+}
+
+.red-text {
+  color: var(--sys-error);
+}
+
+.green-text {
+  color: var(--emerald);
+}
+
+.blue-text {
+  color: var(--lapis);
+}
+
+.black-text {
+  color: var(--sys-on-surface);
+}
+
+.menu-item-button {
+  min-width: 26px;
+  padding-left: 0;
+  padding-right: 0;
+  .mat-icon {
+    height: 20px;
+    position: relative;
+    top: -2px;
+  }
+}

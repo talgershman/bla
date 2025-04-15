@@ -1,0 +1,30 @@
+.table-wrapper {
+  max-height: 28vh;
+  overflow-y: auto;
+  table {
+    border: 1px solid var(--sys-outline-variant);
+    border-collapse: collapse;
+    width: 100%;
+    tr,
+    td,
+    th {
+      padding: 10px;
+      border: 1px solid var(--sys-outline-variant);
+    }
+
+    tr {
+      background-color: var(--sys-surface-container-high);
+    }
+
+    th {
+      text-align: left;
+    }
+
+    .truncated-cell {
+      max-width: 350px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    }
+  }
+}

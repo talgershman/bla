@@ -1,0 +1,10 @@
+.buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+mat-progress-spinner {
+  margin: 1rem 0;
+}

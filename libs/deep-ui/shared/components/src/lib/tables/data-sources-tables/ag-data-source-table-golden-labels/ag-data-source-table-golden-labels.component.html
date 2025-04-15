@@ -1,0 +1,59 @@
+<div class="flex flex-col h-full">
+  <div class="flex-1">
+    <de-ag-data-source-table-golden-labels-standalone
+      [selectionMode]="selectionMode"
+      [tableFilters]="{}"
+      [triggerTableRefresh]="triggerTableRefresh"
+      [selectedDataSources]="selectedDataSources"
+      (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+      (filtersParamsChanged)="onFiltersParamsChanged($event)"
+      (gridReady)="onGridReady($event)"
+    />
+  </div>
+</div>
+<div *mePortalSrc="'data-source-action-bar'">
+  @if (showCRUDButtons) {
+    <div>
+      <div class="flex flex-row gap-6 justify-end items-center">
+        <div [meTooltip]="deleteActionTooltip()" [meTooltipDisabled]="!deleteActionTooltip()">
+          <button
+            mat-button
+            color="primary"
+            class="delete-button"
+            [disabled]="isCRUDButtonsDisabled || !!deleteActionTooltip()"
+            (click)="onDeleteActionClicked()"
+          >
+            <div class="flex flex-row items-center">
+              <mat-icon class="mr-1">delete</mat-icon>Delete
+            </div>
+          </button>
+        </div>
+        <div
+          [meTooltip]="updateSchemaActionTooltip()"
+          [meTooltipDisabled]="!updateSchemaActionTooltip()"
+        >
+          <button
+            mat-button
+            color="primary"
+            class="edit-button"
+            [disabled]="isCRUDButtonsDisabled || !!updateSchemaActionTooltip()"
+            (click)="onEditActionClicked()"
+          >
+            <div class="flex flex-row items-center">
+              <mat-icon class="mr-1">edit</mat-icon>Update schema
+            </div>
+          </button>
+        </div>
+        <button
+          mat-flat-button
+          color="primary"
+          class="create-button"
+          [disabled]="isCRUDButtonsDisabled"
+          (click)="onCreatedActionButtonClicked()"
+        >
+          <div class="flex flex-row items-center"><mat-icon class="mr-1">add</mat-icon>Create</div>
+        </button>
+      </div>
+    </div>
+  }
+</div>

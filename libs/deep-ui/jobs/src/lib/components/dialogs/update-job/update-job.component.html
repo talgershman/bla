@@ -1,0 +1,31 @@
+<div class="p-6 box-border">
+  <div class="mat-headline-small center">
+    <span><b>Update Job</b>: {{ etlJob?.probeName }}</span>
+  </div>
+  <div class="my-6">
+    <div class="space-y-6 mt-4">
+      <div>
+        <mat-slide-toggle disableRipple color="primary" [formControl]="form.controls.markAsFailed">
+          Mark as failed
+        </mat-slide-toggle>
+      </div>
+      <div>
+        <me-chips placeholder="+Add Tags" [formControl]="form.controls.tags" />
+      </div>
+    </div>
+  </div>
+  @if (loading$ | async) {
+    <div class="flex-align-row">
+      <mat-progress-spinner
+        class="dialog-spinner"
+        diameter="40"
+        mode="indeterminate"
+        color="primary"
+      />
+    </div>
+  }
+  <div class="dialog-buttons-container">
+    <button type="button" mat-button mat-dialog-close color="primary">Cancel</button>
+    <button mat-flat-button type="button" color="primary" (click)="onSaveClicked()">Save</button>
+  </div>
+</div>

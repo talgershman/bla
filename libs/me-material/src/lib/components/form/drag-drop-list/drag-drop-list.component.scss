@@ -1,0 +1,138 @@
+.drag-drop-list-container-scrollable-content {
+  overflow-y: auto;
+}
+
+.drag-drop-list-item--preview {
+  @apply bg-sys-surface-container;
+  height: 1.875rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  input {
+    @apply bg-sys-surface-container;
+    @apply text-sys-on-surface;
+    height: 1.875rem;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+  }
+  .drag-drop-indicator {
+    @apply text-sys-secondary;
+    padding: 0 0.125rem;
+    font-size: 0.875rem;
+    width: 0.875rem;
+    height: 0.875rem;
+    cursor: move;
+  }
+}
+
+/* Animate items as they're being sorted. */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Animate an item that has been dropped. */
+.cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-drop-list-container {
+  min-width: 23.125rem;
+  .drag-drop-list-container-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    .label {
+      font: var(--sys-body-medium);
+      letter-spacing: var(--sys-body-medium-tracking);
+    }
+    .drag-drop-list-item--invalid-title {
+      @apply text-sys-error;
+    }
+    .add-button {
+      @apply text-sys-primary;
+      font: var(--sys-title-small);
+      letter-spacing: var(--sys-title-small-tracking);
+      cursor: pointer;
+    }
+  }
+
+  ol {
+    margin: 0;
+    padding-inline-start: 1.5rem;
+  }
+
+  .drag-drop-list-item {
+    @apply bg-sys-surface-container;
+    border: thin solid var(--sys-outline);
+    border-bottom: none;
+    &.drag-drop-list-item--invalid {
+      border: thin solid var(--sys-error);
+      border-bottom: none;
+    }
+    &.drag-drop-list-item--selected {
+      border: 0.125rem solid var(--sys-primary);
+    }
+    &.drag-drop-list-item--selected + li {
+      border-top: none;
+    }
+    .drag-drop-list-item-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      border-color: var(--sys-outline);
+      .list-item-delete {
+        margin-left: auto;
+        width: 1rem;
+        height: 1rem;
+        font-size: 1rem;
+        padding-right: 0.5rem;
+        cursor: pointer;
+      }
+      input {
+        @apply bg-sys-surface-container;
+        @apply text-sys-on-surface;
+        width: 100%;
+        border: none;
+        outline: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        height: 2rem;
+        font-family: var(--mat-form-field-container-text-font);
+        line-height: var(--mat-form-field-container-text-line-height);
+        font-size: var(--mat-form-field-container-text-size);
+        letter-spacing: var(--mat-form-field-container-text-tracking);
+        font-weight: var(--mat-form-field-container-text-weight);
+      }
+      input::placeholder {
+        @apply text-sys-secondary;
+      }
+      .drag-drop-indicator {
+        @apply text-sys-secondary;
+        padding: 0 0.125rem;
+        font-size: 0.875rem;
+        width: 0.875rem;
+        height: 0.875rem;
+        cursor: move;
+      }
+    }
+  }
+  .drag-drop-list-item:first-child {
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+  .drag-drop-list-item:last-child {
+    border-bottom: 0.063rem solid var(--sys-outline);
+    &.drag-drop-list-item--invalid {
+      border-bottom: thin solid var(--sys-error);
+    }
+    &.drag-drop-list-item--selected {
+      border-bottom: 0.125rem solid var(--sys-primary);
+    }
+    border-radius: 0 0 0.25rem 0.25rem;
+  }
+}

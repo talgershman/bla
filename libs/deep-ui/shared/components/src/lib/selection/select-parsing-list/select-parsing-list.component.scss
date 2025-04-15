@@ -1,0 +1,11 @@
+:host ::ng-deep {
+  .ag-row-group {
+    &.ag-row-selected:before {
+      background-color: initial;
+    }
+    &.ag-row-selected.ag-row-hover:before {
+      background-color: var(--ag-row-hover-color);
+      background-image: none;
+    }
+  }
+}

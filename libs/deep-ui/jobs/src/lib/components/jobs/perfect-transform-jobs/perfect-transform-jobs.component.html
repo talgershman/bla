@@ -1,0 +1,23 @@
+<div class="w-full h-full">
+  <div class="jobs-container w-full h-full">
+    <de-perfect-transform-jobs-table
+      tableComponentId="perfect-transform-jobs-table"
+      [triggerTableRefresh]="triggerTableRefresh"
+      [queryParams]="queryParams"
+      (tableActionClicked)="onTableActionClickedRunInZone($event)"
+      (filtersParamsChanged)="onFiltersParamsChanged($event)"
+    />
+  </div>
+</div>
+
+<div *mePortalSrc="'jobs-perfect--add-job'">
+  <div
+    class="mr-1"
+    meTooltip="New job launches are currently suspended, please check the DEEP Teams channel for updates."
+    [meTooltipDisabled]="!disableNewJobs"
+  >
+    <button mat-flat-button color="primary" [disabled]="disableNewJobs" (click)="openWizard()">
+      Add Job
+    </button>
+  </div>
+</div>

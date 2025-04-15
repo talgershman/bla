@@ -1,0 +1,158 @@
+<form class="h-full" [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+  <div class="h-full w-full flex flex-col">
+    <div class="controls w-full overflow-y-auto flex flex-row gap-4 flex-1 px-4 box-border">
+      <div class="flex flex-col gap-7">
+        <div>
+          <me-input title="Name" [formControl]="mainForm.controls.name" />
+        </div>
+        <div>
+          <me-select
+            title="Team"
+            [options]="deepTeamOptions"
+            [formControl]="mainForm.controls.team"
+          />
+        </div>
+        <div>
+          <me-select
+            title="Raw Data Owner"
+            [options]="rawDataOwnerOptions"
+            [formControl]="mainForm.controls.rawDataOwner"
+          />
+        </div>
+        <div>
+          <me-select
+            title="Technology"
+            [options]="technologyOptions"
+            [formControl]="mainForm.controls.technology"
+          />
+        </div>
+        <div>
+          <me-chips title="Tags (Optional)" [formControl]="mainForm.controls.tags" />
+        </div>
+        <div>
+          <me-textarea
+            title="Description (Optional)"
+            [formControl]="mainForm.controls.description"
+          />
+        </div>
+      </div>
+      <div class="flex flex-col gap-7">
+        <div>
+          <me-select
+            title="Upload By"
+            [options]="typeOptions"
+            [formControl]="mainForm.controls.type"
+            (selectionChanged)="onTypeChanged($event)"
+          />
+        </div>
+        <div>
+          @if (mainForm.controls.type.value === PerfectListTypeEnum.DIRECTORY) {
+            <div>
+              <me-control-list
+                class="perfects-folder-list"
+                listTitle="Perfects Folder"
+                (addItemClicked)="addEmptyFolderPath()"
+              >
+                @for (
+                  groupControl of mainForm.controls.locationsOnMobileye.controls;
+                  track i;
+                  let i = $index;
+                  let first = $first
+                ) {
+                  <me-input
+                    placeholder="Insert folder path"
+                    updateOn="blur"
+                    [class.mt-1]="!first"
+                    [formControl]="groupControl.controls.folder"
+                  >
+                    @if (!first && !groupControl.controls.folder.disabled) {
+                      <button
+                        disableRipple
+                        mat-icon-button
+                        aria-label="Clear"
+                        matSuffix
+                        type="button"
+                        class="mat-icon-button-dense relative top-[2px]"
+                        (click)="removeFolderAt(i)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    }
+                  </me-input>
+                }
+              </me-control-list>
+            </div>
+          }
+          @if (mainForm.controls.type.value === PerfectListTypeEnum.FILE) {
+            <div>
+              <me-upload-file
+                class="upload-file-control"
+                title="Upload File"
+                multiple="false"
+                height="14rem"
+                placeholder="Drag & Drop to Upload Perfect List File"
+                [isLoading]="fileIsLoading$ | async"
+                [infoTooltip]="
+                  formMode === 'edit'
+                    ? 'When updating to a new file, old perfects will still be included in the list.' +
+                      'For a fresh copy please consider creating a new Perfect List'
+                    : ''
+                "
+                [selectedFileName]="selectedFileName"
+                [markAsError]="mainForm.controls.file.invalid && mainForm.controls.file.touched"
+                (filesChanges)="onFileChanged($event)"
+              />
+              <div class="mt-1">
+                @if (fileLimitExceeded) {
+                  <mat-error [@MeFadeInOut]="fileLimitExceeded">
+                    File can't be Zipped for upload, please zip the file manually (the file should
+                    not be bigger than 50MB).
+                  </mat-error>
+                }
+              </div>
+            </div>
+          }
+          @if (mainForm.controls.type.value === PerfectListTypeEnum.PerfectSearch) {
+            <div>
+              <section class="space-y-4">
+                <me-input
+                  title="PerfectSearch URL"
+                  type="text"
+                  updateOn="blur"
+                  class="qs-query-params-control"
+                  [formControl]="mainForm.controls.perfectSearchUrl"
+                />
+                <div>
+                  @if (perfectSearchUrlDecoded.value) {
+                    <me-json-editor
+                      title="Query Params"
+                      [overrideOptions]="{readOnly: true, expand: true}"
+                      [formControl]="perfectSearchUrlDecoded"
+                    />
+                  }
+                </div>
+              </section>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div></div>
+    <ng-content />
+    <footer
+      class="p-6 flex gap-4 items-center flex-row border-0 border-t border-solid border-sys-outline-variant"
+    >
+      <div class="grow"></div>
+      <div>
+        <button mat-button type="button" color="primary" (click)="onBackClicked()">
+          {{ cancelButtonLabel }}
+        </button>
+      </div>
+      <div meTooltipPosition="top" [meTooltip]="submitButtonTooltip">
+        <button mat-flat-button type="submit" color="primary" [disabled]="!!submitButtonTooltip">
+          {{ createButtonLabel }}
+        </button>
+      </div>
+    </footer>
+  </div>
+</form>

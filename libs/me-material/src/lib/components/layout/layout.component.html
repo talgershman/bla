@@ -1,0 +1,15 @@
+<me-sidenav [menuItems]="menuItems">
+  <me-header
+    class="sidenav-content"
+    [headerText]="headerText"
+    [userMenuItems]="userMenuItems"
+    [linksItems]="linksItems"
+    [tourItems]="tourItems"
+    [isUpdateAvailable]="isUpdateAvailable"
+    [errorWarningText]="errorWarningText"
+    [user]="user()"
+    [isAdminUser]="isAdminUser()"
+    (adminSettingsClicked)="adminSettingsClicked.emit()"
+  />
+  <ng-content />
+</me-sidenav>

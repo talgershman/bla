@@ -1,0 +1,34 @@
+<de-stepper-container class="block h-full" #stepper>
+  <cdk-step>
+    @defer (when renderSelectDataSourceComponent && (ready$ | async)) {
+      @if (renderSelectDataSourceComponent && (ready$ | async)) {
+        <de-select-datasource
+          [selectedDataSources]="selectedDataSources"
+          (backClicked)="movedBackFromStepper()"
+          (nextClicked)="onSelectedDatasource($event)"
+        />
+      }
+    } @placeholder {
+      <div></div>
+    }
+  </cdk-step>
+  <cdk-step>
+    @defer (when renderQueryBuilderComponent && (ready$ | async)) {
+      @if (renderQueryBuilderComponent && (ready$ | async)) {
+        <de-query-builder
+          [isReadOnlyMode]="isReadOnlyMode"
+          [dataSource]="selectedDatasource"
+          [versionDataSource]="selectedVersionDataSource"
+          [attributes]="selectedAttributes"
+          [subQuery]="selectedSubQuery"
+          [allowAggregation]="selectedDatasource?.allowAggregation"
+          (backClicked)="onQueryBuilderBackClicked()"
+          (addQueryClicked)="onAddQueryClicked($event)"
+          (updateQueryClicked)="onUpdateQueryClicked($event)"
+        />
+      }
+    } @placeholder {
+      <div></div>
+    }
+  </cdk-step>
+</de-stepper-container>

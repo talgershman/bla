@@ -1,0 +1,51 @@
+<div class="p-6 box-border">
+  <h1 class="mat-headline-small center">
+    <span>Cloud-MEST CMD - Local Run</span>
+  </h1>
+  <div class="my-6">
+    @if ((loading$ | async) === false) {
+      <div class="mb-2">
+        The cloud-mest command below is the same one as executed by the job with the following
+        modification made in order to allow local execution: <br />
+        <ul>
+          <li>removing --user flag</li>
+          <li>removing --output-uri flag</li>
+        </ul>
+        <br />
+        Please make sure to define a local output directory by specifying a folder after the flag
+        "-o"
+      </div>
+    }
+    @if (cmdControl.value) {
+      <div class="w-full flex flex-row items-center">
+        <div class="w-full">
+          <div class="bg-sys-surface-container-high text-sys-on-surface">
+            {{ cmdControl.value }}
+          </div>
+        </div>
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Copy To Clipboard"
+          class="copy-button"
+          (click)="copyCmdToClipboard(cmdControl.value)"
+        >
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </div>
+    }
+    @if (loading$ | async) {
+      <div class="flex-align-row">
+        <mat-progress-spinner diameter="40" mode="indeterminate" color="primary" />
+      </div>
+    }
+  </div>
+  @if (errorMsg) {
+    <div class="my-2">
+      <me-error-feedback [error]="errorMsg" />
+    </div>
+  }
+  <div class="buttons-container mt-8">
+    <button mat-button mat-dialog-close color="primary" type="button">Close</button>
+  </div>
+</div>

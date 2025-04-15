@@ -1,0 +1,122 @@
+<div class="toast-container mat-elevation-z0 p-4 box-border" (mouseenter)="isExpanded = true">
+  <div class="w-full flex justify-end">
+    <button disableRipple mat-icon-button class="close-button" (click)="remove()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <section class="flex flex-row items-center gap-4">
+    <div>
+      <mat-icon class="error-icon" fontSet="material-icons-outlined">error_outline</mat-icon>
+    </div>
+    <div [class]="options?.titleClass" [attr.aria-label]="title">
+      @switch (data.errorType) {
+        @case (MeErrorType.OnPremCertificate) {
+          <div class="mat-title-large mb-1">Error</div>
+          <div class="mat-body-medium mb-1">
+            1. Please make sure that you run the certificate <b>install script</b> from:
+            /mobileye/IT/scripts/add_certs_to_browsers.sh on your Linux machine.<br />
+            2. After you run the script <b>close all</b> opened browsers and try again.<br /><br />
+            If still there is a problem open a Jira ticket for DEEP
+          </div>
+          <ng-template [ngTemplateOutlet]="jiraLinkTmpl" />
+        }
+        @case (MeErrorType.AWS) {
+          <div class="mat-title-large mb-1">Error</div>
+          <div class="mat-body-medium">AWS connectivity issue<br /></div>
+        }
+        @case (MeErrorType.VPN) {
+          <div class="mat-title-large mb-1">Error</div>
+          <div class="mat-body-medium">
+            Please check that your <b>VPN connection</b> is working !<br />
+          </div>
+        }
+        @default {
+          <div>
+            @if (data.titleInnerHtml) {
+              <div
+                [class]="options.titleClass"
+                [attr.aria-label]="title"
+                [innerHTML]="data.titleInnerHtml | safe: 'html'"
+              ></div>
+            }
+            @if (!data.titleInnerHtml) {
+              <div class="mat-title-large mb-1">Error</div>
+              <div>We are sorry, something went wrong. Click for more details.</div>
+              <div class="mb-1">Please open a ticket to the DEEP team so they can investigate.</div>
+              <ng-template [ngTemplateOutlet]="jiraLinkTmpl" />
+            }
+          </div>
+        }
+      }
+    </div>
+  </section>
+  <section class="mt-2 w-full flex items-center justify-center">
+    <mat-icon class="cursor-pointer chevron-icon" (click)="isExpanded = !isExpanded">
+      {{ !isExpanded ? 'expand_more' : 'expand_less' }}</mat-icon
+    >
+  </section>
+  <section
+    class="mat-body-medium"
+    [class.h-0]="!isExpanded"
+    [@detailExpand]="isExpanded ? ErrorDetailsState.SHOW : ErrorDetailsState.HIDE"
+  >
+    @if (data && data.bodyText && !data.innerHtml) {
+      <div class="overflow-hidden h-full">
+        {{ data.bodyText }}
+      </div>
+    }
+    @if (data && !data.bodyText && data.innerHtml) {
+      <div class="overflow-hidden h-full" [innerHTML]="data.innerHtml | safe: 'html'"></div>
+    }
+    @if (data && !data.bodyText && !data.innerHtml) {
+      <div class="overflow-hidden h-full">
+        @if (data?.status) {
+          <b>Status: </b>{{ data.status }}.<br />
+        }
+        @if (data?.request) {
+          <b>Request URL: </b>{{ data.request }}<br />
+        }
+        @if (data?.message) {
+          <b>Message: </b>{{ data.message }}<br />
+        }
+        @if (data?.response) {
+          <b>Response Body:&nbsp;</b>
+          @if (!isString(data.response)) {
+            <pre class="mat-typography">{{ stringify(data.response) }}</pre>
+          } @else {
+            {{ data.response }}
+          }
+          <br />
+        }
+        @if (data?.json) {
+          <b>JSON: </b>
+          @if (!isString(data.json)) {
+            <pre class="mat-typography">{{ stringify(data.json) }}</pre>
+          } @else {
+            {{ data.json }}
+          }
+          <br />
+        }
+        @if (data?.stackTrance) {
+          <b>Stacktrance: </b>
+          {{ data.stackTrance }}
+        }
+        @if (sessionReplayUrl) {
+          <b>Fullstory: </b>
+          {{ sessionReplayUrl }}
+        }
+      </div>
+    }
+  </section>
+</div>
+
+<ng-template #jiraLinkTmpl>
+  <a
+    mat-flat-button
+    class="mt-1 open-jira-btn"
+    [href]="toastJiraTicket | safe: 'url'"
+    target="_blank"
+  >
+    Open JIRA ticket for DEEP
+  </a>
+</ng-template>

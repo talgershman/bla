@@ -1,0 +1,54 @@
+@if (isLoading$ | async) {
+  <div class="relative left-4 flex flex-row">
+    @if (title()) {
+      <span class="mr-2"> Budget groups loading... </span>
+    }
+    <mat-progress-spinner class="m-0" diameter="20" mode="indeterminate" color="primary" />
+  </div>
+} @else if (errorMsg()) {
+  <section
+    class="border-box p-4 bg-sys-error-container text-sys-on-error-container flex flex-row gap-1"
+  >
+    <div class="w-10">
+      <mat-icon>error_outline</mat-icon>
+    </div>
+    <div class="budget-group-api-error">
+      Error: {{ errorMsg() }} <br />
+      Please concat Cloud DevOps to resolve this issue. <br />
+      <a class="link-item" href="https://pages.cloud.mobileye.com/cloud-support/" target="_blank"
+        >Click here to open Jira ticket</a
+      >
+      - Application Area: CloudOps <br />
+      @if (canStillTriggerJob()) {
+        <b>*You can still trigger your job</b>
+      }
+    </div>
+  </section>
+} @else {
+  <me-select
+    [title]="title()"
+    [placeholder]="placeholder()"
+    [infoTooltip]="infoTooltip()"
+    [formControl]="controller"
+    [options]="budgetGroupOptions()"
+    (selectionChanged)="onSelectionChange($event)"
+  />
+  @if (isAllOptionsDisabled) {
+    <section
+      class="mt-2 border-box p-4 bg-sys-error-container text-sys-on-error-container flex flex-row gap-1"
+    >
+      <div class="w-10">
+        <mat-icon>error_outline</mat-icon>
+      </div>
+      <div class="all-budget-exceeded">
+        It looks like all of your budget groups have exceeded their limit.<br />
+        <span class="mat-label-large">Triggering a job is unavailable.</span><br />
+        Please concat Cloud DevOps to resolve this issue. <br />
+        <a class="link-item" href="https://pages.cloud.mobileye.com/cloud-support/" target="_blank"
+          >Click here to open Jira ticket</a
+        >
+        ( include Application Area: CloudOps )<br />
+      </div>
+    </section>
+  }
+}

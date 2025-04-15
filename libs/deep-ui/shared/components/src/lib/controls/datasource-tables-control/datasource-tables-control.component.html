@@ -1,0 +1,8 @@
+@if (control?.value) {
+  <de-select-datasource
+    [selectedDataSources]="control.value"
+    [datasourcesOptions]="datasourcesOptions()"
+    (dataSourceSelectionsChanged)="onDataSourceSelectionsChanged($event)"
+    (selectionRemoved)="onSelectionRemoved($event)"
+  />
+}

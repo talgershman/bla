@@ -1,0 +1,56 @@
+<div class="h-full w-full diagram-editor">
+  <div class="h-full w-full flex flex-col">
+    <header class="flex-initial">
+      <me-breadcrumbs [breadcrumbs]="breadcrumbs" />
+      <div class="mt-4 pl-6 box-border">
+        <div class="bg-sys-surface-container w-[33rem]">
+          <me-select
+            placeholder="Select ETL type"
+            [options]="etlOptionsTypes"
+            [formControl]="etlTypeControl"
+          />
+        </div>
+      </div>
+    </header>
+    <div class="h-0 flex-1">
+      @switch (etlTypeControl.value) {
+        @case (EtlTypeEnum.VALIDATION) {
+          <de-etl-validation-form
+            formMode="edit"
+            [type]="etlTypeControl.value"
+            [etl]="etl"
+            [parsingConfigs]="parsingConfigs"
+            [serviceNames]="serviceNames"
+            [showCreateButton]="false"
+            (backButtonClicked)="onBackButtonPressed()"
+          />
+        }
+        @case (EtlTypeEnum.MODEL_INFERENCE) {
+          <de-etl-model-inference-form
+            formMode="edit"
+            [type]="etlTypeControl.value"
+            [etl]="etl"
+            [serviceNames]="serviceNames"
+            [showCreateButton]="false"
+            (backButtonClicked)="onBackButtonPressed()"
+          />
+        }
+        @case (EtlTypeEnum.PERFECT_TRANSFORM) {
+          <de-etl-perfect-transform-form
+            formMode="edit"
+            [type]="etlTypeControl.value"
+            [etl]="etl"
+            [serviceNames]="serviceNames"
+            [showCreateButton]="false"
+            (backButtonClicked)="onBackButtonPressed()"
+          />
+        }
+        @default {
+          <div class="mat-headline-medium h-full w-full flex-auto flex items-center justify-center">
+            No Type Selected
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+:host::ng-deep {
+  .table-wrapper {
+    .table-container {
+      height: min(22rem, calc(90vh - 25rem));
+    }
+  }
+}

@@ -1,0 +1,113 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-autocomplete w-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+  (mouseover)="showCloseButton = true"
+  (mouseout)="showCloseButton = false"
+  (click)="$event.stopPropagation()"
+>
+  @if (title) {
+    <mat-label>
+      {{ title }}
+      @if (infoTooltip) {
+        <me-hint-icon [tooltip]="infoTooltip" />
+      }
+    </mat-label>
+  }
+  <div class="control-container flex flex-row items-center">
+    <input
+      matInput
+      #searchInput
+      #trigger="matAutocompleteTrigger"
+      type="text"
+      class="autocomplete-trigger relative truncate"
+      [errorStateMatcher]="customErrorStateMatcher"
+      [placeholder]="placeholder"
+      [formControl]="innerController"
+      [value]="innerController?.value?.value ? innerController.value.value : ''"
+      [matAutocomplete]="auto"
+      (keydown.enter)="onSearchEnterKey($event, trigger)"
+      (keydown.escape)="trigger.closePanel()"
+      (paste)="onPasteInput($event, trigger)"
+      (blur)="onInputBlur()"
+    />
+    <ng-content select=".left-icon" />
+    @if (innerController.value && !this.disabled) {
+      <button
+        disableRipple
+        mat-icon-button
+        aria-label="Clear"
+        matSuffix
+        type="button"
+        class="py-2 mat-icon-button-dense close-button"
+        [class.show-close-button]="showCloseButton && innerController && innerController.value"
+        (click)="onClearTermClicked($event, trigger)"
+      >
+        <mat-icon title="" fontSet="material-icons-outlined">cancel</mat-icon>
+      </button>
+    }
+    <mat-icon matSuffix class="arrow-icon relative top-[1px] pr-[5px]"> arrow_drop_down</mat-icon>
+    <ng-content />
+  </div>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="onValueChange($event)"
+    (opened)="onPanelOpened()"
+  >
+    <div (click)="onNewItemClicked()">
+      @if (isLoading) {
+        <mat-option disabled> Loading... </mat-option>
+      }
+      @if (addNewItemOption && !isLoading) {
+        <mat-option class="new-item-option" id="me-insert-new" [disabled]="true">
+          + Click here to add input value
+        </mat-option>
+      }
+    </div>
+    @for (option of filteredOptions$ | async; track option.id) {
+      <div meTooltipPosition="right" [meTooltip]="option.tooltip">
+        <mat-option
+          [value]="option"
+          [class.option-selected]="option.id === innerController?.value?.id"
+          [disabled]="disabledOptionsIds.includes(option.id) || option.disabled"
+        >
+          <span
+            meHighlightText
+            classToApply="highlight-text"
+            [search]="searchInput.value"
+            [text]="option.name"
+          ></span>
+        </mat-option>
+      </div>
+    }
+  </mat-autocomplete>
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

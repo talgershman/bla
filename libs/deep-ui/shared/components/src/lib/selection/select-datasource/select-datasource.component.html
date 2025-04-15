@@ -1,0 +1,52 @@
+<div class="box-border flex flex-col gap-4 h-full">
+  @if (viewState().datasourcesOptions.length > 1) {
+    <me-chips-group-buttons
+      class="relative z-[1] w-[80%] ml-4"
+      [options]="viewState().datasourcesOptions"
+      [selectedOption]="selectedGroupButton"
+      (selectedOptionChange)="onGroupButtonChanged($event)"
+    />
+  }
+  @if (selectedGroupButton === 'PERFECTS') {
+    @defer (on viewport; prefetch on idle) {
+      <de-select-perfect-datasource
+        class="flex-1"
+        tableComponentId="de-select-perfect-datasource"
+        rowSelection="multiple"
+        [selectedDataSources]="viewState().perfects.selectedDataSources"
+        [deSelectVersion]="deSelectVersion"
+        [initialTableFilters]="viewState().perfects.initialTableFilters"
+        [isReTriggerFlow]="isReTriggerFlow()"
+        (dataSourceSelectionsChanged)="onDataSourceSelectionsChanged($event)"
+        (disabledRowChanged)="onSelectionRemoved($event)"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  }
+
+  <!--  @if (selectedGroupButton === 'MESTS') {-->
+  <!--    @defer (on viewport; prefetch on idle) {-->
+  <!--      <de-select-perfect-datasource-->
+  <!--        class="flex-1"-->
+  <!--        tableComponentId="de-select-mest-datasource"-->
+  <!--        rowSelection="multiple"-->
+  <!--        overrideType="MESTS"-->
+  <!--        [selectedDataSources]="viewState().mests.selectedDataSources"-->
+  <!--        [deSelectVersion]="deSelectVersion"-->
+  <!--        [initialTableFilters]="viewState().mests.initialTableFilters"-->
+  <!--        [isReTriggerFlow]="isReTriggerFlow()"-->
+  <!--        (dataSourceSelectionsChanged)="onDataSourceSelectionsChanged($event)"-->
+  <!--        (disabledRowChanged)="onSelectionRemoved($event)"-->
+  <!--      ></de-select-perfect-datasource>-->
+  <!--    } @placeholder {-->
+  <!--      <div></div>-->
+  <!--    }-->
+  <!--  }-->
+  @if (selectedGroupButton && viewState().chipsSelectionData?.length) {
+    <de-select-datasource-selections
+      [chipsSelectionData]="viewState().chipsSelectionData"
+      (selectionChipRemoved)="onSelectionRemoved($event)"
+    />
+  }
+</div>

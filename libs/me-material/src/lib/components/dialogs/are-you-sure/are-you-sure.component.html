@@ -1,0 +1,32 @@
+<div class="p-6 box-border">
+  <header class="mat-headline-small">{{ title }}</header>
+  <section class="min-w-6 my-8">
+    @if (!table) {
+      <div [innerHTML]="contentHtml"></div>
+    } @else {
+      <me-enrich-table [description]="tableDescription" [table]="table" />
+    }
+  </section>
+  <div mat-dialog-actions>
+    @if (!hideCancelButton) {
+      <button
+        mat-button
+        mat-dialog-close
+        color="primary"
+        class="cancel-button"
+        (click)="canceled.emit()"
+      >
+        {{ cancelPlaceHolder }}
+      </button>
+    }
+    <button
+      mat-flat-button
+      mat-dialog-close
+      color="primary"
+      class="confirm-button"
+      (click)="confirmed.emit()"
+    >
+      {{ confirmPlaceHolder }}
+    </button>
+  </div>
+</div>

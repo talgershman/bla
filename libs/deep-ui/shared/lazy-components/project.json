@@ -1,0 +1,29 @@
+{
+  "name": "deep-ui-shared-lazy-components",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/deep-ui/shared/lazy-components/src",
+  "prefix": "de",
+  "tags": [],
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/deep-ui/shared/lazy-components/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/deep-ui/shared/lazy-components/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/deep-ui/shared/lazy-components/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

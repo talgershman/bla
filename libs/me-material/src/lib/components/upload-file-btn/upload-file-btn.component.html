@@ -1,0 +1,10 @@
+<button mat-button type="button" color="primary" (click)="onSelectFile()">
+  {{ buttonText() }}
+</button>
+<input
+  #inputElement
+  class="hidden"
+  type="file"
+  (change)="fileChangeHandler($event)"
+  [accept]="accept()"
+/>

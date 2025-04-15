@@ -1,0 +1,98 @@
+<me-server-side-table
+  [componentId]="selectTableComponentId"
+  [columnDefs]="columns"
+  [enableSideBar]="enableSideBar"
+  [teamFilterState]="teamFilterState"
+  [ignoreSavingTeamFilterState]="isReTriggerFlow"
+  [groupDisplayType]="groupDisplayType"
+  [checkboxes]="checkboxes()"
+  [hideDisabledCheckboxes]="hideDisabledCheckboxes()"
+  [clearSelectedRowsFilteredOut]="clearSelectedRowsFilteredOut"
+  [getRowId]="getRowId"
+  [rowSelection]="rowSelection"
+  [isRowSelectable]="isRowSelectable"
+  [getChildCount]="getChildCount"
+  [autoGroupColumnDef]="autoGroupColumnDef"
+  [rowHeight]="rowHeight"
+  [externalFiltersKeys]="externalFiltersKeys"
+  [ignoredFiltersKeys]="ignoredFiltersKeys"
+  [expandOnGroups]="expandOnGroups"
+  (teamFilterClicked)="onTeamFilterClicked($event)"
+  (serverSideSelectionStateChanged)="onServerSideSelectionStateChanged($event)"
+  (gridReady)="onGridReady($event)"
+  (firstDataRenderedEvent)="onSelectionChanged($event)"
+  (storeRefreshed)="onStoreRefreshed($event)"
+/>
+
+<ng-template #nameCell let-params="params" let-row>
+  @if (!!row.userFacingVersion) {
+    <div
+      class="ellipsis"
+      meTooltipPosition="right"
+      meTooltipClass="no-truncate-tooltip"
+      [meTooltip]="tooltipTemplate"
+      [meTooltipContext]="{
+        tooltip: params.value,
+      }"
+      [meTooltipOnEllipsis]="true"
+    >
+      {{ params.value }}
+    </div>
+  } @else {
+    <div
+      class="ellipsis ml-1.5"
+      meTooltipPosition="right"
+      meTooltipClass="no-truncate-tooltip"
+      [meTooltip]="tooltipTemplate"
+      [meTooltipContext]="{
+        tooltip: row.name + ' (' + row.dataSubType + ')',
+      }"
+      [meTooltipOnEllipsis]="true"
+    >
+      {{ row.name }} ({{ startCase(row.dataSubType) }})
+    </div>
+    @if (row?.id) {
+      <div class="uuid-container">
+        <button mat-icon-button (click)="copyJobIdToClipboard($event, row.id)">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+        <div
+          class="text-uuid ellipsis"
+          meTooltipPosition="right"
+          [meTooltip]="params.node.selectable ? params.value : ''"
+          [meTooltipOnEllipsis]="true"
+        >
+          ID: {{ params.value }}
+        </div>
+      </div>
+    }
+  }
+</ng-template>
+
+<ng-template #statusCell let-params="params" let-row>
+  @if (row) {
+    <div
+      class="me-host-align ellipsis"
+      meTooltipPosition="right"
+      [meTooltip]="params.tooltip ? tooltipTemplate : ''"
+      [meTooltipContext]="{
+        tooltip: params.tooltip ? params.tooltip(params) : '',
+      }"
+      [meTooltipOnEllipsis]="true"
+      [class]="'column-status-value-' + row.status"
+    >
+      {{ params.valueFormatted }}
+    </div>
+  }
+</ng-template>
+
+<ng-template #tooltipTemplate let-tooltip="tooltip">
+  <div class="tooltip-container space-x-1">
+    <button mat-icon-button (click)="copyJobIdToClipboard($event, tooltip)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <span class="text-tooltip">
+      {{ tooltip }}
+    </span>
+  </div>
+</ng-template>

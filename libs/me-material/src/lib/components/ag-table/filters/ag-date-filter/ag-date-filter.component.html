@@ -1,0 +1,37 @@
+@if (form) {
+  <div class="flex flex-col space-y-4 p-4">
+    @for (control of form.controls; track i; let i = $index; let first = $first) {
+      <div class="flex flex-col">
+        <me-date
+          width="256px"
+          panelClass="ag-custom-component-popup"
+          runInZone="true"
+          [formControl]="control"
+          [min]="dateOptions[i].minDate"
+          [max]="dateOptions[i].maxDate"
+          [startAtDate]="dateOptions[i].startAt"
+          [placeholder]="dateOptions[i].title"
+          [hideClearButton]="!clearable"
+          [forceErrorMsg]="first ? forceErrorMsg : ''"
+        />
+      </div>
+    }
+    @if (clearable) {
+      <div class="flex flex-row-reverse">
+        <button mat-button color="primary" class="w-[7rem]" type="button" (click)="onClear()">
+          Clear Filter
+        </button>
+        @if (permanentValue) {
+          <mat-checkbox
+            disableRipple
+            color="primary"
+            class="flex-1"
+            [formControl]="permanentControl"
+          >
+            Permanent
+          </mat-checkbox>
+        }
+      </div>
+    }
+  </div>
+}

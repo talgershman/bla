@@ -1,0 +1,90 @@
+<form
+  class="ml-[1.625rem] pr-[1.625rem]"
+  [formGroup]="conditionsForm"
+  (ngSubmit)="onAddQueryClicked()"
+>
+  <header class="flex flex-row gap-6 mb-6 justify-between items-end">
+    @if (dataSource()) {
+      <div class="flex flex-row gap-4 items-center me-body-medium text-sys-on-surface">
+        <span>
+          Data Source Name: <b class="mat-label-large">{{ dataSource().name }}</b>
+        </span>
+        @if (dataSource().versioned) {
+          <span class="min-w-[104px]">
+            Version: <b class="mat-label-large">{{ versionText() }}</b>
+          </span>
+        }
+      </div>
+    }
+    @if (enableLatestVersion) {
+      <div class="relative top-[7px] flex flex-row items-center gap-0.5">
+        <mat-checkbox
+          disableRipple
+          color="primary"
+          [disabled]="isDataSourceLatestVersion() && dataSource().status === 'updating'"
+          [checked]="useLatestVersion()"
+          (change)="onUseLatestVersionChanged($event)"
+        >
+          <span class="mat-body-medium text-sys-on-surface">Always use latest version</span>
+        </mat-checkbox>
+        <me-hint-icon
+          tooltip='When checked, will change the Dataset status to "needs sync" whenever a new version of the Data Source is published.'
+        />
+      </div>
+    }
+    <div class="flex-grow"></div>
+    <div class="buttons flex flex-row space-x-4">
+      <button mat-button type="button" color="primary" (click)="backClicked.emit()">Back</button>
+      @if (dataSource().status !== 'inactive') {
+        <button mat-flat-button type="submit" color="primary" class="save-button">
+          {{ subQuery ? 'Update Query' : 'Add Query' }}
+        </button>
+      }
+    </div>
+  </header>
+
+  <div class="flex flex-row">
+    <main
+      class="box-border border-solid border border-sys-outline-variant border-r-0 rounded-l-lg w-full pt-6 pb-6 pl-6 overflow-x-auto"
+    >
+      @if (!forceShowConditions && showEmptyMessage()) {
+        <section class="h-[270px] flex flex-col items-center justify-center">
+          <div class="mat-body-large">
+            All data will be selected from <b>{{ dataSource().name }}</b> if no query conditions are
+            added.
+          </div>
+          <div class="mt-2">
+            <button
+              mat-button
+              type="button"
+              color="primary"
+              class="add-conditions-btn"
+              (click)="onAddConditionsClicked()"
+            >
+              Click here to add conditions
+            </button>
+          </div>
+        </section>
+      } @else {
+        <de-group
+          groupTitle="Conditions"
+          [allowAggregation]="allowAggregation"
+          [aggregationConditions]="subQuery?.query?.aggregation"
+          [aggregationForm]="aggregationForm"
+          [queryConditions]="subQuery?.query?.conditions"
+          [conditionsForm]="conditionsForm"
+          [isTouched]="conditionsForm?.touched"
+          [groupIndex]="1"
+          [attributes]="attributes"
+          [readonly]="dataSource().status === 'inactive'"
+          [showCloseButton]="!forceShowConditions"
+          [createEmptyRow]="forceShowConditions || !showEmptyMessage()"
+          (clearConditions)="onClearConditions()"
+        />
+      }
+    </main>
+    <div
+      class="flex-initial w-6 padding-right-spacer pr-6 border-solid border border-l-0 border-sys-outline-variant rounded-r-lg"
+    ></div>
+  </div>
+</form>

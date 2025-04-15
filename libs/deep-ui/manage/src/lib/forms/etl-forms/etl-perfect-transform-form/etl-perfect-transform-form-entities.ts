@@ -1,0 +1,1 @@
+export const DEFAULT_ETL_PERFECT_SDK_VERSION = 'N/A';

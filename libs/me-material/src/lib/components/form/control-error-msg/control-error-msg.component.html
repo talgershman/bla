@@ -1,0 +1,9 @@
+@if (text$ | async; as text) {
+  <div class="mt-1">
+    @if (text) {
+      <div [@animation]="increment">
+        <mat-error class="mb-1 px-4">{{ text }}</mat-error>
+      </div>
+    }
+  </div>
+}

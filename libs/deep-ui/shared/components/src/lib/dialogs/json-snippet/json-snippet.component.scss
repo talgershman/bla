@@ -1,0 +1,30 @@
+.json-snippet-container {
+  > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+  .json-snippet-code {
+    overflow-y: hidden;
+    height: 35rem;
+    width: 59rem;
+  }
+
+  @media screen and (max-height: 577px) {
+    .json-snippet-code {
+      height: 27.5rem;
+      width: 59rem;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: row;
+  }
+}
+
+.mat-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}

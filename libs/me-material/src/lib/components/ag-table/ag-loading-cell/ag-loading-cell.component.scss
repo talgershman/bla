@@ -1,0 +1,8 @@
+::ng-deep {
+  ag-grid-angular {
+    .ag-row:has(me-ag-loading-cell .error-container) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

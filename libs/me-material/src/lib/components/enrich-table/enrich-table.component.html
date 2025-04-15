@@ -1,0 +1,63 @@
+@if (description) {
+  <div class="flex flex-row mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [innerHTML]="description"></div>
+  </div>
+}
+@if (!!table) {
+  <div class="table-wrapper mat-body-medium">
+    <table [class]="table.classes?.join(' ')">
+      <tr [class]="table.headers.classes?.join(' ')">
+        @for (head of table.headers.cells; track i; let i = $index) {
+          <th
+            class="mat-label-large mat-prominent"
+            [class]="head.classes?.join(' ')"
+            meTooltipPosition="right"
+            meTooltipClass="no-truncate-tooltip"
+            [meTooltip]="tooltipTemplate"
+            [meTooltipContext]="{
+              tooltip: head.tooltip ? head.tooltip : head.text,
+            }"
+            [meTooltipOnEllipsis]="true"
+          >
+            {{ head.text }}
+          </th>
+        }
+      </tr>
+      @for (row of table.rows; track i; let i = $index) {
+        <tr [class]="row.classes?.join(' ')">
+          @for (cell of row.cells; track i; let i = $index) {
+            <td
+              [class]="cell.classes?.join(' ')"
+              meTooltipPosition="right"
+              meTooltipClass="no-truncate-tooltip"
+              [meTooltip]="tooltipTemplate"
+              [meTooltipContext]="{
+                tooltip: cell.tooltip ? cell.tooltip : cell.text,
+              }"
+              [meTooltipOnEllipsis]="true"
+            >
+              {{ cell.text }}
+            </td>
+          }
+        </tr>
+      }
+    </table>
+  </div>
+  @if (!!table.additionalContentHtml) {
+    <div [innerHTML]="table.additionalContentHtml"></div>
+  }
+}
+
+<ng-template #tooltipTemplate let-tooltip="tooltip">
+  <div class="tooltip-container space-x-1">
+    <button mat-icon-button (click)="copyToClipboard($event, tooltip)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <span class="text-tooltip">
+      {{ tooltip }}
+    </span>
+  </div>
+</ng-template>

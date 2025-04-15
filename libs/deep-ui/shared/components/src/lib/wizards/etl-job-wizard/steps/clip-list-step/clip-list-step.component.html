@@ -1,0 +1,9 @@
+<de-select-clip-list
+  [tableComponentId]="tableComponentId"
+  [isReTriggerFlow]="isReTriggerFlow"
+  [initialTableFilters]="getInitialTableFilters(initialSelectionId, initialFiltersValue)"
+  [initialSelectionId]="initialSelectionId"
+  [rowSelection]="enableMultiSelection ? 'multiple' : 'single'"
+  [isRowSelectable]="isRowSelectable"
+  (selectionChanged)="onClipListsChanged($event)"
+/>

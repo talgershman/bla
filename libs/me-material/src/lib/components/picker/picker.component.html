@@ -1,0 +1,20 @@
+<button
+  mat-button
+  color="primary"
+  class="open-button"
+  type="button"
+  [disabled]="isOpenDialogDisabled()"
+  (click)="onOpenDialog()"
+>
+  <div class="flex flex-row items-center">
+    <span
+      class="ellipsis max-w-64"
+      meTooltipClass="no-truncate-tooltip"
+      [meTooltip]="pickerTitle()"
+      [meTooltipOnEllipsis]="true"
+    >
+      {{ pickerTitle() }}
+    </span>
+    <mat-icon class="mr-1">arrow_drop_down</mat-icon>
+  </div>
+</button>

@@ -1,0 +1,113 @@
+@if (baseViewState().derivedLogic()) {}
+<me-wizard (selectionChange)="onStepSelectionChanged($event, runType())">
+  @if (!refJobId) {
+    <me-cdk-step
+      label="Select Clip List"
+      [isNextDisabled]="clipListStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-clip-list-step
+          [tableComponentId]="clipListStepTableComponentId()"
+          [runType]="runType()"
+          [initialFiltersValue]="initialFiltersValue"
+          (formState)="onFormStateChanged($event, 'clipListStepNextDisabled')"
+        />
+      } @placeholder (minimum 200ms) {
+        <de-loading-step [isLoading]="true" />
+      }
+    </me-cdk-step>
+  }
+  @if (isRunTypeDataCreation()) {
+    <me-cdk-step
+      aria-label="parsing-configuration-step"
+      label="Select Parsing Configuration"
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="parsingStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-parsing-step
+          [tableComponentId]="parsingStepTableComponentId()"
+          (parsingChanged)="onParsingChanged($event)"
+          (formState)="onFormStateChanged($event, 'parsingStepNextDisabled')"
+        />
+      } @placeholder {
+        <div></div>
+      }
+    </me-cdk-step>
+  }
+  @if (isRunTypeFullRun()) {
+    <me-cdk-step
+      #etlCatalogStep
+      aria-label="etl-step"
+      label="Select ETL"
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="etlStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-etl-step
+          [tableComponentId]="etlStepTableComponentId()"
+          [wasShown]="etlCatalogStep.wasShown"
+          [etlType]="EtlTypeEnum.VALIDATION"
+          (etlChanged)="onEtlChanged($event)"
+          (formState)="onFormStateChanged($event, 'etlStepNextDisabled')"
+        />
+      } @placeholder {
+        <div></div>
+      }
+    </me-cdk-step>
+  }
+  <me-cdk-step
+    #configurationStep
+    label="Configurations"
+    [nextLabel]="nextButtonLabel"
+    [isNextDisabled]="runConfigStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onConfigurationStepNextClick(refJobId)"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-run-config-step
+        enableForceParsing="true"
+        [wasShown]="configurationStep.wasShown"
+        [runType]="runType()"
+        [enableServices]="isRunTypeFullRun()"
+        [enableOutputPath]="isRunTypeFullRun()"
+        [enableMergeParsedData]="!refJobId"
+        [etl]="selectedEtl"
+        [dataRetentionInfoObj]="dataRetentionInfoObj"
+        (formState)="onFormStateChanged($event, 'runConfigStepNextDisabled')"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step [hideNext]="true" [hidePrev]="true">
+    @defer (on viewport; prefetch on idle) {
+      <de-loading-step [isLoading]="loading$ | async" />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step
+    [label]="submitJobFeedbackLabel"
+    [hideNext]="true"
+    [isPrevDisabled]="submitJobDisablePrevButton"
+    (prevClicked)="onSubmitJobStepPrevClicked()"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-submit-job-step
+        [items]="submitJobFeedbackItems"
+        (stepLabelChange)="submitJobFeedbackLabel = $event"
+        (disablePrevButton)="submitJobDisablePrevButton = $event"
+        (triggerNewJob)="triggerNewJob.emit($event)"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+</me-wizard>

@@ -1,0 +1,43 @@
+@if (show()) {
+  <div class="json-message-container h-full w-full overflow-y-hidden p-4 box-border rounded">
+    <main class="relative" (mouseenter)="showButtons = true" (mouseleave)="showButtons = false">
+      <header
+        [class.show-container]="showButtons"
+        [class.hide-container]="!showButtons"
+        class="absolute right-2 top-[-6px] flex flex-row gap-2"
+      >
+        <button
+          mat-stroked-button
+          color="primary"
+          class="mat-stoke-button-custom"
+          (click)="jsonMessageService.collapseAll()"
+        >
+          <div class="flex flex-row items-center gap-1">
+            <div>Collapse all</div>
+          </div>
+        </button>
+        <button
+          mat-stroked-button
+          color="primary"
+          class="mat-stoke-button-custom"
+          (click)="jsonMessageService.expandAll()"
+        >
+          <div class="flex flex-row items-center gap-1">
+            <div>Expand all</div>
+          </div>
+        </button>
+        <button
+          mat-stroked-button
+          color="primary"
+          class="mat-stoke-button-custom"
+          (click)="copyToClipboard()"
+        >
+          <div class="flex flex-row items-center gap-1">
+            <div>Copy message</div>
+          </div>
+        </button>
+      </header>
+      <me-group-message [uiConfigs]="uiConfigs" [msg]="copyMsg" [level]="0" />
+    </main>
+  </div>
+}

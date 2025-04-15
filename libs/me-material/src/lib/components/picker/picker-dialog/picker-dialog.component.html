@@ -1,0 +1,41 @@
+<div class="flex flex-col w-full h-full">
+  <header>
+    <div class="flex flex-row justify-between items-center px-6 py-1 min-h-[5rem] box-border">
+      <div class="mat-headline-small step-label text-sys-on-surface">
+        {{ dialogTitle() }}
+      </div>
+      @if (!hideCloseButton()) {
+        <div class="relative left-[0.6rem] text-sys-secondary">
+          <button mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+    <div class="w-full border-0 border-t border-solid border-sys-outline-variant"></div>
+  </header>
+  @if (dialogTemplate()) {
+    <main class="flex-1 overflow-auto">
+      <ng-container *ngTemplateOutlet="dialogTemplate()" />
+    </main>
+  }
+
+  @if (!hideFooter()) {
+    <footer class="flex-initial">
+      <div class="w-full border-0 border-t border-solid border-sys-outline-variant"></div>
+      <div class="flex flex-row w-full justify-end gap-6 px-6 py-4 box-border">
+        <button
+          disableRipple
+          mat-flat-button
+          type="submit"
+          class="button-next"
+          color="primary"
+          [disabled]="isSelectDisabled()"
+          (click)="onSelected()"
+        >
+          Select
+        </button>
+      </div>
+    </footer>
+  }
+</div>

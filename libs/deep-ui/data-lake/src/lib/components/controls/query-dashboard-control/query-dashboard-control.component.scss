@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.jump-file-btn {
+  padding-right: 6px;
+}
+
+.add-icon {
+  font-size: 2.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.invalid-border {
+  @apply border-sys-error;
+}
+
+.copy-query-json-btn {
+  --mdc-text-button-container-height: 24px;
+}
+
+:host::ng-deep {
+  .actions-buttons-container {
+    .mat-mdc-button {
+      padding: 0 4px;
+      margin-right: 4px;
+    }
+  }
+}

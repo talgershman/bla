@@ -1,0 +1,54 @@
+<div
+  class="ag-cell-label-container"
+  role="presentation"
+  meTooltipPosition="right"
+  [meTooltip]="params.displayName"
+  [meTooltipOnEllipsis]="true"
+  [meTooltipEllipsisHost]="headerLabel"
+>
+  @if (params.enableFilterButton && !suppressFilterColumn) {
+    <div #menuButton class="ag-header-icon ag-header-cell-menu-button" (click)="onMenuClicked()">
+      <mat-icon class="menu-indicator text-sm">menu</mat-icon>
+    </div>
+  }
+
+  <div
+    ref="eLabel"
+    class="ag-header-cell-label space-x-2"
+    role="presentation"
+    (click)="onSortRequested()"
+  >
+    <span #headerLabel ref="eText" class="ag-header-cell-text">
+      {{
+        groupDisplayType === 'singleColumn' && isGroupHeader && params.displayName === 'Group'
+          ? 'Name'
+          : params.displayName
+      }}
+    </span>
+    @if (showInfoTooltip) {
+      <me-hint-icon
+        tooltipPosition="bottom"
+        [tooltip]="infoTooltip"
+        (mouseover)="onMouseOver()"
+        (mouseout)="onMouseOut()"
+        class="flex"
+      />
+    }
+    @if (isFilterActive) {
+      <div class="flex ag-header-icon ag-header-label-icon ag-filter-icon">
+        <mat-icon class="filter-indicator text-sm">filter_alt</mat-icon>
+      </div>
+    }
+    @if (params.enableSorting || sortState) {
+      <div class="flex">
+        <mat-icon class="sort-indicator text-sm" [class.active]="sortState" [@flipX]="sortState"
+          >south</mat-icon
+        >
+      </div>
+    }
+  </div>
+
+  @if (showNumberOfSelections) {
+    <div class="text-sys-outline-variant">({{ numberOfSelectedNodes$ | async }})&nbsp;</div>
+  }
+</div>

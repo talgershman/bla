@@ -1,0 +1,144 @@
+<main
+  [class.invalid-sub-query-square]="datasource.status === 'inactive' || markAsInvalid"
+  [class.disabled-area]="disableSquare"
+  (mouseenter)="showButtons = true"
+  (mouseleave)="showButtons = false"
+  class="w-[220px] h-[148px] py-1 px-2 border-box flex flex-col border-solid border border-sys-outline-variant rounded hover:border-sys-primary"
+>
+  <header
+    class="flex flex-row items-baseline mat-body-medium gap-1 sub-query-{{
+      datasource.name.split(' ').join('-')
+    }}"
+  >
+    <div class="flex-1">
+      <div class="break-all">
+        {{ datasource.name }}
+        @if (versionLabel) {
+          <label class="flex-none mat-body-small" [class.text-sys-secondary]="!disableSquare">{{
+            versionLabel
+          }}</label>
+        }
+      </div>
+      <div class="mat-body-small flex flex-row mt-1 gap-1">
+        @if (datasource.status === 'inactive') {
+          <div>Status: <span class="text-sys-error">Inactive</span></div>
+        }
+        @if (
+          datasource.versioned && datasource.status === 'updating' && versionLabel === '(Latest)'
+        ) {
+          <div>Status: Updating...</div>
+        }
+        @if (!datasource.versioned && datasource.status === 'updating') {
+          <div>Status: Updating...</div>
+        }
+      </div>
+    </div>
+    <div
+      class="hide-container action-buttons-container text-sys-primary flex flex-row gap-1 items-center justify-end"
+      [@MeOpacityAnimation]="showButtons ? 'show' : 'hide'"
+      [class.show-container]="showButtons"
+    >
+      <div class="cursor-pointer">
+        <mat-icon class="text-sys-primary" (click)="editSubQueryClicked.emit(subQuery)">
+          {{ datasource.status === 'inactive' ? 'visibility' : 'edit' }}
+        </mat-icon>
+      </div>
+      <div class="cursor-pointer">
+        <mat-icon class="text-sys-primary" (click)="deleteSubQueryClicked.emit(index)">
+          delete_outline
+        </mat-icon>
+      </div>
+    </div>
+  </header>
+  <section class="flex-1"></section>
+  <footer>
+    <div class="add-fields-container">
+      <div class="space-y-1">
+        <div
+          class="select-all-fields-control"
+          [@MeOpacityAnimation]="showButtons || selectedAllFields ? 'show' : 'hide'"
+        >
+          <mat-slide-toggle
+            color="primary"
+            class="ml-1 mb-1"
+            [disabled]="disableSquare"
+            [checked]="selectedAllFields"
+            (change)="onSelectAllFieldsChanged($event)"
+          >
+            <span
+              meTooltip="mat-body-small When enabled, will save all the data source columns to the parquet files."
+            >
+              Select all fields
+            </span>
+          </mat-slide-toggle>
+        </div>
+        <button
+          mat-button
+          type="button"
+          color="primary"
+          class="mat-title-medium"
+          [disabled]="disableSquare"
+          [matMenuTriggerFor]="fieldsMenu"
+          (menuOpened)="onAddFieldsClicked()"
+          (menuClosed)="onCloseFieldsMenu()"
+        >
+          +Add Fields
+        </button>
+      </div>
+      <mat-menu #fieldsMenu="matMenu" class="width-23">
+        <div (click)="$event.stopPropagation()">
+          @if (loading$ | async) {
+            <div class="w-[15rem] flex flex-col items-center gap-2">
+              <div>
+                <mat-progress-spinner diameter="40" mode="indeterminate" color="primary" />
+              </div>
+              <div>Loading fields...</div>
+            </div>
+          } @else {
+            <section class="p-2 border-box">
+              <div class="fields-control">
+                @if (fieldsControl) {
+                  <me-autocomplete-chips
+                    width="20rem"
+                    title="Fields"
+                    placeholder="Select a field or paste copied value"
+                    [options]="attributeNameOptions"
+                    [formControl]="fieldsControl"
+                  >
+                    <div class="mb-2 chips-action-button">
+                      <button
+                        mat-button
+                        type="button"
+                        color="primary"
+                        class=""
+                        [disabled]="!fieldsControl.value.length"
+                        (click)="copyControllerValueToClipboard($event)"
+                      >
+                        <div class="flex flex-row items-center">
+                          <mat-icon fontSet="material-icons-outlined" class="mr-1"
+                            >content_copy</mat-icon
+                          >Export fields
+                        </div>
+                      </button>
+                    </div>
+                  </me-autocomplete-chips>
+                }
+              </div>
+            </section>
+          }
+        </div>
+      </mat-menu>
+    </div>
+    @if (getFooterFieldsDisplayText(fieldsControl?.value, subQuery?.query?.columns); as fieldsStr) {
+      <div
+        class="mat-body-small text-sys-outline ellipsis"
+        [meTooltip]="fieldsStr"
+        [meTooltipProps]="{
+          delay: [500, 500],
+        }"
+      >
+        {{ fieldsStr }}
+      </div>
+    }
+  </footer>
+</main>

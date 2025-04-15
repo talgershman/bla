@@ -1,0 +1,17 @@
+<div class="flex flex-col space-y-4 p-4">
+  <div class="w-[16rem]">
+    <me-select
+      [placeholder]="placeholder"
+      [options]="options"
+      [formControl]="valueControl"
+      (selectionChanged)="onSelectionChange()"
+    />
+  </div>
+  @if (clearable) {
+    <div class="flex flex-row-reverse">
+      <button mat-button color="primary" class="w-[7rem]" type="button" (click)="onClear()">
+        Clear Filter
+      </button>
+    </div>
+  }
+</div>

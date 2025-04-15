@@ -1,0 +1,7 @@
+:host {
+  .cell-wrapper:has(> .me-table-cell-elem),
+  .cell-wrapper:has(> .me-host-align) {
+    display: flex;
+    align-items: center;
+  }
+}

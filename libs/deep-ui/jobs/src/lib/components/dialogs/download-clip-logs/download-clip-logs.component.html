@@ -1,0 +1,89 @@
+<form [formGroup]="downloadClipLogsForm" (ngSubmit)="onSaveClicked()">
+  <div class="w-full h-full">
+    <div class="actions px-6 py-6 pb-4">
+      <div class="mat-headline-small text-sys-on-surface flex-1">ETL Logs</div>
+      @if (files()?.length) {
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Copy To Clipboard"
+          class="download-button"
+          type="button"
+          [disabled]="isLoading$ | async"
+          (click)="downloadEtlLogs()"
+        >
+          <mat-icon class="top-0.5">download</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Copy To Clipboard"
+          class="copy-button"
+          type="button"
+          [disabled]="isLoading$ | async"
+          (click)="copyCmdToClipboard()"
+        >
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      }
+      <button class="dialog-close" mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="w-full border-0 border-t border-solid border-sys-outline-variant"></div>
+    <div class="px-6 pb-6 pt-2 box-border etl-logs-container">
+      <div class="mat-headline-small center">Insert clip name to download logs</div>
+      <div class="clip-name-control mt-4 mb-8">
+        <div class="flex flex-row gap-2">
+          <me-input type="text" [formControl]="downloadClipLogsForm.controls.clipName" />
+          <button mat-flat-button type="submit" color="primary">Submit</button>
+        </div>
+      </div>
+      @if (errorMsg) {
+        <div class="my-2">
+          <me-error-feedback [error]="errorMsg" />
+        </div>
+      }
+      @if (loading$ | async) {
+        <div class="progress-spinner-container flex justify-center items-center h-full">
+          <mat-progress-spinner diameter="50" mode="indeterminate" color="primary" />
+        </div>
+      } @else {
+        @if (files()?.length) {
+          <me-chips-group-buttons
+            class="relative z-[1] w-[80%]"
+            [options]="fileOptions()"
+            [selectedOption]="selectedFileOption()"
+            (selectedOptionChange)="onGroupButtonChanged($event)"
+          />
+        } @else {
+          <div class="json-etl-logs--empty">
+            <me-json-editor
+              [formControl]="downloadClipLogsForm.controls.jsonControls.controls[0]"
+              [isTouched]="downloadClipLogsForm.controls.jsonControls.controls[0]?.touched"
+              [errors]="downloadClipLogsForm.controls.jsonControls.controls[0]?.errors"
+              [overrideOptions]="{readOnly: true}"
+            />
+          </div>
+        }
+        @for (option of fileOptions(); track i; let i = $index) {
+          @if (option.id === selectedIndex().toString()) {
+            <div class="json-etl-logs">
+              <me-json-editor
+                showEvenInError="true"
+                [formControl]="downloadClipLogsForm.controls.jsonControls.controls[selectedIndex()]"
+                [isTouched]="
+                  downloadClipLogsForm.controls.jsonControls.controls[selectedIndex()]?.touched
+                "
+                [errors]="
+                  downloadClipLogsForm.controls.jsonControls.controls[selectedIndex()]?.errors
+                "
+                [overrideOptions]="{readOnly: true, meExpandLevel: 2}"
+              />
+            </div>
+          }
+        }
+      }
+    </div>
+  </div>
+</form>

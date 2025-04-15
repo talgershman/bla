@@ -1,0 +1,135 @@
+<mat-toolbar>
+  <div class="w-full h-full flex flex-row items-center justify-center">
+    <div class="flex flex-row items-center content-center ml-[5px]">
+      <div
+        [routerLink]="['./']"
+        class="cursor-pointer header-left logo-container relative top-[4px]"
+      >
+        <img
+          type="image/webp"
+          [ngSrc]="
+            (isDark$ | async) === true ? 'assets/images/logo-dark.webp' : 'assets/images/logo.webp'
+          "
+          width="143"
+          height="40"
+          loading="lazy"
+          alt="app.logo"
+        />
+      </div>
+      @if (headerText) {
+        <span class="header-text ml-2 text-lg italic">{{ headerText }}</span>
+      }
+    </div>
+    <div class="flex-grow"></div>
+    <div class="flex flex-row gap-4">
+      @for (linkItem of linksItems; track linkItem.href; let last = $last) {
+        <div
+          class="text-sm leading-6 cursor-pointer border-0 pr-4 border-r border-solid border-sys-outline-variant"
+          [class.border-none]="!last"
+        >
+          <div>
+            <a class="link-item mat-label-large" target="_blank" [href]="linkItem.href">
+              {{ linkItem.label }}
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="actions-container flex flex-row items-center justify-center ml-4">
+      @if (isAdminUser()) {
+        <button
+          mat-icon-button
+          aria-label="Admin settings"
+          meTooltip="Admin settings"
+          (click)="adminSettingsClicked.emit()"
+        >
+          <mat-icon>admin_panel_settings</mat-icon>
+        </button>
+      }
+      <button
+        mat-icon-button
+        class="theme-toggle text"
+        aria-label="Change theme"
+        meTooltip="Toggle theme"
+        (click)="changeTheme()"
+      >
+        <mat-icon>{{ (isDark$ | async) === true ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      </button>
+      @if (tourItems?.length) {
+        <div class="flex flex-row mr-4">
+          <button
+            mat-icon-button
+            aria-label="header tours menu button"
+            meTooltip="UI Tours"
+            [matMenuTriggerFor]="toursMenu"
+          >
+            <mat-icon class="text-sys-primary">tour</mat-icon>
+          </button>
+          @if (newToursCount !== 0) {
+            <div class="relative">
+              <div
+                class="absolute top-[10px] left-[-10px] hide-text"
+                matBadgeSize="small"
+                matBadgePosition="after"
+                matBadgeOverlap="true"
+                [matBadge]="1"
+              ></div>
+            </div>
+          }
+          <mat-menu #toursMenu>
+            @for (tourItem of tourItems; track tourItem.title) {
+              <button
+                class="w-full tour-item-button"
+                (click)="tourItem.click(tourItem)"
+                mat-menu-item
+              >
+                <div class="w-full flex flex-row items-center justify-between gap-6">
+                  <span class="mat-title-small">{{ tourItem.title }}</span>
+                  <span class="mat-body-small">{{
+                    tourItem.watched ? 'Watched' : tourItem.isNew ? 'New' : ''
+                  }}</span>
+                </div>
+              </button>
+            }
+          </mat-menu>
+        </div>
+      }
+      @if (user()) {
+        <me-avatar
+          class="relative"
+          [userMenuItems]="userMenuItems"
+          [photo]="userPhoto()"
+          [name]="user()?.name"
+        />
+      }
+    </div>
+  </div>
+</mat-toolbar>
+<div>
+  @if (isUpdateAvailable) {
+    <div
+      class="header-banner bg-warning-container text-on-warning-container flex flex-row items-center gap-4"
+    >
+      <mat-icon>warning</mat-icon>
+      <span class="header-banner-text mat-title-medium"
+        >There is a new UI version please update</span
+      >
+      <div class="flex-1"></div>
+      <button
+        mat-flat-button
+        color="primary"
+        class="update-button cursor-pointer"
+        type="button"
+        (click)="onUpdateClick()"
+      >
+        Get Update
+      </button>
+    </div>
+  }
+  @if (errorWarningText) {
+    <div class="header-banner supported-browser flex flex-row items-center gap-4">
+      <mat-icon>warning</mat-icon>
+      <span class="header-banner-text mat-title-medium font-bold">{{ errorWarningText }}</span>
+    </div>
+  }
+</div>

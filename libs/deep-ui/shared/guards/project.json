@@ -1,0 +1,40 @@
+{
+  "name": "deep-ui-shared-guards",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/deep-ui/shared/guards/src",
+  "prefix": "de",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/libs/deep-ui/shared/guards"],
+      "options": {
+        "project": "libs/deep-ui/shared/guards/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/deep-ui/shared/guards/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/deep-ui/shared/guards/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "libs/deep-ui/shared/guards/src/test.ts",
+        "tsConfig": "libs/deep-ui/shared/guards/tsconfig.spec.json",
+        "karmaConfig": "libs/deep-ui/shared/guards/karma.conf.js",
+        "stylePreprocessorOptions": {
+          "includePaths": ["node_modules", "libs/me-material/style", "libs/me-material/assets"]
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

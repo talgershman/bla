@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.data-retention-container {
+  padding: 1rem;
+  box-sizing: border-box;
+  border: thin solid var(--sys-outline-variant);
+  border-radius: 0.25rem;
+}
+
+:host ::ng-deep {
+  de-data-retention-control {
+    .retention-container {
+      max-height: 45vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+}

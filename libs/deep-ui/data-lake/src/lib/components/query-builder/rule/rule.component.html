@@ -1,0 +1,106 @@
+@if (attributeOptions) {
+  <div
+    class="query-rule w-max pl-2 py-2 flex flex-row flex-nowrap border-solid border border-transparent justify-start hover:border-sys-primary"
+    [class.border-none]="readonly"
+  >
+    <br />
+    <br />
+    <div class="key-control flex flex-row items-start mr-4 max-w-[20rem]">
+      <me-autocomplete
+        width="20rem"
+        placeholder="Attribute"
+        [options]="attributeOptions"
+        [formControl]="keyControl"
+        (selectionChanged)="onAttributeChanged()"
+      />
+    </div>
+    <div class="operator-control flex flex-row items-start mr-4">
+      <me-select
+        width="15rem"
+        placeholder="----"
+        [options]="operatorOptions"
+        [formControl]="operatorControl"
+        (selectionChanged)="onOperatorChanged()"
+      />
+    </div>
+    <div class="value-control flex flex-row items-start">
+      @switch (valueComponentType) {
+        @case ('boolean') {
+          <me-select
+            width="15rem"
+            placeholder="---"
+            [options]="valueOptions"
+            [formControl]="valueControl"
+          />
+        }
+        @case ('double') {
+          <me-input
+            width="15rem"
+            placeholder="----"
+            mask="separator"
+            thousandSeparator=","
+            [formControl]="valueControl"
+          />
+        }
+        @case ('integer') {
+          <me-input
+            width="15rem"
+            placeholder="----"
+            mask="separator.0"
+            thousandSeparator=","
+            [formControl]="valueControl"
+          />
+        }
+        @case ('list') {
+          <me-autocomplete-chips
+            width="15rem"
+            placeholder="+Add option"
+            [options]="valueOptions"
+            [formControl]="arrValueControl"
+          />
+        }
+        @case ('free-list') {
+          <me-chips
+            width="15rem"
+            placeholder="Add or paste(comma sep.)"
+            [formControl]="arrValueControl"
+            [separatorKeysCodes]="separatorKeysCodes"
+          />
+        }
+        @case ('autocomplete') {
+          <me-autocomplete
+            width="15rem"
+            placeholder="----"
+            [options]="valueOptions"
+            [formControl]="valueControl"
+          />
+        }
+        @case (arrayStringTypeComponent) {
+          <me-autocomplete
+            width="15rem"
+            placeholder="----"
+            [options]="valueOptions"
+            [formControl]="valueControl"
+          />
+        }
+        @case ('null') {
+          <div class="empty-control"></div>
+        }
+        @default {
+          <me-input width="15rem" placeholder="----" [formControl]="valueControl" />
+        }
+      }
+    </div>
+    <div class="invisible mx-1" [class.show-icons]="!readonly && showIcons">
+      <button
+        disableRipple
+        mat-icon-button
+        class="delete-rule"
+        type="button"
+        (click)="deleteClicked.emit()"
+      >
+        <mat-icon color="primary"> close </mat-icon>
+      </button>
+    </div>
+  </div>
+}

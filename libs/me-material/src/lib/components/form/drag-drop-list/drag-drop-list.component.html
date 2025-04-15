@@ -1,0 +1,46 @@
+<div class="drag-drop-list-container">
+  <div class="drag-drop-list-container-header">
+    <span class="control-title" [class.drag-drop-list-item--invalid-title]="isInvalid">{{
+      listTitle
+    }}</span>
+    <span (click)="onClickedAdd()" class="add-button">+Add</span>
+  </div>
+  <div class="drag-drop-list-container-scrollable-content" cdkScrollable>
+    <ol cdkDropList (cdkDropListDropped)="drop($event)">
+      @for (listItem of items; track i; let i = $index) {
+        <li
+          class="drag-drop-list-item"
+          [class.drag-drop-list-item--invalid]="isInvalid"
+          [class.drag-drop-list-item--selected]="checkSelectedItem(selected, listItem, isInvalid)"
+        >
+          <div cdkDrag class="drag-drop-list-item-container">
+            <div *cdkDragPreview>
+              <div class="drag-drop-list-item--preview">
+                <mat-icon class="drag-drop-indicator"> drag_indicator </mat-icon>
+                <input
+                  [placeholder]="placeholders && placeholders.length > i ? placeholders[i] : ''"
+                  [value]="listItem"
+                />
+              </div>
+            </div>
+            <mat-icon cdkDragHandle class="drag-drop-indicator"> drag_indicator </mat-icon>
+            <input
+              class="ellipsis"
+              type="text"
+              [value]="listItem"
+              [placeholder]="placeholders && placeholders.length > i ? placeholders[i] : ''"
+              (blur)="updateListItem($event, i)"
+            />
+            <mat-icon
+              class="list-item-delete text-sys-secondary"
+              aria-label="Delete"
+              (click)="onDeleteItem(i)"
+            >
+              close
+            </mat-icon>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</div>

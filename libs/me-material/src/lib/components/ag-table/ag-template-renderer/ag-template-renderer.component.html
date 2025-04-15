@@ -1,0 +1,33 @@
+@if (isReady) {
+  <div
+    class="cell-wrapper w-full h-full"
+    meTooltipPosition="right"
+    [class.checkbox-disabled-cell]="isCheckboxDisabled"
+    [meTooltip]="rowTooltip"
+  >
+    @if (!template) {
+      <div
+        #cellElem
+        class="ellipsis me-table-cell-elem"
+        meTooltipPosition="right"
+        [meTooltip]="isRowSelectable ? cellTooltip : ''"
+        [meTooltipOnEllipsis]="true"
+      >
+        {{ cellValue }}
+      </div>
+    } @else {
+      <ng-container *ngTemplateOutlet="template; context: templateContext" />
+    }
+  </div>
+}
+
+<ng-template #cellTooltip>
+  <div class="tooltip-container space-x-1">
+    <button mat-icon-button (click)="copyToClipboard($event, params.valueFormatted)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <span class="text-tooltip">
+      {{ params.valueFormatted }}
+    </span>
+  </div>
+</ng-template>

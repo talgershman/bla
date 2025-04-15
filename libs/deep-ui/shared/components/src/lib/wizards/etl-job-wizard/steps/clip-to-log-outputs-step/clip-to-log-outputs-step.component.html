@@ -1,0 +1,76 @@
+<div class="controls box-border p-6 flex flex-col gap-4">
+  @switch (runType) {
+    @case (EtlJobRunType.DATA_CREATION) {
+      <div class="main-version-container">
+        <ng-container
+          [ngTemplateOutlet]="itrkControls"
+          [ngTemplateOutletContext]="{
+            isMain: true,
+            errorFeedBackControl: mainErrorFeedback,
+            egoMotionFeedback: mainEgoMotionFeedback,
+          }"
+        />
+      </div>
+    }
+    @case (EtlJobRunType.FULL_RUN) {
+      <div class="main-version-container">
+        <ng-container
+          [ngTemplateOutlet]="itrkControls"
+          [ngTemplateOutletContext]="{
+            isMain: true,
+            errorFeedBackControl: mainErrorFeedback,
+            egoMotionFeedback: mainEgoMotionFeedback,
+          }"
+        />
+      </div>
+    }
+    @case (EtlJobRunType.COMPARE_VERSIONS) {
+      <div class="main-version-container">
+        <label>Main Version:</label>
+        <ng-container
+          [ngTemplateOutlet]="itrkControls"
+          [ngTemplateOutletContext]="{
+            isMain: true,
+            errorFeedBackControl: mainErrorFeedback,
+            egoMotionFeedback: mainEgoMotionFeedback,
+          }"
+        />
+      </div>
+      <div class="dependent-version-container">
+        <label>Dependent Version:</label>
+        <ng-container
+          [ngTemplateOutlet]="itrkControls"
+          [ngTemplateOutletContext]="{
+            isMain: false,
+            errorFeedBackControl: dependentErrorFeedback,
+            egoMotionFeedback: dependentEgoMotionFeedback,
+          }"
+        />
+      </div>
+    }
+  }
+  @if (loading$ | async) {
+    <div class="loading">
+      <mat-progress-spinner diameter="50" mode="indeterminate" color="primary" />
+    </div>
+  }
+</div>
+
+<ng-template
+  #itrkControls
+  let-isMain="isMain"
+  let-errorFeedBackControl="errorFeedBackControl"
+  let-egoMotionFeedback="egoMotionFeedback"
+>
+  <div class="w-full">
+    <de-clip-to-log-outputs
+      (validateEgoMotion)="onValidateEgoMotion(isMain)"
+      (formChanged)="onOutputDirFormChanged($event, isMain)"
+    >
+      @if (egoMotionFeedback) {
+        <div class="general-feedback" [innerHtml]="egoMotionFeedback | safe: 'html'"></div>
+      }
+      <me-error-feedback textAlign="left" [error]="errorFeedBackControl" />
+    </de-clip-to-log-outputs>
+  </div>
+</ng-template>

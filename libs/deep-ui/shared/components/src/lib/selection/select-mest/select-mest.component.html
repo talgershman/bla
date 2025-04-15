@@ -1,0 +1,180 @@
+<div class="select-mest-container h-full w-full">
+  <div class="select-mest-table-container h-full w-full">
+    @if (columns) {
+      <me-server-side-table
+        [componentId]="selectTableComponentId"
+        [columnDefs]="columns"
+        [searchFilterByField]="searchFilterByField"
+        [enableSideBar]="enableSideBar"
+        [teamFilterState]="teamFilterState"
+        [clearSelectedRowsFilteredOut]="clearSelectedRowsFilteredOut"
+        [checkboxes]="checkboxes()"
+        [hideDisabledCheckboxes]="hideDisabledCheckboxes()"
+        [getRowId]="getRowId"
+        [rowSelection]="rowSelection"
+        [isRowSelectable]="isRowSelectable"
+        [suppressRowClickSelection]="true"
+        [rowHeight]="rowHeight"
+        [externalFiltersKeys]="externalFiltersKeys"
+        [ignoreSavingTeamFilterState]="isReTriggerFlow"
+        (teamFilterClicked)="onTeamFilterClicked($event)"
+        (actionClicked)="onActionClickedRunInZone($event)"
+        (displayedColumnsChangedEvent)="onDisplayedColumnChanged($event)"
+        (firstDataRenderedEvent)="onFirstDataRenderedEvent()"
+        (gridReady)="onGridReady($event)"
+        (serverSideSelectionStateChanged)="onServerSideSelectionStateChanged($event)"
+        (filtersParamsChanged)="onFiltersParamsChanged($event)"
+      />
+    }
+    <ng-template #templateNameCell let-row>
+      <div>
+        <div class="flex flex-row items-center gap-1">
+          <div>
+            @if (row.isOverride) {
+              <mat-icon
+                class="override-icon text-sys-primary relative top-1"
+                fontSet="material-icons-outlined"
+                meTooltip="modified only for this run, original version was not modified"
+              >
+                mode_edit
+              </mat-icon>
+            }
+          </div>
+          <div class="ellipsis">
+            <label meTooltipPosition="right" [meTooltip]="row.nickname">{{ row.nickname }}</label>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #rootPathCell let-params="params" let-row>
+      <div class="root-path-container">
+        <me-input
+          placeholder="Root directory path here"
+          [(ngModel)]="row.rootPath"
+          (ngModelChange)="onRootPathChanged(params?.node, row)"
+          (keydown)="$event.stopPropagation()"
+        >
+          <div
+            class="is-valid-container cursor-help"
+            meTooltipClass="no-truncate-tooltip"
+            [meTooltip]="row.validationTooltip"
+          >
+            @if (row.error) {
+              <mat-icon class="text-sys-error"> error </mat-icon>
+            }
+            @if (row.isValid) {
+              <mat-icon class="text-sys-primary"> check_circle </mat-icon>
+            }
+            @if (row.isLoading) {
+              <mat-progress-spinner diameter="20" mode="indeterminate" color="primary" />
+            }
+          </div>
+        </me-input>
+      </div>
+    </ng-template>
+    <ng-template #nicknameCell let-params="params" let-row>
+      <div class="custom-nickname-container">
+        <me-input
+          [placeholder]="!row.rootPath?.trim() ? '' : 'Insert MEST nickname (Optional)'"
+          [disabled]="!row.rootPath?.trim()"
+          [(ngModel)]="row.mestOutputsNickname"
+          (ngModelChange)="onCustomNicknameChanged(params?.node, row)"
+          (keydown)="$event.stopPropagation()"
+        >
+          <div
+            class="custom-nickname-valid-container"
+            meTooltip="Please enter a name without special characters or spaces"
+          >
+            @if (row.customNicknameInvalid) {
+              <mat-icon class="relative top-1 text-sys-error"> error </mat-icon>
+            }
+          </div>
+        </me-input>
+      </div>
+    </ng-template>
+
+    <ng-template #localOutputCell let-params="params" let-row>
+      <div class="local-output-container">
+        <me-input
+          [placeholder]="!row.rootPath?.trim() ? '' : 'Insert output location (Optional)'"
+          [disabled]="!row.rootPath?.trim()"
+          [(ngModel)]="row.mestSyncLocalDirectory"
+          (ngModelChange)="onLocalOutputChanged(params?.node, row)"
+          (keydown)="$event.stopPropagation()"
+        >
+          @if (row.mestSyncLocalDirectory) {
+            @if (row.localOutputLoading) {
+              <mat-progress-spinner diameter="20" mode="indeterminate" color="primary" />
+            } @else if (row.localOutputInvalid) {
+              <div class="local-output-valid-container" title="" meTooltip="Invalid path">
+                <mat-icon class="relative top-1 text-sys-error"> error </mat-icon>
+              </div>
+            }
+          }
+        </me-input>
+      </div>
+    </ng-template>
+    <ng-template #isMainCell let-row>
+      <div class="is-main-container">
+        <mat-checkbox
+          disableRipple
+          color="primary"
+          (click)="$event.stopPropagation()"
+          [disabled]="!row.isValid"
+          (change)="onMainChange($event, row)"
+          [checked]="mainVersion?.id === row.id"
+        />
+      </div>
+    </ng-template>
+    <ng-template #clipListCell let-params="params" let-row>
+      @if (clipListsControl.controls[row.id]) {
+        <div class="select-clip-list-container" (click)="$event.stopPropagation()">
+          <me-select
+            placeholder="Select a clip list"
+            [options]="clipListOptions"
+            [formControl]="clipListsControl.controls[row.id]"
+            (selectionChanged)="onClipListSelected(params.node, row, $event)"
+          />
+        </div>
+      }
+    </ng-template>
+  </div>
+</div>
+
+<div *mePortalSrc="'ag-actions-bar-action-icons'">
+  <section class="flex flex-row gap-6 z-40">
+    <div>
+      <mat-slide-toggle
+        color="primary"
+        [checked]="mestOutputsNicknameColumnVisible"
+        (change)="
+          onColumnSliderChange('mestOutputsNickname', TOGGLE_NICKNAME_SUFFIX_PREFERENCE_KEY)
+        "
+      >
+        Nickname
+      </mat-slide-toggle>
+      <me-hint-icon
+        class="pl-1"
+        tooltip="MEST Data sources can be given a nicknames.
+The nicknames will be visible in:
+Virtual URLs of the MEST outputs (parsed data) and MEST Data Sources.
+(In the future) the Data Lake's MEST Data source view to allow searching and grouping.
+
+Why ?
+Ease the work with MEST outputs by adding description that is not associated with the ETL."
+      />
+    </div>
+    <div *ifUserTeam="['deep-fpa-road']">
+      <mat-slide-toggle
+        color="primary"
+        [checked]="mestSyncLocalDirectoryColumnVisible"
+        (change)="
+          onColumnSliderChange('mestSyncLocalDirectory', TOGGLE_LOCAL_OUTPUT_SUFFIX_PREFERENCE_KEY)
+        "
+      >
+        Sync MEST results
+      </mat-slide-toggle>
+      <me-hint-icon class="pl-1" tooltip="Set output location to download MEST results on-prem" />
+    </div>
+  </section>
+</div>

@@ -1,0 +1,23 @@
+<section class="flex flex-col gap-4 w-full h-full">
+  <div class="box-border p-6">
+    <mat-radio-group color="primary" class="flex flex-col gap-2" (change)="onSelectChanged($event)">
+      @for (button of buttons; track button.id; let first = $first) {
+        <mat-radio-button disableRipple [checked]="first" [value]="button">
+          <span class="ml-2 mat-body-medium">
+            {{ button.label }}
+          </span>
+        </mat-radio-button>
+      }
+    </mat-radio-group>
+  </div>
+
+  @if (selectedId === 'UPDATE') {
+    <de-ag-data-source-table-perfects-standalone
+      [hideTableActions]="true"
+      [selectionMode]="true"
+      [isWizard]="true"
+      [tableFilters]="{status: 'active'}"
+      (dataSourceSelectionChanged)="onPerfectDataSourceSelectionChange($event)"
+    />
+  }
+</section>

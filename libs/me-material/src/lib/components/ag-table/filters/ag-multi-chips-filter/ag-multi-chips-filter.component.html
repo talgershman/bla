@@ -1,0 +1,12 @@
+<div class="flex flex-col space-y-4 p-4">
+  <form [formGroup]="formGroup">
+    <me-chips width="256px" formControlName="chipControl" [placeholder]="placeholder" />
+  </form>
+  @if (clearable) {
+    <div class="flex flex-row-reverse">
+      <button mat-button color="primary" class="w-[7rem]" type="button" (click)="onClear()">
+        Clear Filter
+      </button>
+    </div>
+  }
+</div>

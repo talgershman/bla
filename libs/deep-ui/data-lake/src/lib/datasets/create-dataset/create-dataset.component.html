@@ -1,0 +1,14 @@
+<div class="h-full flex flex-col">
+  <div>
+    <me-breadcrumbs [breadcrumbs]="breadcrumbs" />
+  </div>
+  <div class="h-0 flex-1">
+    <de-dataset-stepper
+      mode="create"
+      [dataset]="dataset"
+      [subQueries]="subQueries"
+      [selectedDataSources]="selectedDataSources"
+      (fromValueChanged)="onFormValueChanged($event)"
+    />
+  </div>
+</div>

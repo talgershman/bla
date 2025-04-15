@@ -1,0 +1,33 @@
+h1.mat-mdc-dialog-title.mat-typography {
+  font: var(--sys-headline-medium);
+  letter-spacing: var(--sys-headline-medium-tracking);
+  color: var(--sys-seconday);
+  padding: 0;
+  margin: 0;
+}
+div.mat-mdc-dialog-content {
+  margin: 2rem 0;
+  padding: 0;
+  min-width: 24rem;
+}
+
+.dialog-buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+
+div.mat-mdc-dialog-actions {
+  margin: 0;
+  justify-content: flex-end;
+  padding: 0;
+  gap: 1rem;
+  min-height: unset;
+  .mat-mdc-button-base + .mat-button-base {
+    margin: 0;
+  }
+}
+.dialog-spinner.mat-mdc-progress-spinner {
+  margin: 1rem 0;
+}

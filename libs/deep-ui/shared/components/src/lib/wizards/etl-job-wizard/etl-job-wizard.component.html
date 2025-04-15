@@ -1,0 +1,73 @@
+@if (showSelectFlowView$ | async) {
+  <div class="relative flex flex-col w-full h-full">
+    <header class="wizard-header flex-initial mb-2">
+      <div class="flex flex-row justify-between items-center min-h-[5rem] px-6 box-border">
+        <div class="mat-headline-small step-label text-sys-on-surface">Select flow</div>
+        <div class="relative left-[0.6rem] text-sys-secondary">
+          <button mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="w-full border-0 border-t border-solid border-sys-outline-variant"></div>
+    </header>
+    <main class="h-0 flex-1 overflow-y-auto w-full px-6 py-5 box-border">
+      <div class="space-y-4 text-sys-on-surface">
+        <div class="mat-body-medium">1. Flow</div>
+        <div>
+          <de-select-flow
+            [selected]="etlJobWizardForm.controls.flowType.value"
+            [readonly]="reTriggerFlow"
+            (flowChanged)="onFlowChanged($event)"
+          />
+        </div>
+        @if (runTypeOptions) {
+          <div class="mat-body-medium">2. Run type</div>
+          <div class="w-[33rem]">
+            <me-select
+              [options]="runTypeOptions"
+              [formControl]="etlJobWizardForm.controls.runType"
+              (selectionChanged)="onRunTypeChanged()"
+            />
+          </div>
+        }
+        <div class="w-[33rem]">
+          <div class="mat-body-medium">
+            3. Budget group
+            <me-hint-icon [tooltip]="BUDGET_GROUP_TOOLTIP_MSG" />
+            <div class="mt-2">
+              <de-budget-group-control
+                placeholder="Select a budget group"
+                [formControl]="etlJobWizardForm.controls.budgetGroup"
+              />
+            </div>
+          </div>
+        </div>
+        @if (showJobIdParsedData) {
+          <div [@MeFadeInOut]="showJobIdParsedData" class="w-[33rem]">
+            <div class="mat-body-medium">
+              3. Ref Job ID (Optional)
+              <me-hint-icon
+                tooltip="To execute your ETL using an existing parsed MEST outputs, enter the job Ref ID"
+              />
+            </div>
+            <div class="mt-2">
+              <me-input
+                placeholder="Insert a ref job ID"
+                [formControl]="etlJobWizardForm.controls.jobIdParsedDataControl"
+              />
+            </div>
+          </div>
+        }
+      </div>
+    </main>
+    <footer>
+      <me-wizard-buttons
+        [hidePrev]="true"
+        [isNextDisabled]="etlJobWizardForm.invalid"
+        (nextClicked)="onFlowNext()"
+      />
+    </footer>
+  </div>
+}
+<ng-container #selectedWizardContainer />

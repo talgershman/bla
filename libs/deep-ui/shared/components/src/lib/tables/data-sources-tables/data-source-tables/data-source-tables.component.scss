@@ -1,0 +1,13 @@
+:host ::ng-deep {
+  .mat-mdc-tab-header {
+    height: 56px;
+  }
+  .mat-mdc-tab-body-wrapper {
+    flex: 1;
+  }
+  // cover on material bug: sometimes its hide the selected tab
+  .mat-mdc-tab-body-content[style*='visibility: hidden'] {
+    visibility: visible !important;
+    display: block;
+  }
+}

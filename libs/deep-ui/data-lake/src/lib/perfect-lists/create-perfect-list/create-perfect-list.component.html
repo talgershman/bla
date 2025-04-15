@@ -1,0 +1,17 @@
+<div class="h-full flex flex-col">
+  <div>
+    <me-breadcrumbs [breadcrumbs]="breadcrumbs" />
+  </div>
+  <div class="h-0 flex-1">
+    <de-perfect-list-form
+      formMode="create"
+      createButtonLabel="Create Perfect List"
+      cancelButtonLabel="Back"
+      [entity]="entity"
+      (backButtonClicked)="onBackButtonPressed()"
+      (fromValueChanged)="onFromValueChanged($event)"
+    >
+      <mat-error class="ml-[1.625rem] text-center my-2" [innerHTML]="errorMsg" />
+    </de-perfect-list-form>
+  </div>
+</div>

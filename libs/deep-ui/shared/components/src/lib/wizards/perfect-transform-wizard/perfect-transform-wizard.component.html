@@ -1,0 +1,105 @@
+<me-wizard (selectionChange)="onStepSelectionChanged($event)">
+  @if (showSelectFlowStep) {
+    <me-cdk-step
+      aria-label="select-flow"
+      label="Select flow"
+      [hidePrev]="true"
+      [isNextDisabled]="selectFlowStepNextDisabled"
+      (nextClicked)="onSelectFlowNextClicked()"
+    >
+      <de-select-flow-step
+        [disableRefreshInterval]="disableRefreshInterval"
+        (formState)="onFormStateChanged($event, 'selectFlowStepNextDisabled')"
+        (dataSourceSelectChanged)="onDataSourceChanged($event)"
+      />
+    </me-cdk-step>
+  }
+  @if (siblingsDatasources?.length) {
+    <me-cdk-step
+      aria-label="update-msg-step"
+      label="Effected Data Sources"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      <de-update-msg-step
+        [mainDatasource]="selectedDatasource"
+        [siblingDatasources]="siblingsDatasources"
+      />
+    </me-cdk-step>
+  }
+  <me-cdk-step
+    #etlCatalogStep
+    aria-label="etl-step"
+    label="Select ETL"
+    [hidePrev]="!siblingsDatasources?.length && !showSelectFlowStep"
+    [isNextDisabled]="etlStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onEtlStepNextClicked()"
+  >
+    <de-etl-step
+      [tableComponentId]="etlStepTableComponentId"
+      [wasShown]="etlCatalogStep.wasShown"
+      [initialSelectionId]="initialEtl?.id || duplicateDatasourceEtl?.id"
+      [etlType]="EtlTypeEnum.PERFECT_TRANSFORM"
+      [selectedEtl]="initialEtl || duplicateDatasourceEtl"
+      [isNameControlDisabled]="!!initialEtl"
+      (etlChanged)="onEtlChanged($event)"
+      (formState)="onFormStateChanged($event, 'etlStepNextDisabled')"
+    />
+  </me-cdk-step>
+  <me-cdk-step
+    #perfectStep
+    aria-label="perfect-step"
+    label="Select Perfect Lists"
+    nextLabel="Next"
+    [isNextDisabled]="perfectListStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onNextClicked()"
+  >
+    <de-perfect-list-step
+      [tableComponentId]="parsingListStepTableComponentId"
+      [wasShown]="perfectStep?.wasShown"
+      [savedPerfectListIds]="selectedDatasource?.perfectListIds"
+      [selectedPerfectListIds]="duplicateDatasource?.perfectListIds"
+      [readOnlySavedPerfectListIds]="
+        isEditFlow() && selectedEtl?.id && initialEtl?.id !== selectedEtl?.id
+      "
+      [initialTableFilters]="perfectListInitialTableFilters()"
+      (formState)="onFormStateChanged($event, 'perfectListStepNextDisabled')"
+    />
+  </me-cdk-step>
+  <me-cdk-step
+    aria-label="datasource-details-step"
+    label="Data Source details"
+    nextLabel="Finish"
+    [isNextDisabled]="detailsStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="triggerDataSourceFormValidation.next()"
+  >
+    <de-datasource-details-step
+      [triggerValidation]="triggerDataSourceFormValidation$"
+      [duplicateDatasource]="duplicateDatasource"
+      [selectedDatasource]="selectedDatasource"
+      [runType]="runType()"
+      [dataRetentionInfoObj]="dataRetentionInfoObj"
+      [etl]="selectedEtl"
+      (formState)="onFormStateChanged($event, 'detailsStepNextDisabled')"
+      (moveToNextStep)="onLastStepClicked()"
+    />
+  </me-cdk-step>
+  <me-cdk-step [hideNext]="true" [hidePrev]="true">
+    <de-loading-step [isLoading]="loading$ | async" />
+  </me-cdk-step>
+  <me-cdk-step
+    [label]="submitJobFeedbackLabel"
+    [hideNext]="true"
+    [isPrevDisabled]="submitJobDisablePrevButton"
+    (prevClicked)="onSubmitJobStepPrevClicked()"
+  >
+    <de-submit-job-step
+      [items]="submitJobFeedbackItems"
+      (stepLabelChange)="submitJobFeedbackLabel = $event"
+      (disablePrevButton)="submitJobDisablePrevButton = $event"
+    />
+  </me-cdk-step>
+</me-wizard>

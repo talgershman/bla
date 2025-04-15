@@ -1,0 +1,108 @@
+<div class="flex items-center">
+  <div class="flex flex-row-reverse w-full gap-2">
+    <ng-content select=".chips-action-button" />
+  </div>
+</div>
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-autocomplete-chips w-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+  (click)="$event.stopPropagation()"
+>
+  @if (title) {
+    <mat-label>
+      {{ title }}
+      @if (infoTooltip) {
+        <me-hint-icon [tooltip]="infoTooltip" />
+      }
+    </mat-label>
+  }
+  <mat-chip-grid #chipList>
+    @for (chip of controls$ | async; track chip; let i = $index) {
+      <mat-chip-option
+        class="me-chip max-w-[100%]"
+        [selectable]="false"
+        [removable]="true"
+        (removed)="remove(i)"
+        [disabled]="innerController.disabled"
+      >
+        <div
+          meTooltipClass="no-truncate-tooltip"
+          [meTooltip]="chip"
+          [meTooltipOnEllipsis]="true"
+          class="flex-1 mat-icon-button-dense truncate select-text"
+        >
+          {{ chip }}
+        </div>
+        @if (!innerController.disabled) {
+          <mat-icon title="" fontSet="material-icons-outlined" matChipRemove>cancel</mat-icon>
+        }
+      </mat-chip-option>
+    }
+    <input
+      #inputElem
+      matInput
+      #trigger="matAutocompleteTrigger"
+      [errorStateMatcher]="customErrorStateMatcher"
+      [placeholder]="!inputCtrl?.disabled ? placeholder : ''"
+      [formControl]="inputCtrl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)"
+      (keydown.enter)="$event.stopPropagation(); $event.preventDefault()"
+      (keydown.escape)="trigger.closePanel()"
+      (click)="trigger.openPanel()"
+      (paste)="addPastedValue()"
+      (focusin)="onFocusIn()"
+      (focusout)="onFocusOut()"
+    />
+  </mat-chip-grid>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onValueChange($event, trigger)">
+    @for (option of filteredOptions; track option) {
+      <mat-option
+        #optionElement
+        [meTooltip]="option"
+        [meTooltipDisabled]="optionElement._getHostElement().meElementTooltipDisabled"
+        [meResizeDisabled]="false"
+        [value]="option"
+        [meTooltipResizeTrigger]="onElemResize"
+      >
+        <span
+          meHighlightText
+          classToApply="highlight-text"
+          [search]="searchStr"
+          [text]="option"
+        ></span>
+      </mat-option>
+    }
+  </mat-autocomplete>
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

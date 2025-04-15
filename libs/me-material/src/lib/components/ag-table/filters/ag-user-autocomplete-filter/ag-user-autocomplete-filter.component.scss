@@ -1,0 +1,13 @@
+:host {
+  mat-form-field {
+    width: var(--width, 256px);
+    --mat-form-field-container-height: 40px;
+    --mat-form-field-container-vertical-padding: 4px;
+    --mdc-filled-text-field-container-color: var(--sys-surface);
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        padding-left: 4px;
+      }
+    }
+  }
+}

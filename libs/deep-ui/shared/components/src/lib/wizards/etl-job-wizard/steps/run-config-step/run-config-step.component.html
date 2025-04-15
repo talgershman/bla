@@ -1,0 +1,182 @@
+@if (!show()) {
+  <div class="w-full h-full flex items-center justify-center">
+    <mat-progress-spinner class="m-0" diameter="40" mode="indeterminate" color="primary" />
+  </div>
+} @else {
+  <div class="p-6 box-border h-full flex flex-col gap-6">
+    <mat-accordion class="flex-1">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-body-large">General</mat-panel-title>
+        </mat-expansion-panel-header>
+        <!-- panel content -->
+        <section class="controls flex flex-col gap-4 w-[45%]">
+          <div>
+            <me-select
+              title="Team"
+              placeholder="Select Team"
+              class="team-control"
+              [options]="deepTeamOptions"
+              [formControl]="runConfigForm.controls.team"
+            />
+          </div>
+          @if (enableOutputPath) {
+            <div>
+              <me-input
+                title="Output path"
+                placeholder="Output path"
+                [infoTooltip]="OUTPUT_PATH_TOOLTIP"
+                [formControl]="runConfigForm.controls.outputPath"
+              />
+              @if (teamSignal()) {
+                <div class="mx-1 mt-2 py-2 px-2 box-border bg-sys-secondary-container rounded">
+                  <div class="flex flex-row items-center mb-1">
+                    <mat-icon svgIcon="suggestion" />
+                    <span class="mat-body-small ml-1">Smart Suggestions:</span>
+                  </div>
+                  @if (outputPathSuggestions().status === 'loading') {
+                    <div class="py-2">
+                      <mat-progress-spinner diameter="20" mode="indeterminate" color="primary" />
+                    </div>
+                  } @else if (outputPathSuggestions().status === 'loaded') {
+                    <div class="flex flex-row gap-2 items-center">
+                      <mat-chip-listbox
+                        class="active-chips"
+                        aria-label="Active filters"
+                        (change)="onSuggestionSelected($event)"
+                      >
+                        @for (suggestion of outputPathSuggestions().result; track suggestion) {
+                          <div class="flex flex-col items-center">
+                            <mat-chip-option
+                              class="output-path-smart-suggestion cursor-default"
+                              [selectable]="true"
+                              [selected]="
+                                suggestion.value === runConfigForm.controls.outputPath.value
+                              "
+                              [value]="suggestion.value"
+                            >
+                              {{ suggestion.label }}
+                            </mat-chip-option>
+                          </div>
+                        }
+                      </mat-chip-listbox>
+                    </div>
+                  } @else if (outputPathSuggestions().status === 'error') {
+                    <mat-error>Failed to load suggestions</mat-error>
+                  }
+                </div>
+              }
+              <div
+                class="pl-2 mt-1 text-sys-on-surface mat-body-small"
+                [innerHTML]="previewOutputPath() | safe: 'html'"
+              ></div>
+            </div>
+          }
+          <div class="tags-control">
+            <me-chips
+              title="Tags"
+              placeholder="+Add Tags"
+              [formControl]="runConfigForm.controls.tags"
+            />
+          </div>
+        </section>
+      </mat-expansion-panel>
+      @if (enableServices && etl()) {
+        <mat-expansion-panel [expanded]="expandOverrideParams">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="mat-body-large">ETL params</mat-panel-title>
+            <mat-panel-description>
+              {{ etlParamsPanelDescription() }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <!-- panel must be lazy because of style issue in json editor,
+        because the user can no open the panel the initial value is also calculated in this component -->
+          <ng-template matExpansionPanelContent>
+            <de-override-etl-params-control
+              [services]="etl().services"
+              [servicesDag]="etl().servicesDag"
+              [initialOverrideParams]="initialOverrideParams"
+              [defaultOverrideParams]="defaultOverrideParams"
+              [formControl]="runConfigForm.controls.overrideParams"
+              (paramsToggleStateChanged)="onParamsToggleStateChanged($event)"
+            />
+          </ng-template>
+        </mat-expansion-panel>
+      }
+      @if (dataRetentionObj && dataRetentionInfoObj) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title class="mat-body-large">Data retention</mat-panel-title>
+            <mat-panel-description>
+              {{ dataRetentionPanelDescription() }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <!-- panel content -->
+          @if (dataRetentionObj && dataRetentionInfoObj) {
+            <section class="data-retention-container">
+              <label class="mt-2 mat-body-medium">
+                DEEP will keep your job outputs up to dates configuration below:
+              </label>
+              <div class="data-retention-control mt-5">
+                <de-data-retention-control
+                  [dataRetention]="dataRetentionObj"
+                  [formControl]="runConfigForm.controls.dataRetention"
+                  [config]="dataRetentionInfoObj"
+                  [showEtlResults]="runType !== EtlJobRunType.DATA_CREATION"
+                  [showMergedParsedData]="runConfigForm.controls.mergeParsedData.value"
+                />
+              </div>
+            </section>
+          }
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+    <section class="flex flex-row gap-4">
+      @if (enableMergeParsedData) {
+        <div class="create-datasource-control">
+          <mat-slide-toggle
+            color="primary"
+            [formControl]="runConfigForm.controls.createDatasourceFromParsedData"
+            (change)="onCreateDataSourceToggleChanged($event)"
+          >
+            Create Data Source from parsed data
+            <me-hint-icon
+              meTooltipClass=""
+              tooltip="The job will create a 'MEST' Data source in the Data Lake based on the parsing step results"
+            />
+          </mat-slide-toggle>
+        </div>
+      }
+      @if (enableForceParsing) {
+        <div class="force-parsing-control">
+          <mat-slide-toggle
+            color="primary"
+            [formControl]="runConfigForm.controls.forceParsing"
+            (change)="onForceParsingToggleChanged($event)"
+          >
+            Force parsed data creation
+            <me-hint-icon
+              meTooltipClass=""
+              tooltip="When a job has a low success rate in the parsing step and new job is triggered on the same inputs. By default DEEP will skip on the step as nothing changed, with this flag turn on, you can force the parsing to be executed"
+            />
+          </mat-slide-toggle>
+        </div>
+      }
+      @if (enableSkipMestRetry) {
+        <div class="skip-mest-retry-control">
+          <mat-slide-toggle
+            color="primary"
+            [formControl]="runConfigForm.controls.skipMestRetry"
+            (change)="onSkipMESTRetryChanged($event)"
+          >
+            Skip MEST retry
+            <me-hint-icon
+              meTooltipClass=""
+              tooltip="If enabled your MEST step will not retry failed clips. This is relevant when cached MEST data exists and you wish to skip the MEST execution."
+            />
+          </mat-slide-toggle>
+        </div>
+      }
+    </section>
+  </div>
+}

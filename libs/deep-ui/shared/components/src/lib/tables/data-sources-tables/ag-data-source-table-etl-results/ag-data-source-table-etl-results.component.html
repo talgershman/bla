@@ -1,0 +1,53 @@
+<div class="flex flex-col h-full">
+  <div class="flex-1">
+    <de-ag-data-source-table-etl-results-standalone
+      [selectionMode]="selectionMode"
+      [tableFilters]="{}"
+      [triggerTableRefresh]="triggerTableRefresh"
+      [selectedDataSources]="selectedDataSources"
+      (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+      (filtersParamsChanged)="onFiltersParamsChanged($event)"
+      (gridReady)="onGridReady($event)"
+      (dataSourceMultiSelectionsChanged)="onDataSourceMultiSelectionsChanged($event)"
+    />
+  </div>
+</div>
+
+<div *mePortalSrc="'data-source-action-bar'">
+  @if (showCRUDButtons) {
+    <div>
+      <div class="flex flex-row gap-6 justify-end items-center">
+        @if (!isCRUDButtonsDisabled) {
+          <div
+            [meTooltip]="dataRetentionActionTooltip()"
+            [meTooltipDisabled]="!dataRetentionActionTooltip()"
+          >
+            <button
+              mat-button
+              color="primary"
+              [disabled]="isCRUDButtonsDisabled || !!dataRetentionActionTooltip()"
+              (click)="onDataRetentionUpdateClicked()"
+            >
+              <div class="flex flex-row items-center">
+                <mat-icon class="mr-1">edit_calendar</mat-icon>Data Retention
+              </div>
+            </button>
+          </div>
+        }
+        <div [meTooltip]="deleteActionTooltip()" [meTooltipDisabled]="!deleteActionTooltip()">
+          <button
+            mat-button
+            color="primary"
+            class="delete-button"
+            [disabled]="isCRUDButtonsDisabled || !!deleteActionTooltip()"
+            (click)="onDeleteActionClicked()"
+          >
+            <div class="flex flex-row items-center">
+              <mat-icon class="mr-1">delete</mat-icon>Delete
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

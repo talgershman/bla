@@ -1,0 +1,96 @@
+<div class="parameters-list-container">
+  <div class="parameters-list-container-header">
+    <span class="label control-title" [class.control-title--invalid]="isInvalid">{{
+      listTitle
+    }}</span>
+    <span (click)="onKeyValueParamClickedAdd()" class="text-sys-primary add-button"
+      >+Add key-value param</span
+    >
+    <span (click)="onSingleParamClickedAdd()" class="text-sys-primary add-button"
+      >+Add single param</span
+    >
+  </div>
+  <div
+    class="parameters-list-container-textarea"
+    [class.parameters-list-container--invalid]="isInvalid"
+  >
+    <me-textarea
+      #textAreaElem
+      [placeholder]="textAreaPlaceholder"
+      [(ngModel)]="textAreaStr"
+      (blurTriggered)="onTextAreaBlurred()"
+      (focusTriggered)="onTextAreaFocused()"
+    />
+    @if (isTextAreaOnBlurred) {
+      <div class="flex flex-row items-center gap-1 warn-msg mt-2 px-2">
+        <mat-icon>error_outline</mat-icon>
+        <div [@MeFadeInOut]="isTextAreaOnBlurred">
+          The current parameters breakdown is a DEEP suggestion, please review carefully before
+          saving
+        </div>
+      </div>
+    }
+  </div>
+  <div
+    class="parameters-list-container-scrollable-content"
+    [class.parameters-list-container--invalid]="isInvalid"
+    cdkScrollable
+  >
+    @for (item of items; track i; let i = $index) {
+      <div class="param-item-container flex flex-row gap-2 items-center px-2 box-border">
+        @switch (item.type) {
+          @case (MeParametersListItemType.KEY_VALUE) {
+            <div class="item-key-value flex-1 flex flex-row items-center gap-4">
+              <div class="flex-1 rounded">
+                <input
+                  class="w-full box-border ellipsis rounded"
+                  type="text"
+                  #inputKeyElem
+                  (blur)="updateListItem(i, inputKeyElem, 'key')"
+                  [value]="item.key"
+                />
+              </div>
+              <span class="flex-initial param-item--key-value-separator">=</span>
+              <div class="flex-1 rounded">
+                <input
+                  class="w-full box-border rounded ellipsis"
+                  type="text"
+                  #inputValueElem
+                  (blur)="updateListItem(i, inputValueElem, 'value')"
+                  [value]="item.value"
+                />
+              </div>
+            </div>
+            <mat-icon
+              class="flex-initial list-item-delete hover:text-sys-primary"
+              aria-label="Delete"
+              (click)="onDeleteItem(i)"
+            >
+              close
+            </mat-icon>
+          }
+          @case (MeParametersListItemType.SINGLE) {
+            <div class="flex-1 item-single flex flex-row gap-2 items-center rounded">
+              <div class="flex-1 rounded">
+                <input
+                  class="w-full box-border rounded ellipsis"
+                  type="text"
+                  #inputElem
+                  (blur)="updateListItem(i, inputElem, 'key')"
+                  [value]="item.key"
+                />
+              </div>
+              <mat-icon
+                class="flex-initial list-item-delete"
+                aria-label="Delete"
+                (click)="onDeleteItem(i)"
+              >
+                close
+              </mat-icon>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</div>

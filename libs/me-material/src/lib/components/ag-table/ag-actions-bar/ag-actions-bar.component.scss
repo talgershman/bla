@@ -1,0 +1,49 @@
+:host ::ng-deep {
+  .table-actions-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--sys-surface);
+    padding: 0.625rem 1.125rem;
+    min-height: 2.5rem;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    box-sizing: border-box;
+
+    &:has(> .search-term-container) {
+      padding: 0 2rem 0 1.125rem;
+    }
+
+    .search-term-container {
+      display: flex;
+      align-items: center;
+      justify-content: stretch;
+      z-index: 2;
+      .mat-focused .placeholder {
+        color: transparent;
+      }
+    }
+    .mat-mdc-chip-listbox {
+      padding: 0.5rem 1rem;
+    }
+    .actions-icons button {
+      --mdc-icon-button-state-layer-size: 40px;
+      padding: 8px;
+    }
+  }
+
+  .hide-search-term {
+    visibility: hidden;
+  }
+
+  .custom-view {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    &.bottom-custom-view {
+      position: static;
+      box-sizing: border-box;
+      height: 48px;
+    }
+  }
+}

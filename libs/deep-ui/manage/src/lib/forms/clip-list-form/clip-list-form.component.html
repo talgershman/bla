@@ -1,0 +1,88 @@
+<form class="h-full" [formGroup]="clipListForm" (ngSubmit)="onSubmit()">
+  <div class="h-full md:h-full w-full flex flex-col">
+    <div class="h-full controls flex-1 px-4 box-border main-form-grid">
+      <div class="mt-4">
+        <me-input title="Name" [formControl]="clipListForm.controls.name" />
+      </div>
+      <div>
+        <me-select
+          title="Team"
+          [options]="deepTeamOptions"
+          [formControl]="clipListForm.controls.team"
+        />
+      </div>
+      <div class="type-control">
+        <me-select
+          title="Type"
+          [options]="typeOptions"
+          [formControl]="clipListForm.controls.type"
+        />
+      </div>
+      <div class="technology-control">
+        <me-select
+          title="Technology"
+          [options]="technologyOptions"
+          [formControl]="clipListForm.controls.technology"
+        />
+      </div>
+      <div class="row-span-4">
+        <div class="optional-controls flex flex-col gap-7">
+          <div class="brain-control">
+            <me-input title="Brain (Optional)" [formControl]="clipListForm.controls.brain" />
+          </div>
+          <div class="camera-control">
+            <me-input title="Camera (Optional)" [formControl]="clipListForm.controls.camera" />
+          </div>
+          <div class="tags-control">
+            <me-chips title="Tags (Optional)" [formControl]="clipListForm.controls.tags" />
+          </div>
+          <div class="description-control">
+            <me-textarea
+              title="Description (Optional)"
+              [formControl]="clipListForm.controls.description"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="upload-file-control row-span-3">
+        <me-upload-file
+          class="upload-file-control"
+          title="Upload File"
+          multiple="false"
+          height="14rem"
+          placeholder="Drag & Drop to Upload Clip List File"
+          [isLoading]="fileIsLoading$ | async"
+          [selectedFileName]="selectedFileName"
+          [markAsError]="
+            clipListForm.controls.clipListFile.invalid && clipListForm.controls.clipListFile.touched
+          "
+          (filesChanges)="onFileChanged($event)"
+        />
+        <div class="mt-1">
+          @if (fileLimitExceeded) {
+            <mat-error [@MeFadeInOut]="fileLimitExceeded">
+              File can't be Zipped for upload, please zip the file manually (the file should not be
+              bigger than 50MB).
+            </mat-error>
+          }
+        </div>
+      </div>
+    </div>
+    <ng-content />
+    <footer
+      class="p-6 flex gap-4 items-center flex-row border-0 border-t border-solid border-sys-outline-variant"
+    >
+      <div class="grow"></div>
+      <div>
+        <button mat-button type="button" color="primary" (click)="onBackClicked()">
+          {{ cancelButtonLabel }}
+        </button>
+      </div>
+      <div meTooltipPosition="top" [meTooltip]="submitButtonTooltip">
+        <button mat-flat-button type="submit" color="primary" [disabled]="!!submitButtonTooltip">
+          {{ createButtonLabel }}
+        </button>
+      </div>
+    </footer>
+  </div>
+</form>

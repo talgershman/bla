@@ -1,0 +1,18 @@
+.actions-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  .buttons-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 8px 20px 8px 0px;
+  }
+}
+
+.mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

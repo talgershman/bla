@@ -1,0 +1,58 @@
+<div class="flex flex-col p-4">
+  <mat-form-field appearance="fill" subscriptSizing="dynamic">
+    <div class="control-container flex flex-row items-center">
+      <input
+        #searchInput
+        type="text"
+        matInput
+        #trigger="matAutocompleteTrigger"
+        [formControl]="valueControl"
+        [placeholder]="placeholder"
+        [matAutocomplete]="auto"
+        (keydown.escape)="trigger.closePanel()"
+      />
+      @if (clearable && valueControl && valueControl.value && !valueControl.disabled) {
+        <button
+          disableRipple
+          mat-icon-button
+          aria-label="Clear"
+          matSuffix
+          type="button"
+          class="mat-icon-button-dense close-button relative top-[1px]"
+          (click)="onClearClicked()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </div>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayFn"
+      (optionSelected)="onOptionSelected($event)"
+    >
+      @if (loading$ | async) {
+        <mat-option disabled> Loading... </mat-option>
+      }
+      @if ((options$ | async).length === 0 && (loading$ | async) === false && trigger.panelOpen) {
+        <mat-option disabled> No Results </mat-option>
+      }
+      @for (option of options$ | async; track option.displayName) {
+        <mat-option [value]="option">
+          <span
+            meHighlightText
+            classToApply="highlight-text"
+            [search]="searchInput.value"
+            [text]="option.displayName"
+          ></span>
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+  @if (clearable) {
+    <div class="flex flex-row-reverse mt-4">
+      <button mat-button color="primary" class="w-[7rem]" type="button" (click)="onClearClicked()">
+        Clear Filter
+      </button>
+    </div>
+  }
+</div>

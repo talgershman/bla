@@ -1,0 +1,31 @@
+<button
+  mat-button
+  disableRipple
+  class="relative filter-by-team-btn"
+  meTooltipPosition="top"
+  [meTooltip]="tooltip"
+  [class.highlight-filter]="highlightIcon"
+  [matMenuTriggerFor]="menu"
+>
+  <div class="flex flex-row items-center">
+    <mat-icon>{{ currentIcon }}</mat-icon>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </div>
+</button>
+
+<mat-menu class="menu-items-container" #menu>
+  <button disableRipple mat-menu-item class="filter-by-my-data" (click)="onFilterClicked('me')">
+    Only by me
+  </button>
+  <button
+    disableRipple
+    mat-menu-item
+    class="filter-by-my-teams"
+    (click)="onFilterClicked('my_teams')"
+  >
+    My teams
+  </button>
+  <button disableRipple mat-menu-item class="filter-by-none" (click)="onFilterClicked('none')">
+    Show all
+  </button>
+</mat-menu>

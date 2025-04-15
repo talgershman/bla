@@ -1,0 +1,101 @@
+@if (columns) {
+  <me-server-side-table
+    [componentId]="selectTableComponentId"
+    [columnDefs]="columns"
+    [enableSideBar]="enableSideBar"
+    [teamFilterState]="teamFilterState"
+    [ignoreSavingTeamFilterState]="isReTriggerFlow"
+    [clearSelectedRowsFilteredOut]="clearSelectedRowsFilteredOut"
+    [checkboxes]="checkboxes()"
+    [hideDisabledCheckboxes]="hideDisabledCheckboxes()"
+    [getRowId]="getRowId"
+    [rowSelection]="rowSelection"
+    [isRowSelectable]="isRowSelectable"
+    [rowHeight]="rowHeight"
+    [externalFiltersKeys]="externalFiltersKeys"
+    (teamFilterClicked)="onTeamFilterClicked($event)"
+    (gridReady)="onGridReady($event)"
+    (serverSideSelectionStateChanged)="onServerSideSelectionStateChanged($event)"
+  />
+}
+
+<ng-template #nameCell let-params="params" let-row>
+  <div
+    class="ellipsis ml-1.5"
+    meTooltipPosition="right"
+    meTooltipClass="no-truncate-tooltip"
+    [ngClass]="{'pl-4': !showSyncColumn}"
+    [meTooltip]="tooltipTemplate"
+    [meTooltipContext]="{
+      tooltip: params.value,
+    }"
+    [meTooltipOnEllipsis]="true"
+  >
+    {{ params.value }}
+  </div>
+  <div class="uuid-container" [ngClass]="{'pl-4': !showSyncColumn}">
+    <button mat-icon-button (click)="copyJobIdToClipboard($event, row.id)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <div
+      class="text-uuid ellipsis"
+      meTooltipPosition="right"
+      [meTooltip]="params.node.selectable ? tooltipTemplate : ''"
+      [meTooltipContext]="{
+        tooltip: params.node.selectable ? row.id : '',
+      }"
+      [meTooltipOnEllipsis]="true"
+    >
+      ID: {{ row.id }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #statusCell let-params="params" let-row>
+  @if (row) {
+    <div
+      class="me-host-align ellipsis"
+      meTooltipPosition="right"
+      [meTooltip]="params.tooltip ? tooltipTemplate : ''"
+      [meTooltipContext]="{
+        tooltip: params.tooltip && params.tooltip(params),
+      }"
+      [meTooltipOnEllipsis]="true"
+      [class]="'column-status-value-' + row.status"
+    >
+      {{ params.valueFormatted }}
+    </div>
+  }
+</ng-template>
+
+<ng-template #syncCell let-params="params" let-row>
+  @if (!selectedPerfectListIds?.includes(row.id)) {
+    <div class="pl-4">--</div>
+  }
+  @if (selectedPerfectListIds?.includes(row.id)) {
+    <div
+      class="sync-column-container pl-4"
+      meTooltip="When enabled, will re-run the Perfect list"
+      (click)="$event.stopPropagation()"
+    >
+      <mat-slide-toggle
+        disableRipple
+        color="primary"
+        [disabled]="readOnlySavedPerfectListIds"
+        [checked]="readOnlySavedPerfectListIds"
+        (change)="onSyncChanged($event, row)"
+      />
+    </div>
+  }
+</ng-template>
+
+<ng-template #tooltipTemplate let-tooltip="tooltip">
+  <div class="tooltip-container space-x-1">
+    <button mat-icon-button (click)="copyJobIdToClipboard($event, tooltip)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <span class="text-tooltip">
+      {{ tooltip }}
+    </span>
+  </div>
+</ng-template>

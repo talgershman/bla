@@ -1,0 +1,6 @@
+:host {
+  display: block;
+  width: var(--width, 100%);
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 4px;
+}

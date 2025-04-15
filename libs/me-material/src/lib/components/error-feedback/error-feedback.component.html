@@ -1,0 +1,5 @@
+@if (_error) {
+  <div class="error-feedback">
+    <mat-error class="text-left" [innerHTML]="_error | safe: 'html'" />
+  </div>
+}

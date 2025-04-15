@@ -1,0 +1,41 @@
+{
+  "name": "deep-ui-data-lake",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/deep-ui/data-lake/src",
+  "prefix": "de",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/libs/deep-ui/data-lake"],
+      "options": {
+        "project": "libs/deep-ui/data-lake/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/deep-ui/data-lake/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/deep-ui/data-lake/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "libs/deep-ui/data-lake/src/test.ts",
+        "tsConfig": "libs/deep-ui/data-lake/tsconfig.spec.json",
+        "karmaConfig": "libs/deep-ui/data-lake/karma.conf.js",
+        "styles": ["libs/deep-ui/shared/components/src/lib/testing/testing-main.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["node_modules", "libs/me-material/style", "libs/me-material/assets"]
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

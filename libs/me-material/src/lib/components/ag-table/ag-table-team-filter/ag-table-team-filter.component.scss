@@ -1,0 +1,13 @@
+.filter-by-team-btn.mat-mdc-button:has(.material-icons, mat-icon, [matButtonIcon]) {
+  border: 1px solid;
+  @apply border-sys-outline;
+  border-radius: 10px;
+  padding: 6px 8px;
+  color: var(--sys-on-surface);
+  &.highlight-filter {
+    background-color: color-mix(in srgb, var(--sys-primary) 16%, transparent);
+    mat-icon {
+      color: var(--sys-primary);
+    }
+  }
+}

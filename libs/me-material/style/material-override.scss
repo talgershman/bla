@@ -1,0 +1,54 @@
+.mat-app-background {
+  background-color: var(--mat-app-background-color, transparent);
+  color: var(--mat-app-text-color, inherit);
+}
+
+.mat-mdc-form-field-infix {
+  flex: auto;
+  align-content: center;
+  justify-items: center;
+  > * {
+    width: 100%;
+  }
+}
+
+.mat-icon-button-dense.mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 32px;
+  padding: 4px;
+}
+
+.mat-mdc-form-field.is-floating-label {
+  padding-top: 6px;
+  box-sizing: border-box;
+}
+
+.mat-mdc-tab-header {
+  height: 48px;
+  .mat-mdc-tab-label-container {
+    border: none;
+    .mdc-tab__content {
+      font-weight: bold;
+    }
+  }
+}
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+  --mat-dialog-container-max-width: 95vw;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input::placeholder {
+  --mdc-outlined-text-field-input-text-placeholder-color: color-mix(
+    in srgb,
+    var(--sys-on-surface-variant) 70%,
+    transparent
+  );
+}
+
+mat-option.mat-mdc-option {
+  min-height: 40px;
+}
+
+.cdk-overlay-container {
+  .cdk-overlay-dark-backdrop {
+    background: color-mix(in srgb, var(--sys-scrim) 32%, transparent);
+  }
+}

@@ -1,0 +1,25 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: block;
+  width: 100%;
+  --mat-switch-with-icon-handle-size: 18px;
+  --mdc-switch-track-height: 22px;
+  --mdc-switch-track-width: 48px;
+  --mdc-switch-state-layer-size: 0;
+  mat-icon.overflow-visible {
+    overflow: visible;
+  }
+  ::ng-deep {
+    me-json-editor {
+      div.cm-line {
+        text-indent: 0 !important;
+        padding-left: 0 !important;
+      }
+    }
+    .fix-params-btn.mat-mdc-unelevated-button.mat-primary {
+      @apply bg-warning;
+      @apply text-on-warning;
+    }
+  }
+}

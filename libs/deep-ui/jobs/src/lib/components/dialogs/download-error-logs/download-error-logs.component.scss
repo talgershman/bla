@@ -1,0 +1,39 @@
+.error-logs-container {
+  > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+  .json-error-logs {
+    overflow-y: hidden;
+    height: 32rem;
+    width: 59rem;
+  }
+
+  .progress-spinner-container {
+    height: 32rem;
+    width: 59rem;
+  }
+
+  @media screen and (max-height: 610px) {
+    .json-error-logs,
+    .progress-spinner-container {
+      height: 26rem;
+      width: 59rem;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+  div.mat-headline-small {
+    margin-bottom: 0;
+  }
+}
+
+.mat-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}

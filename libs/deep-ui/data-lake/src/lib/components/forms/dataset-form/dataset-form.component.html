@@ -1,0 +1,99 @@
+<form class="h-full" [formGroup]="datasetForm" (ngSubmit)="onSubmit()">
+  <div class="h-full flex flex-col">
+    <main class="pl-6 pr-6 overflow-y-auto box-border flex-1 flex flex-col">
+      <div class="h-full flex flex-row gap-4">
+        <div class="flex flex-col gap-6 w-[30%] min-w-[478px]">
+          <section class="controls">
+            <div class="flex flex-row space-x-4">
+              <div class="w-full">
+                <me-input
+                  title="Dataset Name"
+                  type="text"
+                  [formControl]="datasetForm.controls.name"
+                />
+              </div>
+            </div>
+          </section>
+          <section class="controls">
+            <div class="flex flex-row space-x-4">
+              <div class="w-full">
+                <me-select
+                  title="Team"
+                  [options]="deepTeamOptions"
+                  [formControl]="datasetForm.controls.team"
+                />
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="w-full">
+              <me-chips title="Tags (Optional)" [formControl]="datasetForm.controls.tags" />
+            </div>
+          </section>
+          <section>
+            <div class="w-full">
+              <me-textarea
+                title="Description (Optional)"
+                [formControl]="datasetForm.controls.description"
+              />
+            </div>
+          </section>
+          <section>
+            <div class="w-full">
+              @if (dataRetentionObj && dataRetentionInfoObj) {
+                <div class="data-retention-container">
+                  <de-expired-at-data-retention-control
+                    [dataRetention]="dataRetentionObj"
+                    [formControl]="datasetForm.controls.dataRetention"
+                    [config]="dataRetentionInfoObj"
+                  />
+                </div>
+              }
+            </div>
+          </section>
+        </div>
+        <div class="flex-1 flex flex-col">
+          <div class="relative left-4 mat-body-large text-sys-on-surface">Query</div>
+          <div class="h-full flex flex-col">
+            <de-query-dashboard-control
+              class="flex-1"
+              [formControl]="datasetForm.controls.queryDashboard"
+              [(subQueries)]="subQueries"
+              [(selectedDataSources)]="selectedDataSources"
+              [resetQuery$]="resetQuery$"
+              [dataset]="dataset"
+              (editSubQuery)="editSubQuery.emit($event)"
+              (deleteSubQuery)="deleteSubQuery.emit($event)"
+              (addSubQueryClicked)="addSubQueryClicked.emit($event)"
+              (subQueriesChange)="subQueriesChange.emit($event)"
+              (selectedDataSourcesChange)="selectedDataSourcesChange.emit($event)"
+            />
+            <div class="flex-1 max-h-[32px]"></div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-1">
+        <ng-content />
+      </div>
+    </main>
+    <footer
+      class="p-6 box-border flex-initial flex flex-row justify-between space-x-4 border-0 border-t border-solid border-sys-outline-variant"
+    >
+      <div class="flex-dummy-fill"></div>
+      <button
+        mat-button
+        class="flex-initial"
+        color="primary"
+        type="button"
+        (click)="onBackButtonPressed()"
+      >
+        Back
+      </button>
+      <div meTooltipPosition="top" [meTooltip]="submitButtonTooltip">
+        <button mat-flat-button type="submit" color="primary" [disabled]="!!submitButtonTooltip">
+          {{ formMode === 'edit' ? 'Update Dataset' : 'Create Dataset' }}
+        </button>
+      </div>
+    </footer>
+  </div>
+</form>

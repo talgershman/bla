@@ -1,0 +1,53 @@
+<main class="h-full flex flex-row gap-4 items-start p-4 box-border">
+  <section class="flex-initial h-full flex flex-col gap-4 max-w-[44.7vw]">
+    <me-json-editor
+      title="Preview Message"
+      [formControl]="jsonMessageControl"
+      [isTouched]="jsonMessageControl.touched"
+      [errors]="jsonMessageControl.errors"
+    />
+    <div class="flex flex-row w-full items-center justify-center mt-4">
+      <div>
+        <button mat-flat-button color="primary" (click)="applyChanges()">Apply changes</button>
+      </div>
+    </div>
+    <div class="flex flex-row gap-4">
+      <button mat-stroked-button color="primary" (click)="setExampleAll()">Style Example</button>
+      <button mat-stroked-button color="primary" (click)="setExampleLink()">Link Example</button>
+      <button mat-stroked-button color="primary" (click)="setExampleHtml()">HTML Example</button>
+      <button mat-stroked-button color="primary" (click)="setExampleError()">Error</button>
+      <button mat-stroked-button color="primary" (click)="setExampleDefault()">Regular</button>
+    </div>
+    <div class="p-4 box-border flex flex-row gap-4">
+      <div>
+        <b>uiConfigs:</b>
+        @for (item of MeJsonMessageUiConfigs | keyvalue; track item.key) {
+          <li>{{ item.key }} : {{ getTypeOf(item.value) }}</li>
+        }
+      </div>
+      <div>
+        <b>uiKeyConfigs:</b>
+        @for (item of meJsonMessageUiKeyConfigs | keyvalue; track item.key) {
+          <li>{{ item.key }} : {{ getTypeOf(item.value) }}</li>
+        }
+      </div>
+      <div>
+        <b>uiValueConfigs:</b>
+        @for (item of meJsonMessageUiValueConfigs | keyvalue; track item.key) {
+          <li>{{ item.key }} : {{ getTypeOf(item.value) }}</li>
+        }
+      </div>
+      <div>
+        <b>Colors string options:</b>
+        @for (item of ColorPaletteIndexEnum | keyvalue; track item.key) {
+          <li>
+            {{ item.value }}
+          </li>
+        }
+      </div>
+    </div>
+  </section>
+  <section class="flex-1 min-w-0 h-full">
+    <me-json-message class="overflow-x-auto" [msg]="previewMsgValue" [hideParentKey]="true" />
+  </section>
+</main>

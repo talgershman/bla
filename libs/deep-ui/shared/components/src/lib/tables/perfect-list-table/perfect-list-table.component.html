@@ -1,0 +1,75 @@
+@if (columns) {
+  <me-server-side-table
+    [componentId]="tableComponentId"
+    [columnDefs]="columns"
+    [enableSideBar]="enableSideBar"
+    [teamFilterState]="teamFilterState"
+    [clearSelectedRowsFilteredOut]="clearSelectedRowsFilteredOut"
+    [getRowId]="getRowId"
+    [rowSelection]="rowSelection"
+    [isRowSelectable]="isRowSelectable"
+    [rowHeight]="rowHeight"
+    [externalFiltersKeys]="externalFiltersKeys"
+    (teamFilterClicked)="onTeamFilterClicked($event)"
+    (selectionChanged)="onSelectionChanged($event)"
+    (actionClicked)="onActionClickedRunInZone($event)"
+    (gridReady)="onGridReady($event)"
+    (filtersParamsChanged)="onFiltersParamsChanged($event)"
+  />
+}
+
+<ng-template #nameCell let-params="params" let-row>
+  <div
+    class="ellipsis ml-1.5"
+    meTooltipPosition="right"
+    meTooltipClass="no-truncate-tooltip"
+    [meTooltip]="tooltipTemplate"
+    [meTooltipContext]="{
+      tooltip: params.value,
+    }"
+    [meTooltipOnEllipsis]="true"
+  >
+    {{ params.value }}
+  </div>
+  <div class="uuid-container">
+    <button mat-icon-button (click)="copyJobIdToClipboard($event, row.id)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <div
+      class="text-uuid ellipsis"
+      meTooltipPosition="right"
+      [meTooltip]="params.node.selectable ? row.id : ''"
+      [meTooltipOnEllipsis]="true"
+    >
+      ID: {{ row.id }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #statusCell let-params="params" let-row>
+  @if (row) {
+    <div
+      class="me-host-align ellipsis"
+      meTooltipPosition="right"
+      [meTooltip]="params.tooltip ? tooltipTemplate : ''"
+      [meTooltipContext]="{
+        tooltip: params?.tooltip?.(params),
+      }"
+      [meTooltipOnEllipsis]="true"
+      [class]="'column-status-value-' + row.status"
+    >
+      {{ params.valueFormatted }}
+    </div>
+  }
+</ng-template>
+
+<ng-template #tooltipTemplate let-tooltip="tooltip">
+  <div class="tooltip-container space-x-1">
+    <button mat-icon-button (click)="copyJobIdToClipboard($event, tooltip)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <span class="text-tooltip">
+      {{ tooltip }}
+    </span>
+  </div>
+</ng-template>

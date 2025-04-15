@@ -1,0 +1,39 @@
+form {
+  height: 100%;
+  width: 100%;
+  .clip-to-log-output-container {
+    .mat-icon {
+      cursor: pointer;
+    }
+    .itrk-container {
+      .mat-mdc-form-field-error {
+        margin-top: 0.5rem;
+      }
+    }
+    .validate-button {
+      margin-top: 2rem;
+    }
+    .add-button {
+      font: var(--sys-title-small);
+      letter-spacing: var(--sys-title-small-tracking);
+      //color: me.get-color-from-palette(me.$primary);
+      margin-top: 0.75rem;
+      margin-bottom: 0.25rem;
+      display: flex;
+      justify-content: flex-end;
+      cursor: pointer;
+    }
+    .log-container {
+      .log-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        > * {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+}

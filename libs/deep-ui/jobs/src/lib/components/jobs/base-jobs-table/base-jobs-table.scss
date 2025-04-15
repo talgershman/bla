@@ -1,0 +1,10 @@
+@mixin ag-jobs-table {
+  :host ::ng-deep {
+    me-ag-table-actions-bar {
+      .table-actions-container:has(> .search-term-container) {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+    }
+  }
+}

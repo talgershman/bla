@@ -1,0 +1,24 @@
+:host {
+  --mat-expansion-header-collapsed-state-height: 48px;
+  --mat-expansion-container-background-color: var(--sys-surface-container-high);
+}
+
+de-override-etl-params-control {
+  --me-json-editor-scroller-min-height: 300px;
+}
+
+.mat-icon[svgIcon='suggestion'] {
+  width: 18px;
+  height: 18px;
+  color: var(--sys-surface-container-high);
+}
+
+::ng-deep {
+  .dark-theme {
+    .mat-icon[svgIcon='suggestion'] {
+      width: 18px;
+      height: 18px;
+      color: var(--sys-on-surface-container-high);
+    }
+  }
+}

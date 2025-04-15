@@ -1,0 +1,35 @@
+.invalid-sub-query-square {
+  @apply border-sys-error;
+}
+
+.hide-container {
+  visibility: hidden;
+}
+
+.show-container {
+  visibility: visible;
+}
+
+.action-buttons-container {
+  mat-icon {
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+  }
+}
+
+.add-fields-container {
+  .mat-mdc-button {
+    --mdc-text-button-container-height: 32px;
+  }
+}
+
+:host::ng-deep {
+  .mat-mdc-slide-toggle .mdc-switch--disabled + label {
+    --mdc-switch-disabled-label-text-color: color-mix(
+      in srgb,
+      var(--sys-on-surface) 38%,
+      transparent
+    );
+  }
+}

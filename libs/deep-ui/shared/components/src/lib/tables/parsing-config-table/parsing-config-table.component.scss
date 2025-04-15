@@ -1,0 +1,22 @@
+:host ::ng-deep {
+  .ag-row-group {
+    &.ag-row-selected:before {
+      background-color: initial;
+    }
+    &.ag-row-selected.ag-row-hover:before {
+      background-color: var(--ag-row-hover-color);
+      background-image: none;
+    }
+    &.ag-cell-wrapper {
+      align-items: baseline;
+      font-weight: bold;
+      .ag-group-contracted:has(> .ag-icon),
+      .ag-group-expanded:has(> .ag-icon) {
+        align-self: end;
+        .ag-icon {
+          align-self: baseline;
+        }
+      }
+    }
+  }
+}

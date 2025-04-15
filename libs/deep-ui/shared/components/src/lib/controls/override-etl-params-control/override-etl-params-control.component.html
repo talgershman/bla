@@ -1,0 +1,104 @@
+<section class="h-full services-container flex-1 box-border flex flex-col gap-4">
+  @for (service of servicesArrayControls; track i; let i = $index) {
+    <div
+      class="flex flex-col p-4 box-border rounded h-full border-solid border border-sys-outline-variant overflow-hidden"
+    >
+      @if (errorMsg()?.[service.value.type]) {
+        <section
+          class="w-full p-4 mb-4 box-border flex flex-col rounded items-center m-0 gap-2 bg-warning-container text-on-warning-container"
+        >
+          <div class="w-full flex flex-row gap-2">
+            <div class="flex-1">
+              <mat-error>
+                {{ errorMsg()?.[service.value.type] }}
+              </mat-error>
+            </div>
+            <div class="flex flex-col justify-end">
+              <button
+                mat-flat-button
+                type="button"
+                color="primary"
+                class="fix-params-btn"
+                meTooltip="Will added and remove parameters accroding to service's params.yaml"
+                (click)="fixAttributes(service.value, service.controls.params)"
+              >
+                Fix
+              </button>
+            </div>
+          </div>
+        </section>
+      }
+      <header class="flex flex-row items-center justify-between mb-2">
+        <div class="mat-body-medium">{{ service.value.title }}:</div>
+        <div>
+          @if (defaultValueToggleState()) {
+            <mat-slide-toggle
+              color="primary"
+              [disabled]="defaultValueToggleState()?.[service.value.type]"
+              [checked]="defaultValueToggleState()?.[service.value.type]"
+              (change)="onUseDefaultDefinition(service.value, service.controls.params)"
+            >
+              Restore default definition
+              <me-hint-icon
+                tooltip="Will restore your parameters values as defined in your service's params.yaml"
+              />
+            </mat-slide-toggle>
+          }
+        </div>
+      </header>
+      <div class="h-full flex flex-col min-w-0 min-h-0">
+        @if (service.controls.params) {
+          <div class="flex-1">
+            <me-json-editor
+              [formControl]="service.controls.params"
+              [isTouched]="service.controls.params.touched"
+              [errors]="service.controls.params.errors"
+            />
+          </div>
+        }
+        @if (service.controls.uploadFiles?.value) {
+          <div class="flex-initial">
+            <div class="upload-file-control mt-2">
+              <div>
+                <me-control-list
+                  class="upload-file-list"
+                  listTitle="Upload files"
+                  (addItemClicked)="addUploadFileControl(service.controls.uploadFiles)"
+                >
+                  @for (
+                    formGroup of uploadFilesArrayControls(service);
+                    track i;
+                    let i = $index;
+                    let first = $first
+                  ) {
+                    <me-input
+                      placeholder="Insert folder/file path"
+                      updateOn="blur"
+                      [class.mt-1]="!first"
+                      [formControl]="formGroup.controls.path"
+                      [warning]="formGroup.controls.path?.[warningKey]"
+                    >
+                      @if (!first) {
+                        <button
+                          disableRipple
+                          mat-icon-button
+                          matSuffix
+                          aria-label="Clear"
+                          type="button"
+                          class="mat-icon-button-dense relative top-[2px]"
+                          (click)="onDeleteUploadFile(service.controls.uploadFiles, i)"
+                        >
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      }
+                    </me-input>
+                  }
+                </me-control-list>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>

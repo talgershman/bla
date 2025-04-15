@@ -1,0 +1,8 @@
+{
+  "name": "deep-ui/shared/components",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "deep-ui/shared/directives": "0.0.1"
+  },
+  "dependencies": {}
+}

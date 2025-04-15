@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  height: 100%;
+}
+.video-icon {
+  font-size: 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.add-icon {
+  font-size: 2.5rem;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.invalid-border {
+  @apply border-sys-error;
+}
+
+.data-retention-container {
+  box-sizing: border-box;
+}
+
+:host::ng-deep {
+  .actions-buttons-container {
+    .mat-mdc-button {
+      padding: 0 4px;
+      margin-right: 4px;
+    }
+  }
+}

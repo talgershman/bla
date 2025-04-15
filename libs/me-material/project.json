@@ -1,0 +1,41 @@
+{
+  "name": "me-material",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/me-material/src",
+  "prefix": "me",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/libs/me-material"],
+      "options": {
+        "project": "libs/me-material/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/me-material/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/me-material/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "libs/me-material/src/test.ts",
+        "tsConfig": "libs/me-material/tsconfig.spec.json",
+        "karmaConfig": "libs/me-material/karma.conf.js",
+        "stylePreprocessorOptions": {
+          "includePaths": ["node_modules", "libs/me-material/style", "libs/me-material/assets"]
+        },
+        "styles": ["libs/me-material/style/globals.scss"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+<div class="h-full w-full px-6 py-5 box-border flex flex-col gap-4">
+  <mat-radio-group
+    color="primary"
+    class="flex flex-col gap-2"
+    (change)="onFilterTypeChanged($event)"
+  >
+    @for (button of buttons; track button.id; let first = $first) {
+      <mat-radio-button
+        disableRipple
+        [checked]="button.id === form.controls.filterType.value"
+        [value]="button"
+      >
+        <span class="ml-2 mat-body-medium text-sys-on-surface">
+          {{ button.label }}
+        </span>
+      </mat-radio-button>
+    }
+  </mat-radio-group>
+  <div class="flex-1">
+    <ng-container [ngTemplateOutlet]="selectedContainerTmpl" />
+  </div>
+</div>
+
+<ng-template #fileUploadControl>
+  <div class="flex flex-row justify-center mt-8">
+    <me-upload-file
+      class="upload-file-control"
+      title="Upload File"
+      multiple="false"
+      height="14rem"
+      placeholder="Drag & Drop to upload a Clip list file"
+      infoTooltip="The file should contain a list of clip names to filter from the log folder"
+      allowClear="true"
+      [isLoading]="fileIsLoading$ | async"
+      [selectedFileName]="selectedFileName"
+      [markAsError]="form.controls.file.invalid && form.controls.file.touched"
+      (filesChanges)="onFileChanged($event)"
+      (cleared)="onFileCleared()"
+    />
+  </div>
+</ng-template>
+
+<ng-template #clipListCatalog>
+  <de-select-clip-list
+    [initialTableFilters]="getInitialTableFilters(initialSelectionId)"
+    [initialSelectionId]="initialSelectionId"
+    (selectionChanged)="onClipListsChanged($event)"
+  />
+</ng-template>

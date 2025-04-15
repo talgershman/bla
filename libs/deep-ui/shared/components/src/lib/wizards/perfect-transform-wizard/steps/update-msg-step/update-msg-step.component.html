@@ -1,0 +1,24 @@
+<div class="p-6 box-border w-[33rem] mat-body-medium h-full flex flex-col items-center">
+  <div class="w-full">You are about to update the following Data Sources:</div>
+  <div class="w-full">
+    <ol class="w-full px-6">
+      <li>
+        <p>
+          Name: {{ mainDatasource?.name }}<br />
+          Id: {{ mainDatasource?.id }}<br />
+          Sub Type: {{ mainDatasource?.dataSubType }}<br />
+        </p>
+      </li>
+      <br />
+      @for (datasource of siblingDatasources; track datasource.id) {
+        <li>
+          <p>
+            Name: {{ datasource.name }}<br />
+            Id: {{ datasource.id }}<br />
+            Sub Type: {{ datasource.dataSubType }}<br />
+          </p>
+        </li>
+      }
+    </ol>
+  </div>
+</div>

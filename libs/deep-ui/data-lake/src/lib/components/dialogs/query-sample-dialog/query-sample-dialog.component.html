@@ -1,0 +1,217 @@
+<div class="h-full flex flex-col">
+  <div
+    class="flex flex-row justify-between items-center px-6 py-1 min-h-[5rem] box-border border-0 border-b border-solid border-sys-outline-variant"
+  >
+    <div class="mat-headline-small step-label text-sys-on-surface">Preview examples</div>
+    <div class="relative left-[0.6rem] text-sys-secondary">
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  <form
+    class="flex-1 h-0 box-border pl-6 pt-1"
+    [formGroup]="imageServiceForm"
+    (ngSubmit)="onRefresh()"
+  >
+    <main class="h-full flex flex-col gap-4">
+      <header class="flex flex-row items-baseline pr-2">
+        <div class="w-[16rem] mr-4">
+          <me-autocomplete
+            title="Camera"
+            placeholder="select camera"
+            [options]="cameraOptions"
+            [formControl]="imageServiceForm.controls.camera"
+            (selectionChanged)="onAutoCompleteChanged()"
+          />
+        </div>
+        <div class="w-[16rem] mr-4">
+          <me-autocomplete
+            title="Exposure"
+            placeholder="select exposure"
+            [infoTooltip]="exposureTooltip"
+            [options]="exposureOptions"
+            [formControl]="imageServiceForm.controls.exposure"
+            (selectionChanged)="onAutoCompleteChanged()"
+          />
+        </div>
+        <div class="w-[16rem] mr-4">
+          <me-autocomplete
+            title="Pyramid"
+            placeholder="select pyrmaid"
+            [infoTooltip]="pyramidTooltip"
+            [options]="pyramidOptions"
+            [formControl]="imageServiceForm.controls.pyramid"
+            (selectionChanged)="onAutoCompleteChanged()"
+          />
+        </div>
+        <div class="w-[16rem] mr-1">
+          <me-autocomplete
+            title="Pyramid level"
+            type="text"
+            placeholder="0"
+            [infoTooltip]="pyramidLevelTooltip"
+            [options]="pyramidLevelOptions"
+            [formControl]="imageServiceForm.controls.pyramidLevel"
+            (selectionChanged)="onAutoCompleteChanged()"
+          />
+        </div>
+        <div class="relative">
+          <button
+            mat-button
+            type="button"
+            color="primary"
+            [class.disable-refresh-button]="
+              imageServiceForm.invalid || (!(allImagesRendered$ | async) && !runClipsSampleErrorMsg)
+            "
+            (click)="onRefresh()"
+          >
+            Run
+          </button>
+        </div>
+      </header>
+      <section class="flex flex-row">
+        <mat-icon class="info-icon pr-2">info</mat-icon>
+        <div class="flex flex-col gap-1">
+          <span class="text-sys-on-surface">
+            DEEP uses Image Service to show a sample of the data.</span
+          >
+          <div>
+            <span class="text-sys-on-surface"
+              >If images are not available please contact Image Service or open a ticket to 'heat'
+              those clips.</span
+            >
+            <a
+              class="text-sys-primary ml-1 no-underline"
+              target="_blank"
+              [href]="imageServiceJiraTicket"
+              >Click here to open a Jira ticket</a
+            >
+          </div>
+        </div>
+      </section>
+      <section>
+        @if (onQuery) {
+          <span class="flex flex-row gap-2 items-center mat-headline-medium text-sys-on-surface">
+            <mat-progress-spinner diameter="30" mode="indeterminate" color="primary" />
+            Querying clips...
+          </span>
+        }
+        @if (
+          onCheckingImageServiceHealth ||
+          (!onQuery &&
+            images.length &&
+            !(allImagesAreExcluded$ | async) &&
+            !(allImagesRendered$ | async))
+        ) {
+          <span class="mat-headline-medium text-sys-on-surface">
+            Loading images... please wait until all loading is done.
+          </span>
+        }
+        @if (
+          !onQuery &&
+          images.length &&
+          !(allImagesAreExcluded$ | async) &&
+          (allImagesRendered$ | async)
+        ) {
+          <span class="mat-headline-medium text-sys-on-surface">
+            Found {{ viewImages.length + prevViewImages.length }}/{{ images.length }} 'heated'
+            clips.
+            {{ viewImages.length ? '' : "No new 'heated' clips." }}
+          </span>
+        }
+        @if (!onQuery && images.length && (allImagesAreExcluded$ | async)) {
+          <span class="mat-headline-medium text-sys-on-surface">
+            No images found out of {{ images.length }} clips!
+          </span>
+        }
+        @if (!onQuery && runClipsSampleErrorMsg) {
+          <mat-error>
+            {{ runClipsSampleErrorMsg }}
+          </mat-error>
+        }
+      </section>
+      <section #scrollSection class="relative h-full flex flex-col overflow-y-auto">
+        <ng-container [ngTemplateOutlet]="clipsSampleResultsContainerTmpl" />
+      </section>
+    </main>
+  </form>
+  <footer class="flex flex-row items-center box-border p-6 justify-end gap-4 relative">
+    <button mat-button type="button" color="primary" (click)="onClose()">Close</button>
+    <button
+      mat-flat-button
+      type="button"
+      color="primary"
+      [disabled]="
+        onQuery ||
+        onFormChanged ||
+        clipsSampleResultsContainerTmpl === clipsSampleLoadingTmpl ||
+        !!runClipsSampleErrorMsg ||
+        imageServiceForm.invalid ||
+        !(allImagesRendered$ | async)
+      "
+      (click)="onShowMore()"
+    >
+      Show More
+    </button>
+  </footer>
+</div>
+
+<ng-template #clipsSampleLoading>
+  <div class="flex-grow w-full h-full flex flex-col items-center justify-center space-y-4">
+    <span class="mat-body-small">This might take a while</span>
+  </div>
+</ng-template>
+
+<ng-template #imageServiceResults>
+  <div class="relative flex flex-row justify-center">
+    <div class="relative flex flex-row mr-2">
+      @if (!(allImagesRendered$ | async)) {
+        <div>
+          @for (img of images; track i; let i = $index) {
+            <div class="hidden">
+              @switch (img.status) {
+                @case (ClipSampleMetadataStatus.NotSet) {
+                  <div>
+                    <img
+                      class="hidden"
+                      [src]="img.src"
+                      width="323"
+                      height="172"
+                      (load)="onImageLoad(img)"
+                      (error)="onMissingImage(img)"
+                    />
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+      <div class="image-service-container h-fit grid grid-cols-4 gap-2">
+        @for (clip of allViewImages; track i; let i = $index) {
+          <div class="relative">
+            @switch (clip.status) {
+              @case (ClipSampleMetadataStatus.Loaded) {
+                <div
+                  class="visible-img-container relative w-full h-auto min-w-[210px] flex justify-center"
+                >
+                  @defer (on viewport) {
+                    <img class="visible-img w-full object-contain" [src]="clip.src" />
+                    <span
+                      class="image-text-conatiner absolute bottom-0 left-0 p-1 break-all mat-body-medium img-caption"
+                      ><b>Clip:</b> {{ clip.clipName }}<br />
+                      <b>Frame:</b> {{ clip.frameId }}</span
+                    >
+                  } @placeholder (minimum 300ms) {
+                    <div class="w-[323px] h-[172px]"></div>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>

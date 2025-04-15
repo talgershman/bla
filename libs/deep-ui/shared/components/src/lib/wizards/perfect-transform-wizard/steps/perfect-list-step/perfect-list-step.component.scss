@@ -1,0 +1,14 @@
+:host::ng-deep {
+  de-select-perfect-list {
+    me-table {
+      .table-wrapper {
+        .table-container {
+          height: min(49rem, calc(90vh - 14.9rem));
+        }
+      }
+      .mat-column-name {
+        min-width: 12vw;
+      }
+    }
+  }
+}

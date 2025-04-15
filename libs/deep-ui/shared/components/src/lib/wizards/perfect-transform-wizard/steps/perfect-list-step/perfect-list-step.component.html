@@ -1,0 +1,21 @@
+@if (perfectListForm.controls.perfectListsIds?.invalid) {
+  <div class="pl-6 mt-2 mb-2 border-box">
+    <mat-error>
+      {{ perfectListForm.controls.perfectListsIds.getError('isSameTechnology') }}
+    </mat-error>
+  </div>
+}
+@if (wasShown) {
+  <de-select-perfect-list
+    rowSelection="multiple"
+    [tableComponentId]="tableComponentId"
+    [selectedPerfectListIds]="savedPerfectListIds || selectedPerfectListIds"
+    [readOnlySavedPerfectListIds]="readOnlySavedPerfectListIds"
+    [showSyncColumn]="savedPerfectListIds?.length > 0"
+    [initialTableFilters]="initialTableFilters"
+    (selectionChanged)="onPerfectListsChanged($event)"
+    (syncSelectedChanged)="onSyncListsChanged($event)"
+    (invalidAdded)="onInvalidAdded($event)"
+    (invalidRemoved)="onInvalidRemoved($event)"
+  />
+}

@@ -1,0 +1,19 @@
+<div class="page-padding-box flex flex-col w-full h-full">
+  <me-breadcrumbs [breadcrumbs]="breadcrumbs" />
+  <de-ag-entity-list
+    class="flex flex-col flex-1"
+    [selected]="selected"
+    [actionsButtons]="actionButtons"
+    (actionButtonClicked)="onActionButtonClicked($event)"
+  >
+    <de-parsing-config-table
+      class="entity-table"
+      tableComponentId="index-parsing-config-table"
+      [queryParams]="queryParams"
+      (selectionChanged)="onSelectionChanged($event)"
+      (tableActionClicked)="onTableActionClickedRunInZone($event)"
+      (filtersParamsChanged)="onFiltersParamsChanged($event)"
+      (gridReady)="onGridReady($event)"
+    />
+  </de-ag-entity-list>
+</div>

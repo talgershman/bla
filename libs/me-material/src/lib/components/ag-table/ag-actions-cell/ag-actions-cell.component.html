@@ -1,0 +1,35 @@
+@if (!isGroupRow || show) {
+  <div class="flex flex-row w-full h-full justify-center">
+    <button
+      mat-icon-button
+      disableRipple
+      class="menu-action-button self-center"
+      (menuOpened)="onMenuOpened(menuTrigger)"
+      (menuClosed)="onMenuClosed()"
+      (click)="onMenuClick($event)"
+      [matMenuTriggerFor]="menu"
+      #menuTrigger="matMenuTrigger"
+      [class.show-menu]="menuTrigger === currentMenu"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+}
+<mat-menu #menu="matMenu" class="menu-items-container" xPosition="after">
+  @for (action of isGroupRow ? groupActions : actions; track action.id; let i = $index) {
+    <div
+      meTooltipPosition="left"
+      meTooltip
+      (mouseover)="onMouseOver(i, action.tooltip ? action.tooltip(rowNode.data, rowNode) : '')"
+      (mouseout)="onMouseOut(i)"
+    >
+      <button
+        mat-menu-item
+        (click)="onActionClicked(action, rowNode)"
+        [disabled]="action?.isDisabled && action?.isDisabled(rowNode.data, rowNode)"
+      >
+        <span>{{ action.title }}</span>
+      </button>
+    </div>
+  }
+</mat-menu>

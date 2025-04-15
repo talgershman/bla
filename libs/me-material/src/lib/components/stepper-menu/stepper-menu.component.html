@@ -1,0 +1,34 @@
+<div class="flex flex-row items-center space-x-2">
+  @for (menu of menus; track menu.id; let last = $last) {
+    <div>
+      <div
+        class="menu-item"
+        [ngClass]="{
+          'active-menu-item': selectedId() !== undefined && selectedId() === menu.id,
+          'step-done': menu.status === MeStepperMenuStatusEnum.DONE,
+          'step-failed': menu.status === MeStepperMenuStatusEnum.FAILED,
+          'step-not-started': menu.status === MeStepperMenuStatusEnum.NOT_STARTED,
+          'step-in-progress': menu.status === MeStepperMenuStatusEnum.IN_PROGRESS,
+        }"
+        (click)="onMenuItemClick(menu)"
+      >
+        <span class="title mat-label-large">
+          {{ menu.title }}
+        </span>
+        <ng-container
+          *ngTemplateOutlet="
+            menu.tmpl;
+            context: {
+              $implicit: {
+                data: menu.tmplContext,
+              },
+            }
+          "
+        />
+      </div>
+    </div>
+    @if (last === false) {
+      <mat-icon class="arrow-next-icon">east</mat-icon>
+    }
+  }
+</div>

@@ -1,0 +1,38 @@
+<div class="w-full h-full flex flex-col">
+  <header class="flex flex-none justify-between items-end">
+    <div class="flex-initial w-full">
+      <div class="mat-body-large text-sys-secondary px-6 py-4 box-border w-full">
+        Please select a Data Source {{ allowedSubTypesText }}
+      </div>
+    </div>
+    <div class="flex-grow"></div>
+  </header>
+  <section class="flex-1">
+    <de-data-source-tables
+      [selectionMode]="true"
+      [disableRefreshInterval]="true"
+      [selectedDataSources]="selectedDataSources"
+      (dataSourceSelectionChanged)="dataSourceSelection = $event; selected = null"
+      (tabsButtonClicked)="selected = null; dataSourceSelection = null"
+    />
+  </section>
+</div>
+
+<div *mePortalSrc="'select-datasource-buttons'">
+  <div class="flex-initial flex flex-row space-x-4">
+    <div>
+      <button mat-button type="button" color="primary" (click)="backClicked.emit()">Back</button>
+    </div>
+    <div>
+      <button
+        mat-flat-button
+        type="button"
+        color="primary"
+        [disabled]="!selected && !dataSourceSelection?.dataSource && !dataSourceSelection?.version"
+        (click)="onNextClicked()"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  width: var(--width, 100%);
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 4px;
+  ::ng-deep {
+    .mat-datepicker-toggle {
+      .mat-mdc-icon-button.mat-mdc-button-base {
+        --mdc-icon-button-state-layer-size: 32px;
+        padding: 4px;
+      }
+    }
+  }
+}

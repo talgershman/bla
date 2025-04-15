@@ -1,0 +1,54 @@
+<div class="data-retention-container box-border flex flex-col gap-2 py-6">
+  <div class="flex flex-row gap-2 px-6">
+    <label class="mat-headline-small">Data Retention</label>
+    @if (isLoading$ | async) {
+      <mat-progress-spinner class="m-0" diameter="20" mode="indeterminate" color="primary" />
+    }
+  </div>
+  <div class="box-border border-0 border-t border-solid border-sys-outline-variant">
+    <div class="flex flex-row box-border gap-6 px-6">
+      <main
+        class="box-border flex min-w-[20rem] max-w-[27.75rem] flex-col gap-6"
+        [class.pr-0]="!!table"
+      >
+        <header>
+          <div class="mat-body-medium mt-2">
+            {{
+              showDataRetentionControl
+                ? 'DEEP will keep your job outputs up to dates configuration below'
+                : 'No data retention found.'
+            }}
+          </div>
+        </header>
+        <section class="flex-1 flex flex-row gap-6">
+          @if (showDataRetentionControl) {
+            <de-data-retention-control
+              [formControl]="dataRetentionControl"
+              [dataRetention]="currentDataRetention"
+              [config]="config"
+              [forceShowAllKeys]="forceShowAllKeys"
+            />
+          }
+        </section>
+      </main>
+      @if (!!table) {
+        <div class="table-side-container box-border flex-1 flex min-w-[20rem] flex-col gap-6">
+          <me-enrich-table [description]="tableDescription" [table]="table" />
+        </div>
+      }
+    </div>
+  </div>
+  <footer class="mt-2 pt-6 border-0 border-t border-solid border-sys-outline-variant">
+    <div class="flex items-center justify-end gap-4 px-6">
+      <button mat-button mat-dialog-close type="button" color="primary">Cancel</button>
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="dataRetentionControl.invalid || !showDataRetentionControl"
+        (click)="submit()"
+      >
+        Save
+      </button>
+    </div>
+  </footer>
+</div>

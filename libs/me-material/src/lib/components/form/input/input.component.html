@@ -1,0 +1,68 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-input w-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+>
+  @if (title) {
+    <mat-label>
+      {{ title }}
+      @if (infoTooltip) {
+        <me-hint-icon [tooltip]="infoTooltip" />
+      }
+    </mat-label>
+  }
+  <div class="control-container flex flex-row items-center">
+    <input
+      #areaInput
+      matInput
+      meDisableControl
+      class="truncate"
+      title=""
+      [errorStateMatcher]="customErrorStateMatcher"
+      [disableControl]="disableCondition"
+      [pattern]="pattern"
+      [step]="step"
+      [mask]="mask"
+      [thousandSeparator]="thousandSeparator"
+      [allowNegativeNumbers]="allowNegativeNumbers"
+      [min]="min"
+      [max]="max"
+      [placeholder]="placeholder"
+      [formControl]="innerController"
+      [type]="type"
+      (keydown)="innerController.markAsTouched()"
+      (keydown.enter)="$event.stopPropagation(); $event.preventDefault()"
+      (focusin)="onFocusIn()"
+      (focusout)="onFocusOut($event)"
+    />
+    <ng-content />
+  </div>
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

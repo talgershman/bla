@@ -1,0 +1,85 @@
+<div class="table-actions-container">
+  <div class="search-term-container">
+    <div class="control-container flex flex-row items-center">
+      <me-search-input
+        class="actions-bar-filter-term"
+        [controller]="searchInputControl"
+        [placeholder]="searchPlaceHolder"
+      />
+    </div>
+  </div>
+
+  @if (hasChipsFilterViewData) {
+    <div class="flex-1">
+      <mat-chip-listbox class="active-chips" aria-label="Active filters">
+        @for (filter of chipsFilterViewData; track i; let i = $index) {
+          <mat-chip-option
+            class="cursor-default"
+            [selectable]="false"
+            (removed)="onFilterRemoved(filter)"
+          >
+            {{ formattedFilterValue(filter) }}
+            <mat-icon class="cursor-pointer" matChipRemove>cancel</mat-icon>
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </div>
+  }
+  @if (!hasChipsFilterViewData && !isDefaultColumnState) {
+    <div class="custom-view flex items-center justify-center space-x-1">
+      <ng-container [ngTemplateOutlet]="customViewTempl" />
+    </div>
+  }
+
+  <div class="actions-icons z-[1] flex flex-row items-center gap-2">
+    <div *mePortalTarget="'ag-actions-bar-action-icons'"></div>
+    <button
+      (click)="onFit()"
+      mat-icon-button
+      aria-label="fit-table"
+      meTooltip="Resizes columns to fit within the table if possible"
+    >
+      <mat-icon>aspect_ratio</mat-icon>
+    </button>
+    <me-ag-table-refresh-button (clicked)="refreshButtonClicked.emit()" />
+    @if (groupByOptions?.length) {
+      <me-ag-group-select
+        [componentId]="componentId"
+        [groupByOptions]="groupByOptions"
+        [initialGroupByParam]="initialGroupByParam"
+        [resetControl$]="restoredClicked$"
+        (groupChanged)="onGroupByChanged($event)"
+      />
+    }
+    @if (!hideTeamFilterState) {
+      <me-ag-table-team-filter
+        [componentId]="componentId"
+        [state]="teamFilterState"
+        [resetTeamFilter]="resetTeamFilterAndEmitEventOrNot$ | async"
+        [ignoreSavingTeamFilterState]="ignoreSavingTeamFilterState"
+        (teamFilterClicked)="teamFilterClicked.emit($event)"
+      />
+    }
+  </div>
+</div>
+
+@if (hasChipsFilterViewData && !isDefaultColumnState) {
+  <div class="custom-view flex items-center justify-center space-x-1 bottom-custom-view">
+    <ng-container [ngTemplateOutlet]="customViewTempl" />
+  </div>
+}
+
+<ng-template #customViewTempl>
+  <span meTooltip="Your table view includes a custom column arrangement">
+    Custom View Enabled
+  </span>
+  <button
+    mat-button
+    color="primary"
+    type="button"
+    meTooltip="Restores the table to the original column settings"
+    (click)="onRestoreDefaultClicked()"
+  >
+    Restore Default
+  </button>
+</ng-template>

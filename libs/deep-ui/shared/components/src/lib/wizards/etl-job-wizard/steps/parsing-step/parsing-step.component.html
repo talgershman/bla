@@ -1,0 +1,7 @@
+<de-select-parsing-list
+  [tableComponentId]="tableComponentId"
+  [isReTriggerFlow]="isReTriggerFlow"
+  [initialTableFilters]="getInitialTableFilters(initialSelectionId)"
+  [initialSelectionId]="initialSelectionId"
+  (selectionChanged)="onParsingChanged($event)"
+/>

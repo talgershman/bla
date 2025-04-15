@@ -1,0 +1,93 @@
+<me-server-side-table
+  [componentId]="tableComponentId"
+  [columnDefs]="columns"
+  [enableSideBar]="enableSideBar"
+  [teamFilterState]="teamFilterState"
+  [groupDisplayType]="groupDisplayType"
+  [clearSelectedRowsFilteredOut]="clearSelectedRowsFilteredOut"
+  [getRowId]="getRowId"
+  [rowSelection]="rowSelection"
+  [isRowSelectable]="isRowSelectable"
+  [getChildCount]="getChildCount"
+  [autoGroupColumnDef]="autoGroupColumnDef"
+  [rowHeight]="rowHeight"
+  [externalFiltersKeys]="externalFiltersKeys"
+  [ignoredFiltersKeys]="ignoredFiltersKeys"
+  [expandOnGroups]="expandOnGroups"
+  (teamFilterClicked)="onTeamFilterClicked($event)"
+  (selectionChanged)="onSelectionChanged($event)"
+  (actionClicked)="onActionClickedRunInZone($event)"
+  (gridReady)="onGridReady($event)"
+  (filtersParamsChanged)="onFiltersParamsChanged($event)"
+  (firstDataRenderedEvent)="onFirstDataRenderedEvent($event)"
+/>
+
+<ng-template #nameCell let-params="params" let-row>
+  @if (row?.id !== undefined) {
+    <div>
+      <div class="flex flex-row items-center space-x-1 ml-1.5">
+        @if (row.sdkStatus?.status && row.sdkStatus.status !== 'warning') {
+          <div>
+            <mat-icon
+              class="small-icon mr-0.5"
+              meTooltipPosition="right"
+              [class.text-warning]="row.sdkStatus?.status === 'deprecationWarning'"
+              [class.text-sys-error]="row.sdkStatus?.status === 'deprecated'"
+              [meTooltip]="row.sdkStatus.msg"
+              >warning</mat-icon
+            >
+          </div>
+        }
+        <div
+          class="ellipsis"
+          meTooltipPosition="right"
+          meTooltipClass="no-truncate-tooltip"
+          [meTooltip]="tooltipTemplate"
+          [meTooltipContext]="{
+            tooltip: params.value,
+          }"
+          [meTooltipOnEllipsis]="true"
+        >
+          {{ params.value }}
+        </div>
+      </div>
+      <div class="uuid-container">
+        <button mat-icon-button (click)="copyJobIdToClipboard($event, row.id)">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+        <div
+          class="text-uuid ellipsis"
+          meTooltipPosition="right"
+          [meTooltip]="params.node.selectable ? row.id : ''"
+          [meTooltipOnEllipsis]="true"
+        >
+          ID: {{ row.id }}
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div
+      class="ellipsis mat-label-large"
+      meTooltipPosition="right"
+      meTooltipClass="no-truncate-tooltip"
+      [meTooltip]="tooltipTemplate"
+      [meTooltipContext]="{
+        tooltip: params.value,
+      }"
+      [meTooltipOnEllipsis]="true"
+    >
+      {{ params.value }}
+    </div>
+  }
+</ng-template>
+
+<ng-template #tooltipTemplate let-tooltip="tooltip">
+  <div class="tooltip-container space-x-1">
+    <button mat-icon-button (click)="copyJobIdToClipboard($event, tooltip)">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <span class="text-tooltip">
+      {{ tooltip }}
+    </span>
+  </div>
+</ng-template>

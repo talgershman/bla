@@ -1,0 +1,20 @@
+:host ::ng-deep {
+  me-server-side-table {
+    ag-grid-angular {
+      .small-icon {
+        height: 1rem;
+        width: 1rem;
+        font-size: 1rem;
+      }
+      .ag-row-group {
+        &.ag-row-selected:before {
+          background-color: initial;
+        }
+        &.ag-row-selected.ag-row-hover:before {
+          background-color: var(--ag-row-hover-color);
+          background-image: none;
+        }
+      }
+    }
+  }
+}

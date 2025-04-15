@@ -1,0 +1,17 @@
+.mat-option.option-item,
+.mat-option.multiple-option-item {
+  height: 2rem;
+  line-height: 2rem;
+}
+
+:host {
+  display: block;
+  width: var(--width, 100%);
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 4px;
+  --mat-select-placeholder-text-color: color-mix(
+    in srgb,
+    var(--sys-on-surface-variant) 70%,
+    transparent
+  );
+}

@@ -1,0 +1,73 @@
+@if (shouldRender) {
+  <main
+    [class.step-center-screen]="isFixedPosition"
+    [class.step-size-medium]="step.stepMaxWidth === 'medium'"
+    [class.step-size-large]="step.stepMaxWidth === 'large'"
+    class="main-step-container min-h-[190px] text-sys-on-surface bg-sys-surface-container-highest rounded p-6 box-sizing flex flex-col"
+  >
+    @if (headlineTitle) {
+      <header class="w-full flex flex-row items-center mb-8">
+        <div class="flex flex-row justify-center w-full">
+          <label class="mat-headline-small">{{ headlineTitle }}</label>
+        </div>
+      </header>
+    }
+    <section class="w-full flex-1 overflow-y-auto max-h-[70vh] mb-8">
+      <div>
+        @if (step.title) {
+          <div class="mat-title-medium mb-4">{{ step.title }}</div>
+        }
+        @if (step.text) {
+          <div>{{ step.text?.trim() }}</div>
+        }
+        <ng-container [ngTemplateOutlet]="step.template ? customTemplate : innerHtmlTemplate" />
+      </div>
+    </section>
+    @if (isStartStep) {
+      <footer class="w-full flex flex-row items-center justify-center">
+        <button mat-flat-button color="primary" (click)="nextClicked.emit()">
+          {{ currentStepIndex + 1 === totalSteps ? 'Done' : isStartStep ? 'Start' : 'Next' }}
+        </button>
+      </footer>
+    }
+    @if (!isStartStep) {
+      <footer class="w-full flex flex-row items-center">
+        <div>Steps: {{ currentStepIndex }} / {{ totalSteps - 1 }}</div>
+        <div class="flex-1"></div>
+        <div class="flex flex-row gap-2">
+          @if (showPrevButton) {
+            <button
+              mat-button
+              color="primary"
+              [disabled]="(isButtonsEnabled$ | async) === false"
+              (click)="prevClicked.emit()"
+            >
+              Back
+            </button>
+          }
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="(isButtonsEnabled$ | async) === false"
+            (click)="nextClicked.emit()"
+          >
+            {{ currentStepIndex + 1 === totalSteps ? 'Done' : 'Next' }}
+          </button>
+        </div>
+      </footer>
+    }
+    @if (!isFixedPosition) {
+      <div class="tour-arrow" data-popper-arrow></div>
+    }
+  </main>
+}
+
+<ng-template #innerHtmlTemplate>
+  @if (step.innerHtml) {
+    <div [innerHTML]="step.innerHtml | safe: 'html'"></div>
+  }
+</ng-template>
+
+<ng-template #customTemplate>
+  <ng-container *ngTemplateOutlet="step.template" />
+</ng-template>

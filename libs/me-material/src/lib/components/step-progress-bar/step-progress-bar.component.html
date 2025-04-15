@@ -1,0 +1,11 @@
+<div class="step-progress-bar-container">
+  @for (step of steps(); track i; let i = $index) {
+    <div
+      [ngClass]="{
+        'step-done': step.progress === MeStepProgressEnum.DONE,
+        'step-error': step.progress === MeStepProgressEnum.FAILED,
+        'step-in-progress': step.progress === MeStepProgressEnum.IN_PROGRESS,
+      }"
+    ></div>
+  }
+</div>

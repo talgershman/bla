@@ -1,0 +1,92 @@
+<mat-sidenav-container>
+  <mat-sidenav
+    fixedTopGap="64"
+    role="navigation"
+    opened="true"
+    mode="side"
+    [attr.color]="'primary'"
+    [@slide]="currentState"
+    [class.side-nav-expanded]="currentState !== SideNavState.Collapsed"
+    (mouseleave)="collapse()"
+    (mouseenter)="expand()"
+  >
+    <div>
+      <button mat-icon-button class="menu-icon-button" (click)="onMenuClick()">
+        <mat-icon class="menu-icon cursor-pointer"> menu </mat-icon>
+      </button>
+    </div>
+    <ng-content select=".nav" />
+    <div class="mt-2">
+      <mat-nav-list>
+        @for (menuItem of menuItems; track i; let i = $index) {
+          @if (menuItem.isSeparator) {
+            <div
+              class="w-[52px] pl-3 menu-spacer-parent-container box-border h-[20px] flex flex-row items-center"
+            >
+              <div class="flex-1 menu-spacer-container">
+                <div class="menu-spacer"></div>
+              </div>
+              @if (
+                menuItem.title &&
+                (currentState === SideNavState.Expanded ||
+                  currentState === SideNavState.FixedExpanded)
+              ) {
+                <div class="">
+                  <span
+                    class="menu-title text-ellipsis text-on-surface-primary-container px-[0.5rem]"
+                    >{{ menuItem.title }}</span
+                  >
+                </div>
+              }
+              <div class="flex-1 menu-spacer-container">
+                <div class="menu-spacer"></div>
+              </div>
+            </div>
+          }
+          @if (!menuItem.isSeparator && !menuItem.subMenu) {
+            <a
+              mat-list-item
+              [routerLink]="!menuItem.isDisabled ? menuItem.route : null"
+              [queryParams]="menuItem.queryParams"
+              [class.active-item]="window?.location?.pathname?.includes(menuItem.route)"
+              (click)="selectedMenu = menuItem"
+              [disabled]="menuItem.isDisabled"
+            >
+              <div class="flex flex-row items-center">
+                <div class="h-6">
+                  <mat-icon class="menu-icon ml-1 mr-5">
+                    {{ menuItem.icon }}
+                  </mat-icon>
+                </div>
+                <div class="menu-title text-on-surface-primary-container">{{ menuItem.title }}</div>
+              </div>
+            </a>
+          }
+        }
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content role="main">
+    <div>
+      <ng-content select=".sidenav-content" />
+    </div>
+    <div class="main-sidenav-content">
+      @if (routeService.routeLoading$ | async) {
+        <div class="overlay">
+          <div class="loading">
+            <mat-progress-spinner diameter="80" mode="indeterminate" color="primary" />
+          </div>
+        </div>
+      } @else {
+        <ng-content />
+      }
+      @if (loadingService.loading$ | async) {
+        <div class="overlay-transparent">
+          <div class="loading">
+            <mat-progress-spinner diameter="80" mode="indeterminate" color="primary" />
+          </div>
+        </div>
+      }
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

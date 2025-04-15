@@ -1,0 +1,143 @@
+@if (baseViewState().derivedLogic()) {}
+<me-wizard (selectionChange)="onStepSelectionChanged($event, runType())">
+  @if (!refJobId) {
+    <me-cdk-step
+      label="Insert Log List"
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="logFileStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="logFileStepNextClicked.next()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-log-file-step
+          [logFileStepNextClicked]="logFileStepNextClicked$"
+          (formState)="onFormStateChanged($event, 'logFileStepNextDisabled')"
+          (moveToNextStep)="onNextClicked()"
+          [(logFileFormFile)]="logFileFormFile"
+        />
+      } @placeholder (minimum 200ms) {
+        <de-loading-step [isLoading]="true" />
+      }
+    </me-cdk-step>
+  }
+  @if (isRunTypeDataCreation()) {
+    <me-cdk-step
+      aria-label="parsing-configuration-step"
+      label="Select Parsing Configuration"
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="parsingStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-parsing-step
+          [tableComponentId]="parsingStepTableComponentId()"
+          (parsingChanged)="onParsingChanged($event)"
+          (formState)="onFormStateChanged($event, 'parsingStepNextDisabled')"
+        />
+      } @placeholder {
+        <div></div>
+      }
+    </me-cdk-step>
+  }
+  @if (isRunTypeFullRun() || isRunTypeCompareVersions()) {
+    <me-cdk-step
+      #etlCatalogStep
+      aria-label="etl-step"
+      label="Select ETL"
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="etlStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-etl-step
+          [tableComponentId]="etlStepTableComponentId()"
+          [wasShown]="etlCatalogStep.wasShown"
+          (etlChanged)="onEtlChanged($event)"
+          (formState)="onFormStateChanged($event, 'etlStepNextDisabled')"
+        />
+      } @placeholder {
+        <div></div>
+      }
+    </me-cdk-step>
+  }
+  <me-cdk-step
+    #configurationStep
+    label="Configurations"
+    [nextLabel]="nextButtonLabel"
+    [isNextDisabled]="runConfigStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onConfigurationStepNextClick(refJobId)"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-run-config-step
+        enableForceParsing="true"
+        [wasShown]="configurationStep.wasShown"
+        [runType]="runType()"
+        [enableMergeParsedData]="!refJobId"
+        [enableSkipMestRetry]="!refJobId"
+        [enableServices]="isRunTypeFullRun() || isRunTypeCompareVersions()"
+        [enableOutputPath]="isRunTypeFullRun() || isRunTypeCompareVersions()"
+        [etl]="selectedEtl"
+        [dataRetentionInfoObj]="dataRetentionInfoObj"
+        (formState)="onFormStateChanged($event, 'runConfigStepNextDisabled')"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  @if (!refJobId) {
+    <me-cdk-step
+      #mestStep
+      aria-label="mest-step"
+      [label]="mestStepLabel"
+      [nextLabel]="showMestForm ? 'Override MEST CMD' : nextButtonLabel"
+      [isNextDisabled]="showMestForm ? false : mestsStepNextDisabled"
+      (prevClicked)="onMestStepPrevClicked()"
+      (nextClicked)="onMestStepNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-mests-step
+          [enableMultiSelection]="true"
+          [stepShown]="mestStep.isPassed"
+          [tableComponentId]="mestsStepTableComponentId()"
+          [requiredSelection]="requiredSelection()"
+          [overrideDisplayColumns]="overriddenDisplayColumnsForMestStep()"
+          [overrideClicked]="submitOverrideMestForm$"
+          [backToListViewClicked]="returnToSelectMestClicked$"
+          (returnFromMestFormClicked)="setMestStepLabel(runType(), null)"
+          (stepLabelChange)="setMestStepLabel(runType(), $event)"
+          (formState)="onFormStateChanged($event, 'mestsStepNextDisabled')"
+          (showMestForm)="onShowMestFormChanged($event)"
+        />
+      } @placeholder {
+        <div></div>
+      }
+    </me-cdk-step>
+  }
+  <me-cdk-step [hideNext]="true" [hidePrev]="true">
+    @defer (on viewport; prefetch on idle) {
+      <de-loading-step [isLoading]="loading$ | async" />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step
+    [label]="submitJobFeedbackLabel"
+    [hideNext]="true"
+    [isPrevDisabled]="submitJobDisablePrevButton"
+    (prevClicked)="onSubmitJobStepPrevClicked()"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-submit-job-step
+        [items]="submitJobFeedbackItems"
+        (stepLabelChange)="submitJobFeedbackLabel = $event"
+        (disablePrevButton)="submitJobDisablePrevButton = $event"
+        (triggerNewJob)="triggerNewJob.emit($event)"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+</me-wizard>

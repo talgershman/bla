@@ -1,0 +1,12 @@
+.mat-mdc-standard-chip {
+  --mdc-chip-container-height: 32px;
+  --mdc-chip-container-shape-radius: 8px;
+}
+
+:host ::ng-deep {
+  .mat-mdc-standard-chip:not(.mdc-text-field--disabled) {
+    button {
+      cursor: pointer;
+    }
+  }
+}

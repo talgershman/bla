@@ -1,0 +1,67 @@
+@font-face {
+  font-family: 'Intel One';
+  font-weight: 400; //regular
+  src:
+    local('Intel One'),
+    url('libs/me-material/assets/fonts/intel_one/intelone-display-regular.woff2') format('woff2'),
+    /* Super Modern Browsers */
+      url('libs/me-material/assets/fonts/intel_one/intelone-display-regular.woff') format('woff'),
+    /* Pretty Modern Browsers */
+      url('libs/me-material/assets/fonts/intel_one/intelone-display-regular.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: 'Intel One';
+  font-weight: 500; //medium
+  src:
+    local('Intel One'),
+    url('libs/me-material/assets/fonts/intel_one/intelone-display-medium.woff2') format('woff2'),
+    /* Super Modern Browsers */
+      url('libs/me-material/assets/fonts/intel_one/intelone-display-medium.woff') format('woff'),
+    /* Pretty Modern Browsers */
+      url('libs/me-material/assets/fonts/intel_one/intelone-display-medium.ttf');
+}
+
+@font-face {
+  font-family: 'Intel One';
+  font-weight: 700; //bold
+  src:
+    local('Intel One'),
+    url('libs/me-material/assets/fonts/intel_one/intelone-display-bold.woff2') format('woff2'),
+    /* Super Modern Browsers */
+      url('libs/me-material/assets/fonts/intel_one/intelone-display-bold.woff') format('woff'),
+    /* Pretty Modern Browsers */
+      url('libs/me-material/assets/fonts/intel_one/intelone-display-bold.ttf');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.material-icons-outlined {
+  font-family: 'Material Icons Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}

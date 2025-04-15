@@ -1,0 +1,41 @@
+<div class="retention-container flex flex-col gap-4">
+  <!-- single key -->
+  @for (key of formKeys; track i; let i = $index) {
+    <div class="flex flex-row gap-4 items-baseline">
+      <div class="flex flex-col">
+        <me-date
+          title="Expired at"
+          [hideClearButton]="true"
+          [infoTooltip]="form.get(key).get('tooltip')?.value"
+          [formControl]="form.get(key).get('date')"
+          [min]="dateMin"
+          [max]="form.get(key).get('max').value"
+          (dateChanged)="onDateChanged($event, key)"
+        />
+        @if (form.get(key).get('warnMsg').value) {
+          <label class="pl-4 mat-body-medium warn-msg">
+            {{ form.get(key).get('warnMsg').value }}
+          </label>
+        }
+      </div>
+      @if (form.get(key).get('allowPermanent')?.value) {
+        <mat-checkbox
+          disableRipple
+          color="primary"
+          [formControl]="form.get(key).get('permanentControl')"
+          (change)="onPermanentChanged($event, key)"
+        >
+          Permanent
+        </mat-checkbox>
+      }
+    </div>
+  }
+  <div
+    class="border-box p-4 bg-warning-container text-on-warning-container w-[412px]"
+    [class.invisible]="!showPermanentMessage"
+    [class.-mt-5]="!showPermanentMessage"
+  >
+    *Please consider <b>permanent</b> Dataset yield everlasting cloud costs deducted from your
+    team's cloud budget
+  </div>
+</div>

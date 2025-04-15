@@ -1,0 +1,16 @@
+.feedback-item {
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.mest-caption {
+  font: var(--sys-title-small);
+  letter-spacing: var(--sys-title-small-tracking);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.job-error {
+  width: fit-content;
+}

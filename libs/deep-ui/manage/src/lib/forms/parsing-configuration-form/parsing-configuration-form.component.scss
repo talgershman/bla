@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  height: 100%;
+
+  .config-tooltip {
+    margin: 0;
+  }
+
+  .parsing-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(4, 60px);
+    grid-auto-flow: column;
+    grid-gap: 0.875rem 2rem;
+    overflow-y: auto;
+
+    ::ng-deep {
+      me-json-editor {
+        --me-json-editor-scroller-min-height: min(calc(60vh - 54px), calc(500px - 54px));
+        .json-editor-container {
+          height: unset;
+          > div {
+            height: unset;
+          }
+        }
+        div.cm-line {
+          text-indent: 0 !important;
+          padding-left: 0 !important;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .custom-tour-step {
+    --mat-expansion-container-background-color: var(--sys-surface-container-high);
+    --me-json-editor-scroller-min-height: 346px;
+  }
+}

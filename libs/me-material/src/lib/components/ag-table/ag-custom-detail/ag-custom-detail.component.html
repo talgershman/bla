@@ -1,0 +1,5 @@
+<div class="bg-sys-surface-container">
+  <div [class.invisible]="!show()">
+    <ng-container *ngTemplateOutlet="template; context: templateContext" />
+  </div>
+</div>

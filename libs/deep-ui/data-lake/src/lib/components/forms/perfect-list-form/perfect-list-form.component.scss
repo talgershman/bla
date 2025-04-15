@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.controls {
+  > div {
+    width: 36rem;
+  }
+}

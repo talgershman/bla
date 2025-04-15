@@ -1,0 +1,28 @@
+@if (stepShown) {
+  <de-select-mest
+    [tableComponentId]="tableComponentId"
+    [isReTriggerFlow]="isReTriggerFlow"
+    [rowSelection]="enableMultiSelection ? 'multiple' : 'single'"
+    [overrideDisplayColumns]="overrideDisplayColumns"
+    [isShown]="showMestFormView"
+    [hidden]="showMestFormView"
+    [updatedMest]="updatedMest"
+    [clipLists]="clipLists"
+    [initialMestSettings]="initialMestSettings"
+    [initialTableFilters]="initialTableFilters"
+    (mestsSelectedChanged)="onMestsSelectedChanged($event)"
+    (mainVersionChanged)="onMainVersionChanged($event)"
+    (actionClicked)="onActionClickedRunInZone($event)"
+  />
+  @if (showMestFormView) {
+    <div class="p-6 border-box">
+      <de-mest-form
+        formMode="override"
+        minHeight="30rem"
+        [mest]="selectedMest"
+        [triggerSubmitClicked]="overrideClicked"
+        (fromValueChanged)="onMestValueChange($event)"
+      />
+    </div>
+  }
+}

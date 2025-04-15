@@ -1,0 +1,60 @@
+<form [formGroup]="outputDirsForm">
+  <div class="clip-to-log-output-container flex flex-col gap-2">
+    <div class="itrk-container">
+      <me-input
+        title="ITRK dir"
+        placeholder="Insert path to ITRK dir"
+        type="text"
+        updateOn="blur"
+        [disableCondition]="disableCondition"
+        [formControl]="outputDirsForm.controls.itrksDir"
+      />
+    </div>
+    <div class="log-container">
+      <div class="w-full">
+        <me-control-list
+          class="log-dir-list"
+          listTitle="Log Dirs"
+          (addItemClicked)="createLogDirControl()"
+        >
+          @for (
+            inputControl of outputDirsForm.controls.logDirs.controls;
+            track i;
+            let i = $index;
+            let first = $first
+          ) {
+            <me-input
+              placeholder="Insert path to log dir"
+              updateOn="blur"
+              [class.mt-1]="!first"
+              [formControl]="inputControl.controls.logDirs"
+            >
+              <button
+                disableRipple
+                mat-icon-button
+                aria-label="Clear"
+                matSuffix
+                type="button"
+                class="mat-icon-button-dense relative top-[2px]"
+                (click)="removeAt(i)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </me-input>
+          }
+        </me-control-list>
+      </div>
+    </div>
+    <div class="validate-button flex-align-row">
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="outputDirsForm.status !== 'VALID' || disableCondition"
+        (click)="this.validateEgoMotion.emit()"
+      >
+        Validate AV Egomotion
+      </button>
+    </div>
+    <ng-content />
+  </div>
+</form>

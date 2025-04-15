@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  width: var(--width, 100%);
+  --mat-form-field-container-vertical-padding: 4px;
+  --mat-form-field-container-height: 40px;
+
+  .mat-focused {
+    .arrow-icon {
+      color: var(--mdc-outlined-text-field-focus-label-text-color);
+    }
+  }
+
+  .mat-form-field-invalid {
+    .arrow-icon {
+      color: var(--mdc-outlined-text-field-error-label-text-color);
+    }
+  }
+
+  .mat-form-field-disabled {
+    .arrow-icon {
+      color: var(--mdc-outlined-text-field-disabled-input-text-color);
+    }
+  }
+}

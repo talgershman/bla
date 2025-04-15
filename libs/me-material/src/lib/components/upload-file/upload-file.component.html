@@ -1,0 +1,51 @@
+<div class="flex flex-row items-center space-x-1">
+  @if (title) {
+    <div title="" class="control-title">
+      {{ title }}
+    </div>
+  }
+  @if (infoTooltip) {
+    <me-hint-icon [tooltip]="infoTooltip" />
+  }
+</div>
+<ngx-file-drop
+  class="me-upload-file"
+  [class.me-upload-file-mark-error]="markAsError"
+  contentClassName="content"
+  [accept]="accept"
+  [multiple]="multiple"
+  (onFileDrop)="dropped($event)"
+>
+  <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+    <div class="content-container">
+      @if (isLoading) {
+        <mat-progress-spinner diameter="100" mode="indeterminate" color="primary" />
+      }
+      @if (!isLoading) {
+        <div class="placeholder mat-headline-small">
+          {{ placeholder }}
+        </div>
+        <div class="mat-body-medium">OR</div>
+        <div class="flex flex-center justify-center gap-4 mt-3">
+          <button mat-flat-button type="button" color="primary" (click)="openFileSelector()">
+            Browse
+          </button>
+        </div>
+        @if (selectedFileName) {
+          <div class="mt-6 flex flex-row items-center">
+            <mat-icon class="mr-2">upload_file</mat-icon>
+            <div class="selected-file mat-body-medium">{{ selectedFileName }}</div>
+            <div
+              class="ml-8 flex items-center"
+              [meTooltip]="!allowClear ? 'Removing file is disabled' : ''"
+            >
+              <button mat-icon-button [disabled]="!allowClear" (click)="onClear()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </ng-template>
+</ngx-file-drop>

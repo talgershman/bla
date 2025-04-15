@@ -1,0 +1,281 @@
+:host {
+  display: block;
+  max-width: fit-content;
+  min-width: 100%;
+  height: 100%;
+}
+:host ::ng-deep {
+  .jse-main {
+    --jse-value-color-string: var(--emerald);
+    .jse-welcome {
+      background-color: var(--sys-surface) !important;
+      color: var(--sys-on-surface) !important;
+      border: none !important;
+    }
+    .jse-navigation-bar {
+      background: var(--sys-surface-container-highest) !important;
+      color: var(--sys-secondary) !important;
+      border-left: none !important;
+      border-right: none !important;
+    }
+    .jse-search-box {
+      background: var(--sys-surface-container-highest) !important;
+      color: var(--sys-secondary) !important;
+    }
+    .jse-contents {
+      flex: 1 1 0;
+      background-color: var(--sys-surface);
+      border-left: none !important;
+      border-right: none !important;
+      min-height: var(--me-json-editor-scroller-min-height, initial);
+      min-width: fit-content;
+      .ͼ2 {
+        --indent-marker-bg-color: color-mix(in srgb, var(--sys-on-surface) 8%, transparent);
+        --indent-marker-active-bg-color: color-mix(in srgb, var(--sys-on-surface) 16%, transparent);
+      }
+      .ͼo {
+        color: var(--sys-on-surface);
+      }
+      .ͼr {
+        color: var(--emerald);
+      }
+      .ͼs {
+        color: var(--sapphire);
+      }
+      .ͼq {
+        color: var(--citrine);
+      }
+      .ͼp {
+        color: var(--ruby);
+      }
+      .cm-line {
+        color: color-mix(in srgb, var(--sys-on-surface) 38%, transparent);
+      }
+      .cm-activeLine,
+      .cm-activeLineGutter {
+        color: var(--sys-scrim);
+        background: color-mix(in srgb, var(--sys-secondary) 16%, transparent) !important;
+      }
+      .cm-selectionMatch {
+        background-color: var(--emerald-container) !important;
+      }
+      .cm-gutters {
+        background: var(--sys-surface-container-highest) !important;
+        color: var(--sys-secondary) !important;
+      }
+      .cm-activeLine {
+        .ͼo {
+          color: var(--sys-secondary);
+        }
+      }
+      .cm-selectionBackground {
+        background: var(--sys-inverse-on-surface) !important;
+      }
+      .cm-editor {
+        .cm-search {
+          background: var(--sys-surface-container-highest) !important;
+          color: var(--sys-secondary) !important;
+          input {
+            &:focus-visible {
+              outline: 1px solid var(--sys-primary);
+            }
+          }
+        }
+        .cm-searchMatch {
+          background-color: var(--topaz-container) !important;
+          outline: 1px solid var(--citrine) !important;
+        }
+      }
+    }
+  }
+
+  .jse-main {
+    .jse-tree-mode {
+      .jse-contents {
+        overflow: auto;
+        &:last-child {
+          border-bottom: none !important;
+        }
+        .jse-key {
+          color: var(--sys-on-surface);
+        }
+        .fa-icon {
+          color: color-mix(in srgb, var(--sys-on-surface-variant) 50%, transparent);
+        }
+        .jse-value.jse-null {
+          color: var(--sapphire);
+        }
+        .jse-value.jse-boolean {
+          color: var(--citrine);
+        }
+        .jse-value.jse-number {
+          color: var(--ruby);
+        }
+        .jse-bracket {
+          color: color-mix(in srgb, var(--sys-on-surface) 38%, transparent) !important;
+        }
+        .jse-tag {
+          color: var(--sys-on-secondary) !important;
+          background: color-mix(in srgb, var(--sys-secondary) 50%, transparent) !important;
+        }
+        .jse-tag.jse-expanded {
+          opacity: 0.9 !important;
+        }
+        .jse-highlight {
+          background-color: var(--topaz-container) !important;
+          outline: 1px solid var(--citrine) !important;
+        }
+      }
+      .jse-json-node.jse-selected-key
+        > .jse-contents-outer
+        > .jse-contents
+        > .jse-identifier
+        > .jse-key,
+      .jse-json-node.jse-selected-key
+        > .jse-header-outer
+        > .jse-header
+        > .jse-identifier
+        > .jse-key {
+        background: var(--sys-inverse-on-surface) !important;
+      }
+      .jse-json-node.jse-selected-value > .jse-contents-outer > .jse-contents > .jse-value {
+        background: var(--sys-surface-variant) !important;
+      }
+      .jse-json-node.jse-selected > .jse-header-outer > .jse-header > .jse-meta,
+      .jse-json-node.jse-selected .jse-props .jse-header,
+      .jse-json-node.jse-selected .jse-items .jse-header,
+      .jse-json-node.jse-selected .jse-props .jse-contents,
+      .jse-json-node.jse-selected .jse-items .jse-contents,
+      .jse-json-node.jse-selected .jse-header,
+      .jse-json-node.jse-selected .jse-contents,
+      .jse-json-node.jse-selected .jse-footer,
+      .jse-json-node.jse-selected .jse-key,
+      .jse-json-node.jse-selected .jse-value {
+        background: var(--sys-inverse-on-surface) !important;
+      }
+
+      .jse-json-node.jse-selected > .jse-header-outer > .jse-header > .jse-meta,
+      .jse-json-node.jse-selected .jse-props .jse-header,
+      .jse-json-node.jse-selected .jse-items .jse-header,
+      .jse-json-node.jse-selected .jse-props .jse-contents,
+      .jse-json-node.jse-selected .jse-items .jse-contents,
+      .jse-json-node.jse-selected .jse-header,
+      .jse-json-node.jse-selected .jse-contents,
+      .jse-json-node.jse-selected .jse-footer,
+      .jse-json-node.jse-selected .jse-key,
+      .jse-json-node.jse-selected .jse-value {
+        background: var(--sys-inverse-on-surface) !important;
+      }
+
+      .jse-json-node.jse-selected .jse-expand {
+        background: var(--sys-inverse-on-surface) !important;
+      }
+
+      .jse-json-node.jse-selected-value .jse-meta,
+      .jse-json-node.jse-selected-value > .jse-header-outer > .jse-header > .jse-meta,
+      .jse-json-node.jse-selected-value > .jse-footer-outer > .jse-footer,
+      .jse-json-node.jse-selected-value .jse-props .jse-contents,
+      .jse-json-node.jse-selected-value .jse-props .jse-header,
+      .jse-json-node.jse-selected-value .jse-props .jse-footer,
+      .jse-json-node.jse-selected-value .jse-props .jse-expand,
+      .jse-json-node.jse-selected-value .jse-items .jse-contents,
+      .jse-json-node.jse-selected-value .jse-items .jse-header,
+      .jse-json-node.jse-selected-value .jse-items .jse-footer,
+      .jse-json-node.jse-selected-value .jse-items .jse-expand {
+        background: var(--sys-inverse-on-surface) !important;
+      }
+
+      .jse-json-node.jse-selected-value .jse-meta .jse-key,
+      .jse-json-node.jse-selected-value .jse-meta .jse-value,
+      .jse-json-node.jse-selected-value > .jse-header-outer > .jse-header > .jse-meta .jse-key,
+      .jse-json-node.jse-selected-value > .jse-header-outer > .jse-header > .jse-meta .jse-value,
+      .jse-json-node.jse-selected-value > .jse-footer-outer > .jse-footer .jse-key,
+      .jse-json-node.jse-selected-value > .jse-footer-outer > .jse-footer .jse-value,
+      .jse-json-node.jse-selected-value .jse-props .jse-contents .jse-key,
+      .jse-json-node.jse-selected-value .jse-props .jse-contents .jse-value,
+      .jse-json-node.jse-selected-value .jse-props .jse-header .jse-key,
+      .jse-json-node.jse-selected-value .jse-props .jse-header .jse-value,
+      .jse-json-node.jse-selected-value .jse-props .jse-footer .jse-key,
+      .jse-json-node.jse-selected-value .jse-props .jse-footer .jse-value,
+      .jse-json-node.jse-selected-value .jse-props .jse-expand .jse-key,
+      .jse-json-node.jse-selected-value .jse-props .jse-expand .jse-value,
+      .jse-json-node.jse-selected-value .jse-items .jse-contents .jse-key,
+      .jse-json-node.jse-selected-value .jse-items .jse-contents .jse-value,
+      .jse-json-node.jse-selected-value .jse-items .jse-header .jse-key,
+      .jse-json-node.jse-selected-value .jse-items .jse-header .jse-value,
+      .jse-json-node.jse-selected-value .jse-items .jse-footer .jse-key,
+      .jse-json-node.jse-selected-value .jse-items .jse-footer .jse-value,
+      .jse-json-node.jse-selected-value .jse-items .jse-expand .jse-key,
+      .jse-json-node.jse-selected-value .jse-items .jse-expand .jse-value {
+        background: var(--sys-inverse-on-surface) !important;
+      }
+    }
+  }
+
+  .jse-message.jse-success {
+    display: none !important;
+  }
+  .jse-message.jse-error {
+    background: var(--ruby-container) !important;
+    color: var(--on-ruby-container) !important;
+    .jse-button.jse-action {
+      background: var(--sys-error) !important;
+      color: var(--sys-on-error) !important;
+    }
+  }
+  .jse-menu {
+    background: var(--surface-primary-container-high) !important;
+    border-top-left-radius: 2px !important;
+    border-top-right-radius: 2px !important;
+    .jse-button:hover,
+    .jse-button:focus {
+      background: var(--on-surface-primary) !important;
+    }
+    .jse-button.jse-group-button,
+    .jse-button.jse-transform,
+    .jse-separator {
+      display: none !important;
+    }
+  }
+  .jse-main {
+    display: flex !important;
+    flex-direction: column !important;
+    > div {
+      border-top-left-radius: 4px !important;
+      border-top-right-radius: 4px !important;
+      border: thin solid var(--sys-outline-variant) !important;
+      &:hover {
+        border: 1px solid var(--sys-outline) !important;
+        border-top-left-radius: 4px !important;
+        border-top-right-radius: 4px !important;
+        box-sizing: border-box !important;
+      }
+    }
+
+    .jse-text-mode {
+      .jse-contents:not(:has(.cm-selectionBackground)) {
+        .cm-activeLine {
+          background: var(--topaz-container) !important;
+        }
+      }
+      .jse-status-bar {
+        background: var(--sys-surface-container-highest);
+        color: var(--sys-secondary);
+      }
+    }
+  }
+}
+
+::ng-deep {
+  me-json-editor.ng-invalid.ng-touched {
+    .json-editor-container {
+      .jse-main {
+        .jse-text-mode,
+        .jse-tree-mode {
+          @apply border-sys-error;
+          border: thin solid var(--sys-error) !important;
+        }
+      }
+    }
+  }
+}

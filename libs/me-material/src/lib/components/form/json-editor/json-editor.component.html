@@ -1,0 +1,17 @@
+<div class="flex flex-row items-center space-x-1">
+  <div class="flex flex-row items-baseline gap-2">
+    @if (title) {
+      <div title="" class="control-title">
+        {{ title }}
+      </div>
+    }
+    <ng-content select=".title-extra" />
+  </div>
+  @if (infoTooltip) {
+    <me-hint-icon [tooltip]="infoTooltip" />
+  }
+</div>
+<div class="json-editor-container h-full rounded" [class.empty-control]="!ngControl?.value">
+  <div #jsonEditorElement class="rounded h-full"></div>
+</div>
+<me-control-error-msg [isTouched]="ngControl?.touched" [errors]="errors" />

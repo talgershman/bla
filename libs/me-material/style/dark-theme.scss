@@ -1,0 +1,77 @@
+@use '@angular/material' as mat;
+@use 'm3-theme';
+
+.dark-theme {
+  @include mat.all-component-colors(m3-theme.$dark-theme);
+  @include mat.system-level-colors(m3-theme.$dark-theme);
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #babac0;
+    border-radius: 16px;
+  }
+}
+
+//overrides material
+@include m3-theme.define-custom-color-dark('sys-background', neutral, 6);
+@include m3-theme.define-custom-color-dark('sys-on-background', neutral, 90);
+
+@include m3-theme.define-custom-color-dark('sys-primary', primary, 80);
+@include m3-theme.define-custom-color-dark('sys-on-primary', primary, 20);
+@include m3-theme.define-custom-color-dark('sys-primary-container', primary, 30);
+@include m3-theme.define-custom-color-dark('sys-on-primary-container', primary, 90);
+@include m3-theme.define-custom-color-dark('sys-primary-fixed', primary, 90);
+@include m3-theme.define-custom-color-dark('sys-on-primary-fixed', primary, 10);
+@include m3-theme.define-custom-color-dark('sys-on-seconday-fixed-dim', primary, 80);
+@include m3-theme.define-custom-color-dark('sys-on-primary-fixed-dim', primary, 30);
+
+@include m3-theme.define-custom-color-dark('sys-seconday', secondary, 80);
+@include m3-theme.define-custom-color-dark('sys-on-seconday', secondary, 20);
+@include m3-theme.define-custom-color-dark('sys-seconday-cointainer', secondary, 30);
+@include m3-theme.define-custom-color-dark('sys-on-seconday-cointainer', secondary, 90);
+@include m3-theme.define-custom-color-dark('sys-seconday-fixed', secondary, 90);
+@include m3-theme.define-custom-color-dark('sys-on-seconday-fixed', secondary, 10);
+@include m3-theme.define-custom-color-dark('sys-seconday-fixed-dim', secondary, 80);
+@include m3-theme.define-custom-color-dark('sys-seconday-fixed-variant', secondary, 30);
+@include m3-theme.define-custom-color-dark('sys-on-seconday-fixed-variant', secondary, 30);
+
+@include m3-theme.define-custom-color-dark('sys-tertiary', tertiary, 80);
+@include m3-theme.define-custom-color-dark('sys-on-tertiary', tertiary, 20);
+@include m3-theme.define-custom-color-dark('sys-tertiary-container', tertiary, 30);
+@include m3-theme.define-custom-color-dark('sys-on-tertiary-container', tertiary, 90);
+@include m3-theme.define-custom-color-dark('sys-tertiary-fixed', tertiary, 90);
+@include m3-theme.define-custom-color-dark('sys-on-tertiary-fixed', tertiary, 10);
+@include m3-theme.define-custom-color-dark('sys-tertiary-fixed-dim', tertiary, 80);
+
+@include m3-theme.define-custom-color-dark('sys-surface', neutral, 6);
+@include m3-theme.define-custom-color-dark('sys-surface-tint', primary, 80);
+@include m3-theme.define-custom-color-dark('sys-surface-bright', neutral, 24);
+@include m3-theme.define-custom-color-dark('sys-surface-container', neutral, 12);
+@include m3-theme.define-custom-color-dark('sys-surface-container-high', neutral, 17);
+@include m3-theme.define-custom-color-dark('sys-surface-container-highest', neutral, 22);
+@include m3-theme.define-custom-color-dark('sys-surface-container-low', neutral, 10);
+@include m3-theme.define-custom-color-dark('sys-surface-container-lowest', neutral, 4);
+
+@include m3-theme.define-custom-color-dark('sys-scrim', neutral, 40);
+@include m3-theme.define-custom-color-dark('sys-shadow', neutral, 0);
+@include m3-theme.define-custom-color-dark('sys-outline', neutral-variant, 60);
+@include m3-theme.define-custom-color-dark('sys-outline-variant', neutral-variant, 30);
+
+//custom colors
+@include m3-theme.define-custom-color-dark('surface-primary-container-highest', neutral, 30);
+@include m3-theme.define-custom-color-dark('surface-primary-container-high', neutral, 17);
+@include m3-theme.define-custom-color-dark('surface-primary-container', neutral, 12);
+@include m3-theme.define-custom-color-dark('surface-primary-container-low', neutral, 10);
+@include m3-theme.define-custom-color-dark('surface-primary-container-lowest', neutral, 4);
+@include m3-theme.define-custom-color-dark('on-surface-primary', secondary, 50);
+@include m3-theme.define-custom-color-dark('on-surface-primary-variant', secondary, 70);
+@include m3-theme.define-custom-color-dark('on-surface-primary-container', primary, 100);
+@include m3-theme.define-custom-color-dark('warning', orange, 80);
+@include m3-theme.define-custom-color-dark('on-warning', orange, 20);
+@include m3-theme.define-custom-color-dark('warning-container', orange, 40);
+@include m3-theme.define-custom-color-dark('on-warning-container', orange, 90);
+@include m3-theme.define-custom-color-dark('emerald', green, 90);
+@include m3-theme.define-custom-color-dark('emerald-container', green, 35);
+@include m3-theme.define-custom-color-dark('topaz-container', yellow, 35);
+@include m3-theme.define-custom-color-dark('citrine', orange, 80);
+@include m3-theme.define-custom-color-dark('ruby', rose, 70);
+@include m3-theme.define-custom-color-dark('lapis', azure, 70);

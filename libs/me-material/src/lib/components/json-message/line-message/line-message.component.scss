@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.red-text {
+  color: var(--sys-error);
+}
+
+.green-text {
+  color: var(--emerald);
+}
+
+.blue-text {
+  color: var(--lapis);
+}
+
+.black-text {
+  color: var(--sys-on-surface);
+}
+
+.array-index {
+  color: color-mix(in srgb, var(--sys-on-surface) 58%, transparent);
+}
+
+.value-container {
+  transition: background-color;
+}
+
+.value-container:hover {
+  background-color: var(--sys-inverse-on-surface);
+  transition-delay: 250ms;
+}
+
+.menu-item-button {
+  min-width: 26px;
+  padding-left: 0;
+  padding-right: 0;
+  .mat-icon {
+    height: 20px;
+    position: relative;
+    top: -10px;
+  }
+}
+
+.value-margin {
+  margin-left: 28px;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base.copy-button {
+  color: var(--sys-secondary);
+  --mdc-icon-button-state-layer-size: 18px;
+  padding: 0;
+  .mat-icon {
+    height: 18px;
+    width: 18px;
+    font-size: 18px;
+    position: relative;
+    top: -3px;
+  }
+}

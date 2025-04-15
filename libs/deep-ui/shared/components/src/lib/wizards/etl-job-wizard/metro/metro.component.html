@@ -1,0 +1,87 @@
+@if (baseViewState().derivedLogic()) {}
+<me-wizard (selectionChange)="onStepSelectionChanged($event, runType())">
+  <me-cdk-step
+    label="Select Clip List"
+    [isNextDisabled]="clipListStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onNextClicked()"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-clip-list-step
+        [tableComponentId]="clipListStepTableComponentId()"
+        [runType]="runType()"
+        [initialFiltersValue]="initialFiltersValue"
+        [ignoreRowRestrictionOfFilters]="true"
+        (formState)="onFormStateChanged($event, 'clipListStepNextDisabled')"
+      />
+    } @placeholder (minimum 200ms) {
+      <de-loading-step [isLoading]="true" />
+    }
+  </me-cdk-step>
+  <me-cdk-step
+    #etlCatalogStep
+    aria-label="etl-step"
+    label="Select ETL"
+    [isNextDisabled]="etlStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onNextClicked()"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-etl-step
+        [tableComponentId]="etlStepTableComponentId()"
+        [wasShown]="etlCatalogStep.wasShown"
+        [etlType]="EtlTypeEnum.MODEL_INFERENCE"
+        (etlChanged)="onEtlChanged($event)"
+        (formState)="onFormStateChanged($event, 'etlStepNextDisabled')"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step
+    #configurationStep
+    label="Configurations"
+    nextLabel="Finish"
+    [isNextDisabled]="runConfigStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onConfigurationStepNextClick(refJobId)"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-run-config-step
+        [wasShown]="configurationStep.wasShown"
+        [runType]="runType()"
+        [enableOutputPath]="true"
+        [enableServices]="true"
+        [etl]="selectedEtl"
+        [dataRetentionInfoObj]="dataRetentionInfoObj"
+        (formState)="onFormStateChanged($event, 'runConfigStepNextDisabled')"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step [hideNext]="true" [hidePrev]="true">
+    @defer (on viewport; prefetch on idle) {
+      <de-loading-step [isLoading]="loading$ | async" />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step
+    [label]="submitJobFeedbackLabel"
+    [hideNext]="true"
+    [isPrevDisabled]="submitJobDisablePrevButton"
+    (prevClicked)="onSubmitJobStepPrevClicked()"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-submit-job-step
+        [items]="submitJobFeedbackItems"
+        (stepLabelChange)="submitJobFeedbackLabel = $event"
+        (disablePrevButton)="submitJobDisablePrevButton = $event"
+        (triggerNewJob)="triggerNewJob.emit($event)"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+</me-wizard>

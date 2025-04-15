@@ -1,0 +1,23 @@
+<div class="h-full flex flex-col">
+  <div>
+    <me-breadcrumbs
+      [breadcrumbs]="breadcrumbs"
+      [showTourButton]="true"
+      (tourClick)="baseTour.handleTourClicked()"
+    />
+  </div>
+  <div class="h-0 flex-1">
+    <de-mest-form
+      createButtonLabel="Update MEST CMD"
+      formMode="edit"
+      [mest]="mest"
+      [showTour]="baseTour.openTour$"
+      (fromValueChanged)="onMestFormChanged($event)"
+      (backButtonClicked)="onBackButtonPressed()"
+    >
+      @if (errorMsg) {
+        <me-error-feedback class="ml-[1.625rem] text-center my-2" [error]="errorMsg" />
+      }
+    </de-mest-form>
+  </div>
+</div>

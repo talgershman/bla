@@ -1,0 +1,48 @@
+<section class="cursor-pointer" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+  @if (photo()) {
+    <div class="avatar relative">
+      <img width="41" height="41" loading="lazy" [src]="photo() | safe: 'url'" alt="" />
+    </div>
+  }
+  @if (!photo()) {
+    <div class="circle">
+      <div class="initials">
+        {{ initials }}
+      </div>
+    </div>
+  }
+</section>
+<mat-menu #menu="matMenu" class="menu-items-container" xPosition="after">
+  @for (menu of userMenuItems; track i; let i = $index) {
+    @switch (menu.type) {
+      @case ('separator') {
+        <mat-divider />
+      }
+      @case ('header') {
+        <span class="header" (click)="$event.stopPropagation()" mat-menu-item disabled>
+          {{ menu.title }}
+        </span>
+      }
+      @case ('sub-header') {
+        <span class="sub-header" (click)="$event.stopPropagation()" mat-menu-item disabled>
+          {{ menu.title }}
+        </span>
+      }
+      @case ('button') {
+        <span (click)="menu.action()" mat-menu-item>{{ menu.title }}</span>
+      }
+      @case ('profile') {
+        <mat-card
+          appearance="outlined"
+          (click)="$event.stopPropagation()"
+          class="flex items-center menu-item--profile"
+        >
+          <mat-card-header>
+            <mat-card-title>{{ menu.user?.name }}</mat-card-title>
+            <mat-card-subtitle>{{ menu.user?.userName }}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      }
+    }
+  }
+</mat-menu>

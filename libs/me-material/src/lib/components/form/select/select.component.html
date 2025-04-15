@@ -1,0 +1,89 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-select w-full h-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+>
+  @if (title) {
+    <mat-label>
+      {{ title }}
+      @if (infoTooltip) {
+        <me-hint-icon [tooltip]="infoTooltip" />
+      }
+    </mat-label>
+  }
+  @if (!multiple) {
+    <mat-select
+      #selectElem
+      disableOptionCentering
+      [errorStateMatcher]="customErrorStateMatcher"
+      [placeholder]="placeholder"
+      [formControl]="innerController"
+      [value]="innerController?.value"
+      (selectionChange)="onSelectionChanged($event)"
+      (openedChange)="onOpenedChanged($event)"
+    >
+      @for (item of _options; track item.id) {
+        <div
+          meTooltipPosition="right"
+          [meTooltipDisabled]="!item.tooltip"
+          [meTooltip]="item.tooltip"
+        >
+          <mat-option [value]="item.id" [disabled]="item.isDisabled">
+            <label>{{ item.value }}</label>
+          </mat-option>
+        </div>
+      }
+    </mat-select>
+  } @else {
+    <mat-select
+      #selectElem
+      disableOptionCentering
+      multiple
+      [placeholder]="placeholder"
+      [formControl]="innerController"
+      [value]="innerController?.value"
+      (selectionChange)="onSelectionChanged($event)"
+    >
+      @for (item of _options; track item.id) {
+        <mat-option
+          meTooltipPosition="right"
+          class="multiple-option-item"
+          [meTooltipDisabled]="!item.tooltip"
+          [meTooltip]="item.tooltip"
+          [value]="item.id"
+          [disabled]="item.isDisabled"
+        >
+          <label>{{ item.value }}</label>
+        </mat-option>
+      }
+    </mat-select>
+  }
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

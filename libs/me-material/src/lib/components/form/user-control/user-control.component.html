@@ -1,0 +1,85 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-user-control w-full h-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+>
+  <div class="h-[21px] flex flex-row items-center">
+    <input
+      #searchInput
+      type="text"
+      matInput
+      #trigger="matAutocompleteTrigger"
+      [errorStateMatcher]="customErrorStateMatcher"
+      [formControl]="innerController"
+      [placeholder]="placeholder"
+      [value]="innerController.value"
+      [matAutocomplete]="auto"
+      (keydown.enter)="trigger.closePanel()"
+      (keydown.escape)="trigger.closePanel()"
+    />
+    @if (innerController.value && !this.disabled) {
+      <button
+        disableRipple
+        mat-icon-button
+        aria-label="Clear"
+        matSuffix
+        type="button"
+        class="mat-icon-button-dense close-button"
+        (click)="onClearClicked()"
+      >
+        <mat-icon title="" fontSet="material-icons-outlined">cancel</mat-icon>
+      </button>
+    }
+    <ng-content />
+  </div>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (closed)="onPanelClosed()"
+    [displayWith]="displayFn.bind(this)"
+    (optionSelected)="onOptionSelected($event)"
+    (opened)="onPanelOpened()"
+  >
+    @if (loading$ | async) {
+      <mat-option disabled> Loading... </mat-option>
+    }
+    @if ((options$ | async).length === 0 && (loading$ | async) === false && trigger.panelOpen) {
+      <mat-option disabled> No Results </mat-option>
+    }
+    @for (option of options$ | async; track option.userPrincipalName; let i = $index) {
+      <mat-option [value]="option">
+        <span
+          meHighlightText
+          classToApply="highlight-text"
+          text="{{ option.displayName }} ({{ option.userPrincipalName }})"
+          [search]="searchInput.value"
+        ></span>
+      </mat-option>
+    }
+  </mat-autocomplete>
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <mat-icon class="hint-icon mt-0.5 pr-0.5">error_outline</mat-icon>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

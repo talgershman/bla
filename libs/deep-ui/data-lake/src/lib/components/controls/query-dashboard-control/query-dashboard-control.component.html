@@ -1,0 +1,259 @@
+<div class="h-full flex-1 flex flex-col">
+  <section class="dashboard-container flex-1 box-border flex flex-col p-4">
+    <ng-container [ngTemplateOutlet]="subQueriesTmpl" />
+    <ng-container [ngTemplateOutlet]="queryContainerTmpl" />
+  </section>
+</div>
+
+<ng-template #queryLoading>
+  <div
+    class="query-container mt-2 flex-1 w-full h-full flex flex-col items-center justify-center space-y-4"
+  >
+    <mat-progress-spinner diameter="40" mode="indeterminate" color="primary" />
+    <span class="mat-body-medium text-sys-on-surface">This might take a while</span>
+    <button mat-button type="button" color="primary" (click)="cancelQuery()">Cancel</button>
+  </div>
+</ng-template>
+
+<ng-template #queryEditor>
+  <div
+    class="query-container mt-2 flex-1 w-full border-solid border border-sys-outline-variant rounded box-border py-2"
+    [class.invalid-border]="control?.touched && form.controls.numberOfClips.invalid"
+  >
+    <ng-container [ngTemplateOutlet]="queryEditorResultTmpl" />
+  </div>
+</ng-template>
+
+<ng-template #queryResults>
+  <div class="relative h-full flex flex-col items-center justify-center">
+    <div class="mb-2 mt-4">
+      <div class="mb-1 mat-title-medium text-sys-on-surface">Query Result:</div>
+    </div>
+    <div>
+      @if (form.controls.numberOfClips.value) {
+        <span class="mat-display-small text-sys-on-surface">
+          {{ form.controls.numberOfClips.value | mask: 'separator' : {thousandSeparator: ','} }}
+          Clips
+        </span>
+      }
+      @if (form.controls.numberOfClips.value === 0 && form.controls.queryString.value) {
+        <span class="mat-headline-medium pb-2 text-sys-on-surface"> No Results Found ! </span>
+      }
+    </div>
+    @if (
+      !form.controls.queryJson.errors?.unableToRunQuery &&
+      form.controls.numberOfClips.value === null
+    ) {
+      <div>
+        <span
+          class="mat-headline-small text-sys-secondary"
+          [class.text-sys-error]="control?.touched && form.controls.numberOfClips.invalid"
+        >
+          Please run query
+        </span>
+      </div>
+    }
+    <div class="border-box pb-2">
+      @if (form.errors?.greaterOrEqualThan) {
+        <mat-error>
+          Value must be greater or equal then
+          {{ form.errors?.greaterOrEqualThan | mask: 'separator' : {thousandSeparator: ','} }}
+        </mat-error>
+      }
+      @if (form.controls.queryJson.errors?.unableToRunQuery) {
+        <mat-error>
+          {{ form.controls.queryJson.errors?.unableToRunQuery }}
+        </mat-error>
+      }
+      @if (runQueryErrorMsg) {
+        <mat-error>
+          {{ runQueryErrorMsg }}
+        </mat-error>
+      }
+      @if (dataset?.status === 'updating') {
+        <mat-error>
+          Dataset is updating, please wait until finished in order to save your changes.
+        </mat-error>
+      }
+    </div>
+    <div
+      [meTooltip]="
+        dataset?.source === 'dataset_client'
+          ? 'Query is disabled for dataset that was created via the dataset client'
+          : ''
+      "
+    >
+      <button
+        mat-button
+        type="button"
+        color="primary"
+        class="run-query-button"
+        [disabled]="isReadOnlyMode || form.controls.queryJson.invalid"
+        (click)="runQuery()"
+      >
+        <div class="flex flex-row items-center">
+          <mat-icon fontSet="material-icons-outlined" class="mr-1">manage_search</mat-icon>Run Query
+        </div>
+      </button>
+    </div>
+    <div class="dummy flex-1 max-h-[96px] w-full"></div>
+
+    <div class="actions-buttons-container flex flex-row justify-center items-center">
+      <div class="flex flex-col">
+        <button
+          mat-button
+          type="button"
+          class="download-clip-list-btn"
+          color="primary"
+          [disabled]="isActionButtonDisabled()"
+          (click)="downloadClipListClicked()"
+        >
+          <div class="flex flex-row items-center">
+            <mat-icon fontSet="material-icons-outlined" class="mr-1">videocam</mat-icon>Download
+            Clip List
+          </div>
+        </button>
+        <div download-clip-list-trigger [matMenuTriggerFor]="downloadClipListMenu"></div>
+        <mat-menu #downloadClipListMenu="matMenu" [overlapTrigger]="false">
+          <div class="error-feedback p-4 border-box">
+            @if (queryActionButtonErrorMsg) {
+              <mat-error>
+                {{ queryActionButtonErrorMsg }}
+              </mat-error>
+            }
+          </div>
+        </mat-menu>
+      </div>
+      <div class="flex flex-col">
+        <button
+          mat-button
+          type="button"
+          class="preview-examples-btn"
+          color="primary"
+          [disabled]="isActionButtonDisabled() || dataset?.source === 'dataset_client'"
+          (click)="previewDialogButtonClicked()"
+        >
+          <div class="flex flex-row items-center">
+            <mat-icon fontSet="material-icons-outlined" class="mr-1">preview</mat-icon>Preview
+            Examples
+          </div>
+        </button>
+        <div preview-example-trigger [matMenuTriggerFor]="previewExamplesMenu"></div>
+        <mat-menu #previewExamplesMenu="matMenu" [overlapTrigger]="false">
+          <div class="error-feedback p-4 border-box">
+            @if (queryActionButtonErrorMsg) {
+              <mat-error>
+                {{ queryActionButtonErrorMsg }}
+              </mat-error>
+            }
+          </div>
+        </mat-menu>
+      </div>
+      <div class="query-action-buttons flex flex-col">
+        <div class="flex flex-row items-center">
+          <button
+            mat-button
+            type="button"
+            class="jump-file-btn"
+            color="primary"
+            [disabled]="isActionButtonDisabled()"
+            (click)="jumpFileButtonClicked()"
+          >
+            <div class="flex flex-row items-center">
+              <mat-icon fontSet="material-icons-outlined" class="mr-1">text_snippet</mat-icon>
+              <span>Multiple fields jump file</span>
+            </div>
+          </button>
+          <div>
+            <me-hint-icon
+              tooltip="Click this icon, for more info about multiple fields jump file"
+              (click)="window.open(multiFieldsJumpFileDocUrl, '_blank')"
+            />
+          </div>
+        </div>
+        <div jump-file-trigger [matMenuTriggerFor]="jumpFileMenu"></div>
+        <mat-menu class="jump-file-menu" #jumpFileMenu="matMenu">
+          <div class="p-4 border-box">
+            @if (!!queryActionButtonErrorMsg) {
+              <div class="error-feedback">
+                <mat-error>
+                  {{ queryActionButtonErrorMsg }}
+                </mat-error>
+              </div>
+            } @else {
+              <section class="flex flex-col">
+                <div class="mat-title-small">Query results location:</div>
+                <div class="flex flex-row items-center gap-2">
+                  <div class="ellipsis jumpfile-s3path" [meTooltip]="jumpFileS3Path">
+                    {{ jumpFileS3Path }}
+                  </div>
+                  <button mat-icon-button color="primary" (click)="copyToClipboard(jumpFileS3Path)">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                </div>
+              </section>
+            }
+          </div>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #subQueriesTmpl>
+  <div class="relative flex flex-row flex-wrap gap-y-2 items-stretch">
+    @for (
+      subQuery of subQueries;
+      track subQuery.version?.id || subQuery.dataSource?.id;
+      let index = $index;
+      let last = $last
+    ) {
+      @if (getSubQueryDataSource(subQuery.dataSourceId); as datasource) {
+        <div class="sub-query-container" [class.mr-6]="last">
+          <de-sub-query-square
+            meTooltipPosition="right"
+            [index]="index"
+            [subQuery]="subQuery"
+            [datasource]="datasource"
+            [disableSquare]="queryEditorResultTmpl === queryLoadingTmpl"
+            [isReadOnlyMode]="isReadOnlyMode"
+            [selectedFields]="subQuery.query?.columns"
+            [materialized]="subQuery.query?.materialized"
+            [markAsInvalid]="!!subQuery.errorMsg"
+            [meTooltip]="subQuery.errorMsg"
+            (materializedUpdated)="onMaterializedUpdated($event, subQuery)"
+            (subQueryFieldsUpdated)="onSubQueryFieldsUpdated($event, subQuery)"
+            (deleteSubQueryClicked)="onDeleteSubQuery($event)"
+            (editSubQueryClicked)="onEditSubQuery($event)"
+          />
+        </div>
+        @if (!last) {
+          <div class="self-center mx-2">&</div>
+        }
+      }
+    }
+    <div
+      class="add-query-button w-[220px] h-[148px] p-1 border-box text-sys-primary border-solid border border-dashed border-sys-outline-variant rounded cursor-pointer hover:border-sys-primary flex flex-col items-center justify-center mb-2"
+      [class.disabled-area]="this.queryEditorResultTmpl === this.queryLoadingTmpl"
+      [class.invalid-border]="control?.touched && form.controls.queryJson.value.length === 0"
+      (click)="onAddSubQuery()"
+    >
+      <mat-icon class="add-icon">add</mat-icon>
+      <span class="mat-title-medium font-bold">Add query </span>
+    </div>
+    <div class="flex-1"></div>
+    <div class="absolute right-[2px] top-[-2.75rem]">
+      <button
+        mat-button
+        type="button"
+        class="copy-query-json-btn"
+        color="primary"
+        (click)="copyQueryJson()"
+      >
+        <div class="flex flex-row items-center">
+          <mat-icon fontSet="material-icons-outlined" class="mr-1">content_copy</mat-icon>Query JSON
+        </div>
+      </button>
+    </div>
+  </div>
+</ng-template>

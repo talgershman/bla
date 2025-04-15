@@ -1,0 +1,48 @@
+<div class="h-full flex flex-col">
+  <div>
+    <me-breadcrumbs [breadcrumbs]="breadcrumbs" />
+  </div>
+  <div class="flex flex-col gap-2 h-full w-full">
+    <div class="px-6 box-border w-full flex flex-row items-center">
+      <div class="flex-1">
+        <me-chips-group-buttons
+          [options]="groupButtons"
+          [(selectedOption)]="selectedGroupButton"
+          (selectedOptionChange)="onGroupButtonChanged($event)"
+        />
+      </div>
+      <div *mePortalTarget="'jobs-perfect--add-job'"></div>
+      <div *mePortalTarget="'jobs-etl--add-job'"></div>
+    </div>
+    <div class="h-0 flex-1">
+      @switch (this.selectedGroupButton) {
+        @case (JobsDynamicViewEnum.ETL) {
+          @defer (when (selectedGroupButton === JobsDynamicViewEnum.ETL); prefetch on timer(10s)) {
+            <de-etl-jobs
+              [selectedGroupButton]="selectedGroupButton"
+              [queryParams]="queryParams()"
+              (filtersParamsChanged)="onFiltersParamsChanged($event)"
+            />
+          } @placeholder {
+            <div></div>
+          }
+        }
+        @case (JobsDynamicViewEnum.PERFECT_TRANSFORM) {
+          @defer (
+            when (selectedGroupButton === JobsDynamicViewEnum.PERFECT_TRANSFORM);
+            prefetch on timer(10s)
+          ) {
+            <de-perfect-transform-jobs
+              [selectedGroupButton]="selectedGroupButton"
+              [queryParams]="queryParams()"
+              (filtersParamsChanged)="onFiltersParamsChanged($event)"
+            />
+          } @placeholder {
+            <div></div>
+          }
+        }
+        @default {}
+      }
+    </div>
+  </div>
+</div>

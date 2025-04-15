@@ -1,0 +1,13 @@
+<div class="flex flex-col h-full">
+  <div class="flex-1">
+    <de-ag-data-source-table-official-drives-standalone
+      [selectionMode]="selectionMode"
+      [tableFilters]="{}"
+      [triggerTableRefresh]="triggerTableRefresh"
+      [selectedDataSources]="selectedDataSources"
+      (dataSourceSelectionChanged)="onDataSourceSelectionChanged($event)"
+      (filtersParamsChanged)="onFiltersParamsChanged($event)"
+      (gridReady)="onGridReady($event)"
+    />
+  </div>
+</div>

@@ -1,0 +1,42 @@
+{
+  "name": "deep-ui-shared-components",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/deep-ui/shared/components/src",
+  "prefix": "de",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/libs/deep-ui/shared/components"],
+      "options": {
+        "project": "libs/deep-ui/shared/components/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/deep-ui/shared/components/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/deep-ui/shared/components/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "libs/deep-ui/shared/components/src/test.ts",
+        "tsConfig": "libs/deep-ui/shared/components/tsconfig.spec.json",
+        "karmaConfig": "libs/deep-ui/shared/components/karma.conf.js",
+        "scripts": [],
+        "styles": ["libs/deep-ui/shared/components/src/lib/testing/testing-main.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["node_modules", "libs/me-material/style", "libs/me-material/assets"]
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

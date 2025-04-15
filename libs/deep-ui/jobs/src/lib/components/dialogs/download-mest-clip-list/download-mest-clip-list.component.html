@@ -1,0 +1,49 @@
+<div class="p-6 box-border">
+  <div class="mat-headline-small center">
+    <span>Download filtered Clip List by MEST status</span>
+  </div>
+  <div class="my-6">
+    <me-select title="Status" [options]="mestClipListStatusOptions" [formControl]="statusControl" />
+    @if (clipsListNotFoundMsg) {
+      <div [@MeFadeInOut]="clipsListNotFoundMsg">
+        {{ clipsListNotFoundMsg }}
+      </div>
+    }
+  </div>
+  @if (loading$ | async) {
+    <div class="flex-align-row">
+      <mat-progress-spinner diameter="40" mode="indeterminate" color="primary" />
+    </div>
+  }
+  <div class="buttons-container mt-8">
+    <button mat-button mat-dialog-close color="primary" type="button">Cancel</button>
+    <div
+      [meTooltip]="
+        statusControl.value !== DataLoaderClipListStatus.VALID
+          ? 'Enabled only in valid flow'
+          : !lastClipList && !isNewFlow
+            ? 'No clip list found'
+            : clipsListNotFoundMsg
+      "
+    >
+      <button
+        mat-flat-button
+        type="button"
+        color="primary"
+        [disabled]="
+          isNewFlow
+            ? statusControl.value !== DataLoaderClipListStatus.VALID
+            : !lastClipList ||
+              clipsListNotFoundMsg ||
+              statusControl.value !== DataLoaderClipListStatus.VALID
+        "
+        (click)="onExportToClipList()"
+      >
+        Export To Clip List Catalog
+      </button>
+    </div>
+    <button mat-flat-button type="button" color="primary" (click)="downloadClicked()">
+      Download
+    </button>
+  </div>
+</div>

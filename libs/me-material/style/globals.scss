@@ -1,0 +1,194 @@
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 0;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tippy-box {
+  background-color: var(--mdc-plain-tooltip-container-color);
+  border-radius: var(--mdc-plain-tooltip-container-shape);
+  color: var(--mdc-plain-tooltip-supporting-text-color);
+  &.no-truncate-tooltip {
+    white-space: pre-line !important;
+    max-width: unset !important;
+  }
+  &.no-truncate-tooltip-vertically {
+    max-height: unset;
+  }
+  &.tooltip-json {
+    white-space: pre-wrap !important;
+  }
+}
+
+.tippy-arrow {
+  color: var(--mdc-plain-tooltip-container-color);
+}
+
+.link-color {
+  color: var(--sys-primary);
+}
+
+.flex-align-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.flex-align-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.general-feedback {
+  font: var(--sys-body-medium);
+  letter-spacing: var(--sys-body-medium-tracking);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  margin-top: 0.75rem;
+}
+
+.highlight-text {
+  @apply text-sys-primary;
+}
+
+.flex-dummy-fill {
+  flex: 1;
+}
+
+.small-gap {
+  height: 1rem;
+}
+
+.hint-msg {
+  color: color-mix(in srgb, var(--sys-on-surface) 38%, transparent);
+}
+
+.hint-icon {
+  height: 1rem;
+  width: 1rem;
+  font-size: 1rem;
+  color: var(--warning);
+}
+
+.warn-msg {
+  @apply text-warning;
+}
+
+.line-spacer {
+  position: relative;
+  border-top: 2px solid var(--sys-outline-variant);
+  width: 1rem;
+}
+
+.control-title {
+  font: var(--sys-body-medium);
+  letter-spacing: var(--sys-body-medium-tracking);
+  margin-bottom: 2px;
+}
+
+.force-error-msg.mat-mdc-form-field-bottom-align::before {
+  content: initial;
+}
+
+.mat-simple-snackbar-action {
+  .mat-mdc-button:not(:disabled) {
+    margin-left: 4px;
+    --mdc-text-button-label-text-color: var(--sys-on-inverse-surface);
+  }
+}
+
+.disabled-area {
+  pointer-events: none;
+  color: color-mix(in srgb, var(--sys-on-surface) 38%, transparent);
+  border-color: color-mix(in srgb, var(--sys-on-surface) 12%, transparent);
+}
+
+.link-item {
+  @apply no-underline text-sys-primary hover:text-sys-primary visited:text-sys-primary;
+}
+
+/* Customize website's scrollbar like Mac OS
+Not supports in Firefox and IE */
+
+/* total width */
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* scrollbar itself */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3); /* Semi-transparent dark thumb */
+  border-radius: 10px; /* Smooth, rounded corners */
+  transition: background 0.3s ease; /* Smooth transition */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5); /* Slightly darker on hover */
+}
+
+/* set button(top and bottom of the scrollbar) */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+.custom-mdc-button {
+  --tw-space-x-reverse: 0;
+  color: var(--sys-primray);
+  box-sizing: border-box;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: baseline;
+  text-align: center;
+  margin: 0;
+  min-width: 64px;
+  line-height: 36px;
+  letter-spacing: 1.25px;
+  padding: 0 16px;
+  border-radius: 4px;
+  overflow: visible;
+  &:not(:hover) {
+    background: transparent;
+  }
+  &:hover {
+    background-color: color-mix(in srgb, var(--sys-primary) 4%, transparent);
+  }
+  &:active {
+    background-color: color-mix(in srgb, var(--sys-primary) 12%, transparent);
+  }
+}

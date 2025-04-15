@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  width: var(--width, 100%);
+
+  --mdc-chip-container-height: 22px;
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 6px;
+
+  ::ng-deep {
+    .mat-mdc-standard-chip {
+      .mdc-evolution-chip__cell--primary {
+        overflow: hidden;
+      }
+      .mat-mdc-chip-action-label {
+        overflow: auto;
+      }
+    }
+    button.mdc-evolution-chip__action {
+      overflow: hidden;
+      cursor: default;
+    }
+    icon.mdc-evolution-chip__action {
+      cursor: pointer;
+    }
+  }
+}

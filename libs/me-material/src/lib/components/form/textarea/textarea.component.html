@@ -1,0 +1,60 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-textarea w-full h-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+>
+  @if (title) {
+    <mat-label>
+      {{ title }}
+      @if (infoTooltip) {
+        <me-hint-icon [tooltip]="infoTooltip" />
+      }
+    </mat-label>
+  }
+  <div class="me-textarea-container">
+    <textarea
+      #areaInput
+      matInput
+      cdkTextareaAutosize
+      title=""
+      [placeholder]="placeholder"
+      [errorStateMatcher]="customErrorStateMatcher"
+      [formControl]="innerController"
+      [cdkAutosizeMinRows]="cdkAutosizeMinRows"
+      [cdkAutosizeMaxRows]="cdkAutosizeMaxRows"
+      (keydown.enter)="$event.stopPropagation(); $event.preventDefault()"
+      (input)="handleInput()"
+      (focusin)="onFocusIn()"
+      (focusout)="onFocusOut($event)"
+    >
+    </textarea>
+  </div>
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

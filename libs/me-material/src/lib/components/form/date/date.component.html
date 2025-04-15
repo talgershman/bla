@@ -1,0 +1,80 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-date w-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+  (click)="$event.stopPropagation()"
+>
+  @if (title) {
+    <mat-label>
+      {{ title }}
+      @if (infoTooltip) {
+        <me-hint-icon [tooltip]="infoTooltip" />
+      }
+    </mat-label>
+  }
+  <div class="flex flex-row items-center">
+    <div class="flex-1">
+      <input
+        #inputElem
+        matInput
+        [errorStateMatcher]="customErrorStateMatcher"
+        [min]="min"
+        [max]="max"
+        [matDatepicker]="picker"
+        [formControl]="innerController"
+        [placeholder]="placeholder"
+        (focusout)="onFocusOut($event)"
+      />
+    </div>
+    @if (!hideClearButton && !this.disabled) {
+      <button
+        disableRipple
+        mat-icon-button
+        aria-label="Clear"
+        matSuffix
+        type="button"
+        class="mat-icon-button-dense close-button"
+        [class.invisible]="!innerController?.value || innerController.disabled"
+        (click)="onClearClicked()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </div>
+  <mat-datepicker-toggle matSuffix [for]="picker" />
+  <mat-datepicker
+    panelClass="ag-custom-component-popup"
+    #picker
+    [startAt]="startAtDate"
+    (opened)="onOpen(picker)"
+    class="me-date-trigger"
+  />
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

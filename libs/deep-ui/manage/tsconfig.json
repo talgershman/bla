@@ -1,0 +1,38 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
+  "compilerOptions": {
+    "target": "es2022",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "paths": {
+      "@mobileye/material/*": ["libs/me-material/*"],
+      "deep-ui/shared/common": ["libs/deep-ui/shared/common/src/index.ts"],
+      "deep-ui/shared/components/*": ["libs/deep-ui/shared/components/*"],
+      "deep-ui/shared/directives/*": ["libs/deep-ui/shared/directives/*"],
+      "deep-ui/shared/configs": ["libs/deep-ui/shared/configs/src/index.ts"],
+      "deep-ui/shared/core": ["libs/deep-ui/shared/core/src/index.ts"],
+      "deep-ui/shared/environments": ["libs/deep-ui/shared/environments/src/index.ts"],
+      "deep-ui/shared/guards": ["libs/deep-ui/shared/guards/src/index.ts"],
+      "deep-ui/shared/http": ["libs/deep-ui/shared/http/src/index.ts"],
+      "deep-ui/shared/models": ["libs/deep-ui/shared/models/src/index.ts"],
+      "deep-ui/shared/testing": ["libs/deep-ui/shared/testing/src/index.ts"],
+      "deep-ui/shared/validators": ["libs/deep-ui/shared/validators/src/index.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": false
+  }
+}

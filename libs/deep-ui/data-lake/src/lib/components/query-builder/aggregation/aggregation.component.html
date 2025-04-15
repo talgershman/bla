@@ -1,0 +1,35 @@
+<div class="flex flex-row items-center mb-4">
+  <div class="mat-label-large">Aggregation (Optional)&nbsp;</div>
+  <div>
+    <me-hint-icon
+      tooltip="Setting an aggregation, will fetch all clips that answer the condition below within at least/at most/equal X frames.
+  For example, to get all clips that contains at least 5 frames with 'construction area' signal, need to set the aggregation to 'greater 4' and add the condition 'construction area (signal) equal True'."
+    />
+  </div>
+</div>
+<div class="flex flex-row items-start gap-4">
+  <me-select
+    class="aggregate-key-control"
+    width="15rem"
+    placeholder="----"
+    [options]="aggregateKeyOptions"
+    [formControl]="aggregateKeyControl"
+  />
+
+  <me-select
+    width="15rem"
+    class="operator-control"
+    placeholder="----"
+    [options]="operatorOptions"
+    [formControl]="operatorControl"
+  />
+
+  <me-input
+    width="15rem"
+    class="value-control"
+    placeholder="----"
+    mask="separator.0"
+    thousandSeparator=","
+    [formControl]="valueControl"
+  />
+</div>

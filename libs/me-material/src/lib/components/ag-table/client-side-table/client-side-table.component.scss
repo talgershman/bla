@@ -1,0 +1,42 @@
+@use '../base-table';
+
+@include base-table.ag-table;
+
+:host ::ng-deep {
+  ag-grid-angular {
+    .ag-group-filter-field-select-wrapper {
+      --ag-icon-size: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      & > * + * {
+        margin-top: 0.25rem;
+      }
+    }
+    .ag-cell-wrapper.ag-row-group {
+      align-items: baseline;
+      font-weight: bold;
+      .ag-group-contracted:has(> .ag-icon),
+      .ag-group-expanded:has(> .ag-icon) {
+        align-self: end;
+        .ag-icon {
+          align-self: baseline;
+        }
+      }
+    }
+    .ag-cell,
+    .ag-full-width-row .ag-cell-wrapper.ag-row-group {
+      -webkit-font-smoothing: antialiased;
+    }
+    .ag-row-hover:not(.row-disabled) {
+      me-ag-actions-cell {
+        mat-icon {
+          visibility: visible;
+        }
+      }
+      .ag-cell {
+        cursor: pointer;
+      }
+    }
+  }
+}

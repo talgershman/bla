@@ -1,0 +1,117 @@
+@if (baseViewState().derivedLogic()) {}
+<me-wizard (selectionChange)="onStepSelectionChanged($event, runType())">
+  @if (!refJobId) {
+    <me-cdk-step
+      label="Insert Cloud MCO Command"
+      hint='To obtain the cloud-MCO command, run the clips2logs tool in "dry" mode by adding the --dry flag.
+clips2logs prepares the necessary configurations for cloud-MCO and generates the command.
+The command is printed to the terminal at the end of the process and is also written to a file in the output directory.
+
+DEEP will execute the command you provide, track its progress until completion, and then process the outputs in subsequent DEEP stages, such as parsing and ETL execution.'
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="cloudMcoCmdStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-cloud-mco-cmd-step
+          [isCompareVersionsFlow]="isRunTypeCompareVersions()"
+          (formState)="onFormStateChanged($event, 'cloudMcoCmdStepNextDisabled')"
+          (moveToNextStep)="onNextClicked()"
+        />
+      } @placeholder (minimum 200ms) {
+        <de-loading-step [isLoading]="true" />
+      }
+    </me-cdk-step>
+  }
+  @if (isRunTypeDataCreation()) {
+    <me-cdk-step
+      aria-label="parsing-configuration-step"
+      label="Select Parsing Configuration"
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="parsingStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-parsing-step
+          [tableComponentId]="parsingStepTableComponentId()"
+          (parsingChanged)="onParsingChanged($event)"
+          (formState)="onFormStateChanged($event, 'parsingStepNextDisabled')"
+        />
+      } @placeholder {
+        <div></div>
+      }
+    </me-cdk-step>
+  }
+  @if (isRunTypeFullRun() || isRunTypeCompareVersions()) {
+    <me-cdk-step
+      #etlCatalogStep
+      aria-label="etl-step"
+      label="Select ETL"
+      [nextLabel]="nextButtonLabel"
+      [isNextDisabled]="etlStepNextDisabled"
+      (prevClicked)="onPrevClicked()"
+      (nextClicked)="onNextClicked()"
+    >
+      @defer (on viewport; prefetch on idle) {
+        <de-etl-step
+          [tableComponentId]="etlStepTableComponentId()"
+          [wasShown]="etlCatalogStep.wasShown"
+          (etlChanged)="onEtlChanged($event)"
+          (formState)="onFormStateChanged($event, 'etlStepNextDisabled')"
+        />
+      } @placeholder {
+        <div></div>
+      }
+    </me-cdk-step>
+  }
+  <me-cdk-step
+    #configurationStep
+    label="Configurations"
+    [nextLabel]="nextButtonLabel"
+    [isNextDisabled]="runConfigStepNextDisabled"
+    (prevClicked)="onPrevClicked()"
+    (nextClicked)="onConfigurationStepNextClick(refJobId)"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-run-config-step
+        enableForceParsing="true"
+        [wasShown]="configurationStep.wasShown"
+        [runType]="runType()"
+        [enableMergeParsedData]="!refJobId"
+        [enableServices]="isRunTypeFullRun() || isRunTypeCompareVersions()"
+        [enableOutputPath]="isRunTypeFullRun() || isRunTypeCompareVersions()"
+        [etl]="selectedEtl"
+        [dataRetentionInfoObj]="dataRetentionInfoObj"
+        (formState)="onFormStateChanged($event, 'runConfigStepNextDisabled')"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step [hideNext]="true" [hidePrev]="true">
+    @defer (on viewport; prefetch on idle) {
+      <de-loading-step [isLoading]="loading$ | async" />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+  <me-cdk-step
+    [label]="submitJobFeedbackLabel"
+    [hideNext]="true"
+    [isPrevDisabled]="submitJobDisablePrevButton"
+    (prevClicked)="onSubmitJobStepPrevClicked()"
+  >
+    @defer (on viewport; prefetch on idle) {
+      <de-submit-job-step
+        [items]="submitJobFeedbackItems"
+        (stepLabelChange)="submitJobFeedbackLabel = $event"
+        (disablePrevButton)="submitJobDisablePrevButton = $event"
+        (triggerNewJob)="triggerNewJob.emit($event)"
+      />
+    } @placeholder {
+      <div></div>
+    }
+  </me-cdk-step>
+</me-wizard>

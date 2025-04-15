@@ -1,0 +1,12 @@
+<div class="flex flex-row items-start justify-between">
+  @if (listTitle) {
+    <div title="" class="control-title">{{ listTitle }}</div>
+  }
+  <span class="flex-1"></span>
+  <span class="add-button text-sys-primary flex-align-row" (click)="addItemClicked.emit()"
+    >+Add</span
+  >
+</div>
+<div class="list-container">
+  <ng-content />
+</div>

@@ -1,0 +1,83 @@
+<div class="p-6 box-border min-h-[262px] min-w-[520px] flex flex-col gap-6">
+  <header class="mat-headline-small">Jump File - {{ dataset.name }}</header>
+  <main class="flex-1 flex flex-col gap-4">
+    <section>
+      <mat-radio-group
+        color="primary"
+        class="flex flex-row gap-2"
+        [(ngModel)]="selectOption"
+        (change)="onOptionSelected($event)"
+      >
+        <mat-radio-button disableRipple [value]="JumpFileDialogOptionTypes.Simple">
+          <span class="ml-2 mat-body-medium"> Jump file </span>
+        </mat-radio-button>
+        <mat-radio-button disableRipple [value]="JumpFileDialogOptionTypes.MUlTI_FIELDS">
+          <span class="ml-2 mat-body-medium"> Multiple fields jump file </span>
+        </mat-radio-button>
+      </mat-radio-group>
+    </section>
+    <section class="flex-1 flex flex-col">
+      <ng-container [ngTemplateOutlet]="selectedTmpl" />
+    </section>
+  </main>
+</div>
+
+<ng-template #simpleJumpTmpl>
+  <div class="mb-4">Creates a jump file with fields: clip_name, start/end frame and duration.</div>
+  <div class="mb-8 flex-1 flex flex-col gap-2">
+    <me-input
+      title="Insert frames gap"
+      width="10rem"
+      mask="separator.0"
+      thousandSeparator=","
+      type="text"
+      [formControl]="gapControl"
+    />
+    @if (loading$ | async) {
+      <div class="flex-align-row">
+        <mat-progress-spinner diameter="40" mode="indeterminate" color="primary" />
+      </div>
+    }
+  </div>
+  <div class="buttons-container">
+    <button mat-button mat-dialog-close color="primary" type="button">Cancel</button>
+    <button mat-flat-button type="button" color="primary" (click)="onSubmit()">Download</button>
+  </div>
+</ng-template>
+
+<ng-template #multiFieldsJumpFileTmpl>
+  <section class="flex-1 flex flex-col">
+    <p>
+      Jump file that contains additional fields and aggregations.<br />
+      In order to create this jump file, please use the dedicated<a
+        class="text-sys-primary ml-1 no-underline"
+        target="_blank"
+        [href]="multiFieldsJumpFileDocUrl"
+        >DEEP package : deep_jump_file_generator</a
+      >.
+    </p>
+    <div class="flex-1">
+      @if (!!isJumpFileEnabled) {
+        <div class="mat-title-small">Copy the below path for your package implementation:</div>
+        <div class="flex flex-row items-center gap-2">
+          <div class="w-[465px] ellipsis" [meTooltip]="dataset.pathOnS3">
+            {{ dataset.pathOnS3 }}
+          </div>
+          <button mat-icon-button color="primary" (click)="copyToClipboard(dataset.pathOnS3)">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+      } @else {
+        <div>
+          <mat-error>
+            Your dataset does not contains additional fields, please edit your dataset and add
+            fields.
+          </mat-error>
+        </div>
+      }
+    </div>
+  </section>
+  <div class="buttons-container">
+    <button mat-button mat-dialog-close color="primary" type="button">Close</button>
+  </div>
+</ng-template>

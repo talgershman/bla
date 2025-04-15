@@ -1,0 +1,63 @@
+@use '../../../../style/vars';
+
+.mat-toolbar {
+  height: vars.$toolbarHeight;
+  padding-left: 2px;
+  position: relative;
+  border-bottom: solid;
+  border-width: 1px;
+  z-index: 2;
+  background-color: transparent;
+  @apply border-sys-outline-variant;
+}
+
+.actions-container {
+  --mat-icon-color: var(--sys-primary);
+}
+
+.header-text {
+  color: var(--me-header-text);
+  position: relative;
+  top: 4px;
+  left: -4px;
+}
+
+.mat-badge-small.mat-badge-above .mat-badge-content {
+  @apply bg-sys-error;
+}
+
+.mat-badge.hide-text .mat-badge-content {
+  color: transparent;
+  width: 12px;
+  height: 12px;
+}
+
+.header-banner {
+  height: 64px;
+  padding: 16px;
+  box-sizing: border-box;
+  mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
+  &.supported-browser {
+    @apply bg-sys-error;
+    @apply text-sys-on-error;
+  }
+}
+
+::ng-deep {
+  .tour-item-button {
+    .mat-mdc-menu-item-text {
+      width: 100%;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .update-button.mat-mdc-unelevated-button.mat-primary {
+    @apply bg-warning;
+    @apply text-on-warning;
+  }
+}

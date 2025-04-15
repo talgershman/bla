@@ -1,0 +1,40 @@
+.me-tour-focus-element {
+  @apply outline outline-offset-8 outline-2 outline-sys-primary;
+  position: relative;
+  top: 10px;
+  left: 10px;
+  z-index: 999;
+}
+
+.me-tour-overlay {
+  position: absolute;
+  box-sizing: content-box;
+  z-index: 999;
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.me-tour-helper-layer {
+  box-sizing: content-box;
+  position: absolute;
+  z-index: 998;
+  border-radius: 4px;
+}
+.me-tour-tooltip-layer {
+  box-sizing: content-box;
+  position: absolute;
+  z-index: 1000;
+  border-radius: 4px;
+  transition: all 0.3s ease-out;
+}
+
+.me-tour-code-block {
+  display: block;
+  white-space: pre;
+  overflow-x: scroll;
+  max-width: 100%;
+  min-width: 100px;
+  padding: 0;
+  margin: 0;
+  background-color: var(--sys-surface-container-highest);
+}

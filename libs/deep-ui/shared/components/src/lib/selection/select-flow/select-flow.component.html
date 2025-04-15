@@ -1,0 +1,14 @@
+<mat-radio-group
+  color="primary"
+  class="flex flex-col gap-2"
+  [disabled]="readonly"
+  (change)="flowChanged.emit($event)"
+>
+  @for (button of buttons; track button.id; let first = $first) {
+    <mat-radio-button disableRipple [checked]="button.id === selected" [value]="button">
+      <span class="ml-2 mat-body-medium text-sys-on-surface cursor-pointer">
+        {{ button.label }}
+      </span>
+    </mat-radio-button>
+  }
+</mat-radio-group>

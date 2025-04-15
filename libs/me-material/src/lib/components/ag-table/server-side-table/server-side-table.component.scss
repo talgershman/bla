@@ -1,0 +1,66 @@
+@use '../base-table';
+
+@include base-table.ag-table;
+
+:host {
+  .loading-shade-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: color-mix(in srgb, var(--sys-surface) 70%, transparent);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+}
+
+:host ::ng-deep {
+  ag-grid-angular {
+    .ag-cell,
+    .ag-full-width-row .ag-cell-wrapper.ag-row-group {
+      -webkit-font-smoothing: antialiased;
+    }
+    .ag-row-hover:not(.row-disabled):not(.row-regular-cursor) {
+      me-ag-actions-cell {
+        mat-icon {
+          visibility: visible;
+        }
+      }
+      .ag-cell {
+        cursor: pointer;
+      }
+    }
+    .ag-group-value {
+      width: 100%;
+    }
+    .ag-row.row-master,
+    .ag-row.ag-row-group {
+      &:not(.row-disabled):not(.row-regular-cursor) {
+        cursor: pointer;
+      }
+      &.row-disabled {
+        me-ag-actions-cell {
+          button {
+            cursor: initial;
+          }
+        }
+      }
+    }
+    .ag-row:has(> me-ag-custom-detail) {
+      overflow-y: hidden;
+      background-color: var(--sys-surface-container);
+    }
+    .ag-checkbox-input-wrapper {
+      &.ag-indeterminate::after {
+        font-size: 1.25rem;
+        font-family: 'Material Icons';
+        content: '\e909';
+        color: var(--sys-primary);
+      }
+    }
+  }
+}

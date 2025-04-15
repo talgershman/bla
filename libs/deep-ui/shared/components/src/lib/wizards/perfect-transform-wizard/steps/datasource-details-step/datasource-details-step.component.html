@@ -1,0 +1,69 @@
+<div class="h-full flex flex-row gap-4">
+  <div class="h-full p-6 box-border w-[33rem] flex flex-col gap-4">
+    @if (runType === 'CREATE') {
+      <div>
+        <me-input title="Name" [formControl]="dataSourceDetailsForm.controls.name" />
+      </div>
+      <div>
+        <me-select
+          title="Team"
+          [options]="deepTeamOptions"
+          [formControl]="dataSourceDetailsForm.controls.team"
+        />
+      </div>
+      <div>
+        <me-select
+          title="Raw Data Owner"
+          [options]="rawDataOwnerOptions"
+          [formControl]="dataSourceDetailsForm.controls.rawDataOwner"
+        />
+      </div>
+    }
+    <div>
+      <de-budget-group-control
+        title="Budget Group"
+        [infoTooltip]="BUDGET_GROUP_TOOLTIP_MSG"
+        [formControl]="dataSourceDetailsForm.controls.budgetGroup"
+      />
+    </div>
+    <div class="tags-control">
+      <me-chips
+        [title]="runType === 'UPDATE' ? 'Version Tags (Optional)' : 'Tags (Optional)'"
+        [formControl]="dataSourceDetailsForm.controls.tags"
+      />
+    </div>
+    <div class="description-control">
+      <me-textarea
+        title="Description (Optional)"
+        [title]="runType === 'UPDATE' ? 'Version Description (Optional)' : 'Description (Optional)'"
+        [formControl]="dataSourceDetailsForm.controls.description"
+      />
+    </div>
+  </div>
+
+  <div class="mt-4 controls w-[calc(100%-36rem)] box-border flex flex-col gap-4">
+    @if (dataRetentionObj && dataRetentionInfoObj) {
+      <div class="data-retention-container">
+        <label class="mt-2 mat-body-medium">
+          <div class="mat-title-medium">Data Retention</div>
+          DEEP will keep your job outputs up to dates configuration below:
+        </label>
+        <div class="data-retention-control mt-5">
+          <de-data-retention-control
+            [dataRetention]="dataRetentionObj"
+            [formControl]="dataSourceDetailsForm.controls.dataRetention"
+            [config]="dataRetentionInfoObj"
+          />
+        </div>
+      </div>
+    }
+    <div class="h-full override-params-control flex-1">
+      <de-override-etl-params-control
+        class="h-full"
+        [services]="etl?.services"
+        [servicesDag]="etl?.servicesDag"
+        [formControl]="dataSourceDetailsForm.controls.overrideParams"
+      />
+    </div>
+  </div>
+</div>

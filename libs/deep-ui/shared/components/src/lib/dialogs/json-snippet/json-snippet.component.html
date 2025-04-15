@@ -1,0 +1,34 @@
+<div class="p-6 box-border json-snippet-container">
+  <div class="actions">
+    @if (!!extraDataToggleName) {
+      <mat-slide-toggle
+        color="primary"
+        class="mr-2"
+        [checked]="hideExtraData"
+        (change)="onToggleChanged($event)"
+      >
+        {{ extraDataToggleName }}
+      </mat-slide-toggle>
+    }
+    <button
+      mat-icon-button
+      color="primary"
+      aria-label="Copy To Clipboard"
+      class="copy-button"
+      (click)="copyCmdToClipboard()"
+    >
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <button class="dialog-close" mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="json-snippet-code">
+    <me-json-editor
+      [formControl]="jsonControl"
+      [isTouched]="jsonControl?.touched"
+      [errors]="jsonControl?.errors"
+      [overrideOptions]="{readOnly: true}"
+    />
+  </div>
+</div>

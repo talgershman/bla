@@ -1,0 +1,59 @@
+.step-center-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tour-arrow,
+.tour-arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+.tour-arrow {
+  visibility: hidden;
+  z-index: -2;
+}
+
+.tour-arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.main-step-container {
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.main-step-container[data-popper-placement^='top'] > .tour-arrow {
+  bottom: -4px;
+}
+
+.main-step-container[data-popper-placement^='bottom'] > .tour-arrow {
+  top: -4px;
+}
+
+.main-step-container[data-popper-placement^='left'] > .tour-arrow {
+  right: -4px;
+}
+
+.main-step-container[data-popper-placement^='right'] > .tour-arrow {
+  left: -4px;
+}
+
+.close-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.step-size-medium {
+  max-width: min(600px, var(--max-width, 2000px));
+}
+.step-size-large {
+  max-width: min(900px, var(--max-width, 2000px));
+}

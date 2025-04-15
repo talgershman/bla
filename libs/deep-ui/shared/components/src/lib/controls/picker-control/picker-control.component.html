@@ -1,0 +1,14 @@
+<div class="picker-container h-full">
+  <me-picker
+    [pickerTitle]="pickerHostService.pickerTitle()"
+    [pickerDialogTitle]="pickerDialogTitle()"
+    [dialogTemplate]="dialogTemplate()"
+    [hideDialogCloseButton]="hideDialogCloseButton()"
+    [hideDialogFooter]="hideDialogFooter()"
+    [isOpenDialogDisabled]="disabled"
+    [isSelectDialogDisabled]="isSelectDialogDisabled()"
+    (openDialog)="onOpenDialog($event)"
+    (closeDialog)="closeDialog.emit($event)"
+  />
+</div>
+<me-control-error-msg [isTouched]="control?.touched" [errors]="control?.errors" />

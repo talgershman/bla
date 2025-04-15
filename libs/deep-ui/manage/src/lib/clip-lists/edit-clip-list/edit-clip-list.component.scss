@@ -1,0 +1,11 @@
+mat-error {
+  margin-top: 0.5rem;
+  font: var(--sys-body-medium);
+  letter-spacing: var(--sys-body-medium-tracking);
+  text-align: center;
+  .invalid-clips-container {
+    text-align: left;
+    overflow: auto;
+    max-height: 7.5rem;
+  }
+}

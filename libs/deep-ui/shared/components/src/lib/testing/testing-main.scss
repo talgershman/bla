@@ -1,0 +1,18 @@
+@use 'libs/me-material/style/m3-theme-testing';
+
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ag-grid-angular {
+  height: 400px !important;
+}

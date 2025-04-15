@@ -1,0 +1,15 @@
+.dialog-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .dialog-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    min-height: 2.5rem;
+  }
+  .dialog-content {
+    flex: auto;
+  }
+}

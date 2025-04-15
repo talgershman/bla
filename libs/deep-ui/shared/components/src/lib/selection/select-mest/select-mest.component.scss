@@ -1,0 +1,28 @@
+:host::ng-deep {
+  [col-id='ag-Grid-ControlsColumn'] {
+    .ag-checkbox-input-wrapper {
+      pointer-events: none;
+    }
+  }
+}
+
+.select-mest-container {
+  .is-override-container,
+  .is-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .is-override-container,
+  .is-main-container,
+  .is-valid-container {
+    display: flex;
+  }
+
+  .override-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+}

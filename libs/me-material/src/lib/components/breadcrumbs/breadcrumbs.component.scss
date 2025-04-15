@@ -1,0 +1,35 @@
+@use '../../../../style/vars';
+
+.breadcrumbs-container {
+  display: flex;
+  align-items: center;
+  height: vars.$breadcrumbsHeight;
+  background-color: transparent;
+  .menu,
+  .item {
+    font: var(--sys-title-large);
+    letter-spacing: var(--sys-title-large-tracking);
+    color: var(--sys-on-surface);
+  }
+  a {
+    text-decoration: none;
+  }
+  a:hover {
+    @apply text-sys-primary hover:text-sys-primary visited:text-sys-primary;
+  }
+}
+
+.mat-icon {
+  height: 1.188rem;
+  width: 1.188rem;
+  font-size: 1.188rem;
+  &.chevron-icon {
+    height: 1.75rem;
+    width: 1.375rem;
+    line-height: 1.75rem;
+    font-size: 1.375rem;
+    color: var(--sys-on-surface);
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}

@@ -1,0 +1,43 @@
+<div class="breadcrumbs-container w-full flex flex-row item-center">
+  <div class="ml-6 flex">
+    @for (item of breadcrumbs; track item.title; let last = $last) {
+      @if (item.route) {
+        <a
+          [class.menu]="item.isMenu === true"
+          [class.item]="!item.isMenu"
+          routerLink="{{ item.route }}"
+          >{{ item.title }}</a
+        >
+      }
+      @if (!item.route) {
+        <span [class.menu]="item.isMenu" [class.item]="!item.isMenu" class="regular-item">{{
+          item.title
+        }}</span>
+      }
+      @if (last === false) {
+        <mat-icon class="chevron-icon">chevron_right</mat-icon>
+      }
+    }
+  </div>
+  <div class="flex-1"></div>
+  <div class="mr-4">
+    @if (showTourButton) {
+      <button
+        disableRipple
+        mat-button
+        class="exit-button"
+        color="primary"
+        (click)="tourClick.emit()"
+      >
+        <div class="flex flex-row items-center">
+          <mat-icon fontSet="material-icons-outlined" class="mr-1">info</mat-icon>
+          <span class="relative top-[1px]">Take a tour</span>
+        </div>
+      </button>
+    }
+  </div>
+  <div
+    *mePortalTarget="'breadcrumbs-actions-container'"
+    class="self-baseline relative top-[3px]"
+  ></div>
+</div>

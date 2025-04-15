@@ -1,0 +1,76 @@
+<div class="mr-4 flex flex-row items-center" [class.value-margin]="parentKey">
+  <div
+    class="flex-initial whitespace-nowrap"
+    [ngClass]="keyTextColorClass"
+    [class.mat-body-large]="keyConfigs?.bold"
+    [class.array-index]="parentType === 'array'"
+  >
+    {{ keyDisplay }}
+    @if (keyConfigs?.tooltip) {
+      <me-hint-icon [meTooltip]="keyConfigs.tooltip" />
+    }
+  </div>
+  &nbsp;:&nbsp;
+  <div
+    class="value-container whitespace-nowrap flex flex-row items-center overflow-hidden"
+    (mouseenter)="showButtons()"
+    (mouseleave)="hideButtons()"
+  >
+    @switch (currentValueType) {
+      @case ('number') {
+        <div class="value-number-container">
+          <div
+            class="value-cell ellipsis whitespace-pre"
+            [ngClass]="valueTextColorClass"
+            [class.mat-body-large]="valueConfigs?.bold"
+          >
+            {{ value | mask: 'separator' : {thousandSeparator: ','} }}
+          </div>
+        </div>
+      }
+      @case ('string') {
+        <ng-container *ngTemplateOutlet="menuButtonTmpl" />
+        <div class="value-string-container overflow-hidden">
+          <div
+            class="value-cell ellipsis whitespace-pre"
+            meTooltipClass="no-truncate-tooltip"
+            [meTooltip]="valueConfigs?.tooltip ? '' : value"
+            [meTooltipOnEllipsis]="true"
+            [class.mat-body-large]="valueConfigs?.bold"
+            [ngClass]="valueTextColorClass"
+          >
+            {{ value }}
+            @if (valueConfigs?.tooltip) {
+              <me-hint-icon [meTooltip]="valueConfigs?.tooltip" />
+            }
+          </div>
+        </div>
+      }
+      @case ('html') {
+        <div [innerHTML]="valueConfigs.html | safe: 'html'"></div>
+      }
+      @case ('link') {
+        <a class="link-item" target="_blank" href="{{ value }}">
+          {{ valueConfigs.linkTitle }}
+        </a>
+      }
+      @default {
+        {{ value === null ? 'null' : value }}
+      }
+    }
+  </div>
+</div>
+
+<ng-template #menuButtonTmpl>
+  @if (isButtonsShown) {
+    <button
+      disableRipple
+      mat-icon-button
+      aria-label="Copy To Clipboard"
+      class="copy-button"
+      (click)="copyToClipboard(value)"
+    >
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  }
+</ng-template>

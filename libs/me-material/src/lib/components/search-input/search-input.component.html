@@ -1,0 +1,43 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  class="me-search-input w-full"
+  subscriptSizing="dynamic"
+  [ngStyle]="{'width': inputWidth}"
+>
+  <div class="w-full h-full flex flex-row items-center">
+    <div class="h-full flex items-center">
+      <mat-icon class="text-sys-on-surface-variant">search</mat-icon>
+    </div>
+    <div class="flex-1">
+      <input
+        matInput
+        class="truncate"
+        title=""
+        type="text"
+        [formControl]="controller()"
+        [placeholder]="placeholder()"
+        (keydown.enter)="$event.stopPropagation(); $event.preventDefault()"
+      />
+    </div>
+    @if (controller().value) {
+      <div class="ml-4">
+        <button
+          disableRipple
+          mat-icon-button
+          aria-label="Clear"
+          matSuffix
+          type="button"
+          class="py-2 mat-icon-button-dense close-button"
+          (click)="controller().setValue('')"
+        >
+          <mat-icon title="" fontSet="material-icons-outlined">cancel</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+  <ng-content />
+</mat-form-field>
+<div>
+  <span #dummyContent class="dummy-content"></span>
+</div>

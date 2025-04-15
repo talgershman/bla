@@ -1,0 +1,187 @@
+<form #mestFormElement class="h-full" [formGroup]="mestForm" (ngSubmit)="onSubmit()">
+  <div class="h-full w-full mest-form-container">
+    <div
+      [class.no-padding-margin]="formMode === 'override'"
+      class="flex-grow h-full content ml-[1.625rem] pr-[1.625rem]"
+    >
+      <div class="left-section space-y-4">
+        <div class="nickname-container">
+          <me-input
+            title="Template Name"
+            type="text"
+            class="nickname-control"
+            [formControl]="mestForm.controls.nickname"
+          />
+        </div>
+        <div>
+          @if (formMode !== 'override') {
+            <me-select
+              title="Team"
+              [options]="deepTeamOptions"
+              [formControl]="mestForm.controls.group"
+            />
+          }
+        </div>
+        @if (isFormModeOverride()) {
+          <div>
+            <me-input
+              title="Root Path"
+              class="root-path-control"
+              placeholder="example: /mobileye/trees_archive/PSW/bundle/4.19.11/RC2_2020_06_04/"
+              type="text"
+              updateOn="blur"
+              [formControl]="mestForm.controls.rootPath"
+              [class.valid-root-path]="
+                mestForm.controls.rootPath?.touched && !mestForm.controls.rootPath?.errors
+              "
+            />
+          </div>
+        }
+        <div class="space-y-2">
+          <p class="mat-body-medium">
+            Please insert to the fields below a partial location/file for the files needed to
+            trigger MEST.<br />
+            When providing multiple files, DEEP use the root path provided in the wizard phase and
+            will search by order for each option, if it doesn't find the option provided, it will
+            move on to the next option,
+            <label
+              class="underline cursor-pointer"
+              meTooltipPosition="right"
+              meTooltipClass="no-truncate-tooltip"
+              [meTooltip]="FILES_TOOLTIP"
+            >
+              Example.
+            </label>
+          </p>
+          <div class="paths-container space-y-2">
+            <div class="executable-control">
+              <me-drag-drop-list
+                listTitle="Executable"
+                formControlName="executables"
+                [placeholders]="[
+                  'Example: GV_Wono',
+                  'Example: eyeq4/release-st/Wono/GV_Wono',
+                  'Example: GV_Wono_EyeQ4sw_tbb',
+                ]"
+                [selected]="executableWithoutBasePath()"
+                [isInvalid]="
+                  mestForm.controls.executables.touched &&
+                  (mestForm.controls.executables.errors !== null ||
+                    selectedExecutable() === 'not-found')
+                "
+              />
+              @if (mestForm.controls.executables.touched) {
+                @if (selectedExecutable() === 'not-found') {
+                  <mat-error> Couldn't find files in Mobileye file system. </mat-error>
+                }
+                @if (mestForm.controls.executables.errors?.arrayValuesInvalidPrefix) {
+                  <mat-error> Paths can't start with a leading "/". </mat-error>
+                }
+                @if (mestForm.controls.executables.errors?.arrayIsValidPath) {
+                  <mat-error> Some path is not a valid path string. </mat-error>
+                }
+                @if (mestForm.controls.executables.errors?.arrayInvalidRegexValidation) {
+                  <mat-error> Paths can't include "//". </mat-error>
+                }
+              }
+            </div>
+            <div class="libs-control">
+              <me-drag-drop-list
+                listTitle="Libs"
+                formControlName="libs"
+                [placeholders]="[
+                  'Example: libWono.so',
+                  'Example: eyeq4/release-st/Wono/libWono.so',
+                  'Example: libWono_EyeQ4sw_tbb.so',
+                ]"
+                [selected]="libWithoutBasePath()"
+                [isInvalid]="
+                  mestForm.controls.libs.touched &&
+                  (mestForm.controls.libs.errors !== null || selectedLib() === 'not-found')
+                "
+              />
+              @if (mestForm.controls.libs.touched && selectedLib() === 'not-found') {
+                <mat-error> Couldn't find files in Mobileye file system. </mat-error>
+              }
+              @if (mestForm.controls.libs.errors?.arrayValuesInvalidPrefix) {
+                <mat-error> Paths can't start with a leading "/". </mat-error>
+              }
+              @if (mestForm.controls.libs.errors?.arrayIsValidPath) {
+                <mat-error> Some path is not a valid path string. </mat-error>
+              }
+              @if (mestForm.controls.libs.errors?.arrayInvalidRegexValidation) {
+                <mat-error> Paths can't include "//". </mat-error>
+              }
+            </div>
+            <div class="brain-libs-control">
+              <me-drag-drop-list
+                listTitle="Brain Libs (Optional)"
+                formControlName="brainLibs"
+                [placeholders]="[
+                  'Example: brain',
+                  'Example: eyeq4/release-st/Wono/brain',
+                  'Example: brainLibs',
+                ]"
+                [selected]="brainLibWithoutBasePath()"
+                [isInvalid]="
+                  mestForm.controls.brainLibs.touched &&
+                  (mestForm.controls.brainLibs.errors !== null ||
+                    selectedBrainLib() === 'not-found')
+                "
+              />
+              @if (mestForm.controls.brainLibs.touched && selectedBrainLib() === 'not-found') {
+                <mat-error> Couldn't find files in Mobileye file system. </mat-error>
+              }
+              @if (mestForm.controls.brainLibs.errors?.arrayValuesInvalidPrefix) {
+                <mat-error> Paths can't start with a leading "/". </mat-error>
+              }
+              @if (mestForm.controls.brainLibs.errors?.arrayIsValidPath) {
+                <mat-error> Some path is not a valid path string. </mat-error>
+              }
+              @if (mestForm.controls.brainLibs.errors?.arrayInvalidRegexValidation) {
+                <mat-error> Paths can't include "//". </mat-error>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right-section space-y-4">
+        <div class="params-control">
+          <me-parameters-list
+            listTitle="MEST Parameters"
+            textAreaPlaceholder="Paste text here for automatic parameters breakdown by DEEP"
+            formControlName="params"
+            [isInvalid]="
+              mestForm.controls.params.touched &&
+              (mestForm.controls.params.invalid || !mestForm.controls.params.value)
+            "
+          />
+        </div>
+        <div class="args-control">
+          <me-textarea
+            title="Cloud MEST Arguments (Optional)"
+            [formControl]="mestForm.controls.args"
+          />
+        </div>
+      </div>
+    </div>
+    <ng-content />
+    @if (formMode !== 'override') {
+      <footer
+        class="p-6 flex gap-4 items-center flex-row border-0 border-t border-solid border-sys-outline-variant"
+      >
+        <div class="grow"></div>
+        <div>
+          <button mat-button type="button" color="primary" (click)="onBackClicked()">
+            {{ cancelButtonLabel }}
+          </button>
+        </div>
+        <div meTooltipPosition="top" [meTooltip]="submitButtonTooltip">
+          <button mat-flat-button type="submit" color="primary" [disabled]="!!submitButtonTooltip">
+            {{ createButtonLabel }}
+          </button>
+        </div>
+      </footer>
+    }
+  </div>
+</form>

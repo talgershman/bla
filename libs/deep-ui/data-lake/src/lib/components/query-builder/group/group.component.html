@@ -1,0 +1,118 @@
+@if (viewState().derivedLogic()) {}
+<div
+  class="group-index-{{
+    groupIndex
+  }} group-container ml-2 bg-sys-surface-container p-4 border-none rounded mat-elevation-z4"
+  [class.group-container-hover]="showIcons"
+  [class.is-even-group]="groupIndex % 2 === 0"
+  (mouseover)="$event.stopPropagation(); showIcons = true"
+  (mouseout)="$event.stopPropagation(); showIcons = false"
+>
+  <section class="flex flex-row justify-between">
+    @if (allowAggregation) {
+      <de-aggregation
+        class="aggregation-rules mb-4"
+        [aggregationForm]="aggregationForm"
+        [aggregationConditions]="aggregationConditions"
+        [readonly]="readonly"
+      />
+    }
+    @if (showCloseButton && !readonly) {
+      <div class="flex-1"></div>
+      <button mat-icon-button (click)="removeAllConditions()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </section>
+  @if (groupTitle) {
+    <div class="mat-title-medium text-sys-on-surface mb-2">
+      {{ groupTitle }}
+    </div>
+  }
+  <header class="operators flex flex-row" [class.pointer-events-none]="readonly">
+    <button
+      type="button"
+      mat-stroked-button
+      class="and-button mat-label-large"
+      [class.selected-operator]="conditionControl?.value === 'AND'"
+      (click)="conditionControl.setValue('AND')"
+    >
+      @if (conditionControl?.value === 'AND') {
+        <mat-icon>checked</mat-icon>
+      }
+      And
+    </button>
+    <button
+      type="button"
+      mat-stroked-button
+      class="or-button mat-label-large"
+      [class.selected-operator]="conditionControl?.value === 'OR'"
+      (click)="conditionControl.setValue('OR')"
+    >
+      @if (conditionControl?.value === 'OR') {
+        <mat-icon>checked</mat-icon>
+      }
+      Or
+    </button>
+    <div class="flex-grow"></div>
+    <div
+      class="flex flex-row gap-2 items-center justify-start"
+      [class.show-icons]="!readonly && showIcons"
+    >
+      <button mat-flat-button type="button" color="primary" (click)="addEmptyRule()">+Add</button>
+      <button mat-flat-button type="button" color="primary" (click)="addSubGroup()">
+        +(group)
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        color="primary"
+        class="delete-button"
+        (click)="deleteGroup.emit()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </header>
+  <div class="spacer h-4 w-1"></div>
+  <div class="rules-container">
+    @for (rules of rulesControl?.controls; track rules; let index = $index; let last = $last) {
+      <div class="flex flex-row" [class.last]="last">
+        @if (last) {
+          <div
+            class="hide"
+            [class.hide-even]="groupIndex % 2 === 0"
+            [class.hide-odd]="groupIndex % 2 !== 0"
+          ></div>
+        }
+        <div class="horizontal-spacer"></div>
+        @if (rulesTypes[index]; as type) {
+          @if (type === 'rule') {
+            <de-rule
+              [rulesGroup]="rules"
+              [rule]="queryConditions?.rules[index]"
+              [attributes]="attributes"
+              [isTouched]="isTouched"
+              [readonly]="readonly"
+              (deleteClicked)="onDeleteRuleClicked(index)"
+            />
+          }
+          @if (type === 'group') {
+            <de-group
+              class="my-2"
+              [attributes]="attributes"
+              [conditionsForm]="rules"
+              [queryConditions]="queryConditions?.rules?.[index]"
+              [groupIndex]="groupIndex + 1"
+              [isTouched]="isTouched"
+              [readonly]="readonly"
+              [createEmptyRow]="true"
+              [showCloseButton]="false"
+              (deleteGroup)="onDeleteGroupClicked(index)"
+            />
+          }
+        }
+      </div>
+    }
+  </div>
+</div>

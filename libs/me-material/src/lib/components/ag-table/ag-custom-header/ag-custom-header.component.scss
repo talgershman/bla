@@ -1,0 +1,38 @@
+:host {
+  width: 100%;
+  font: var(--sys-title-medium);
+  letter-spacing: var(--sys-title-medium-tracking);
+  color: var(--sys-on-surface);
+  .ag-header-icon.ag-header-cell-menu-button {
+    .menu-indicator {
+      text-align: center;
+      line-height: 1.5rem;
+      &:hover {
+        color: var(--sys-primary);
+        cursor: pointer;
+      }
+    }
+  }
+
+  .ag-header-icon.ag-header-label-icon.ag-filter-icon {
+    .filter-indicator {
+      text-align: center;
+      line-height: 1.5rem;
+      color: var(--sys-primary);
+    }
+  }
+
+  .sort-indicator {
+    line-height: 1.5rem;
+    color: transparent;
+    &.active {
+      color: var(--sys-primary);
+    }
+  }
+
+  .ag-header-cell-label:hover {
+    .sort-indicator:not(.active) {
+      color: var(--sys-secondary);
+    }
+  }
+}

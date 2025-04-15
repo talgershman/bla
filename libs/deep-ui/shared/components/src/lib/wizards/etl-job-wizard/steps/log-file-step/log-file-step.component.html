@@ -1,0 +1,15 @@
+<div class="condition-controls-container w-full">
+  <div class="w-full">
+    <me-upload-file
+      class="upload-file-control"
+      multiple="false"
+      placeholder="Drag & Drop to Upload Log List File"
+      [isLoading]="fileIsLoading$ | async"
+      [selectedFileName]="selectedFileName"
+      [markAsError]="logFileForm.touched && logFileForm.controls.file.invalid"
+      (filesChanges)="onFileChanged($event)"
+    />
+  </div>
+
+  <me-error-feedback [error]="errorMsg" />
+</div>

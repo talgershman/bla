@@ -1,0 +1,425 @@
+@if (showForm$ | async) {
+  <form class="h-full flex flex-col" [formGroup]="etlForm" (ngSubmit)="onSubmit()">
+    <div class="h-0 flex-1 overflow-y-auto form-container">
+      <div class="content">
+        <div class="flex-grow">
+          <div class="nodes-container">
+            @for (node of nodes; track node.id; let last = $last) {
+              <div
+                (click)="onNodeClicked(node, nodeFormElem)"
+                [class.node-selected]="node.id === selectedNode?.id"
+                [class.node-warning]="node.formGroup && node.warning && node.warning()"
+                [class.node-invalid]="
+                  (node.formGroup &&
+                    isSubmitted &&
+                    !node.formGroup.valid &&
+                    node.formGroup.status !== 'PENDING') ||
+                  (node.checkError && node.checkError())
+                "
+                [class.mb-4]="last"
+                class="etl-node cursor-pointer mat-elevation-z2"
+              >
+                <section class="w-full flex flex-col justify-center">
+                  <header [class.invisible]="!node.showDelete">
+                    <mat-icon
+                      class="close-icon cursor-pointer text-sys-primary"
+                      (click)="$event.stopPropagation(); onDeleteNode('probeLogicForm', node.id)"
+                    >
+                      close
+                    </mat-icon>
+                  </header>
+                  <div>
+                    <span class="node-label mat-label-large text-sys-on-surface">{{
+                      node.title
+                    }}</span>
+                    <div class="mt-1 px-2 text-ellipsis min-w-[137px]">
+                      @switch (node.id) {
+                        @case ('dataPrep') {
+                          <span
+                            class="mat-body-medium"
+                            meTooltipPosition="right"
+                            [meTooltip]="etlForm.controls.dataPrepForm.controls.sdkVersion?.value"
+                            >SDK Version:
+                            {{ etlForm.controls.dataPrepForm.controls.sdkVersion?.value }}</span
+                          >
+                        }
+                        @case ('probeLogic') {
+                          <span
+                            class="mat-body-medium"
+                            meTooltipPosition="right"
+                            [meTooltip]="
+                              etlForm.controls?.probeLogicForm?.controls?.sdkVersion?.value
+                            "
+                            >SDK Version:
+                            {{
+                              etlForm.controls?.probeLogicForm?.controls?.sdkVersion?.value
+                            }}</span
+                          >
+                        }
+                      }
+                    </div>
+                  </div>
+                </section>
+              </div>
+              @if (!last) {
+                <mat-icon class="arrow-down">trending_flat</mat-icon>
+              }
+            }
+          </div>
+        </div>
+        <div #nodeFormElem class="flex-initial node-form-container w-1/3 mat-elevation-z2">
+          <ng-container>
+            <div class="h-full">
+              <div class="node-title mat-headline-small">{{ selectedNode?.title }}</div>
+              @if (selectNodeTemplate) {
+                <ng-container [ngTemplateOutlet]="selectNodeTemplate" />
+              } @else {
+                <ng-container [ngTemplateOutlet]="rootForm" />
+              }
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <ng-content />
+    </div>
+    <footer
+      class="bg-sys-surface box-border p-6 flex gap-4 items-center flex-row border-0 border-t border-solid border-sys-outline-variant"
+    >
+      <div class="grow"></div>
+      <div>
+        <button mat-button type="button" color="primary" (click)="onBackClicked()">Back</button>
+      </div>
+      <div>
+        @if (showCreateButton) {
+          <div meTooltipPosition="top" [meTooltip]="submitButtonTooltip">
+            <button
+              mat-flat-button
+              type="submit"
+              color="primary"
+              [disabled]="!!submitButtonTooltip"
+            >
+              Publish
+            </button>
+          </div>
+        }
+      </div>
+      @if (showIncrementMajor) {
+        <div>
+          <div class="increment-major-control flex flex-row items-center gap-1">
+            <div>
+              <mat-checkbox disableRipple color="primary" [formControl]="incrementMajorControl">
+                Increment major
+              </mat-checkbox>
+            </div>
+            <div>
+              <me-hint-icon tooltipPosition="top" [tooltip]="INCREMENT_MAJOR_TOOLTIP" />
+            </div>
+          </div>
+        </div>
+      }
+    </footer>
+  </form>
+}
+
+<ng-template #rootForm>
+  <form #rootFormElement [formGroup]="etlForm.controls.rootForm">
+    <div class="space-y-4">
+      <div>
+        <me-input title="Name" [formControl]="etlForm.controls.rootForm.controls.name" />
+      </div>
+      <div>
+        <me-select title="Team" [options]="deepTeamOptions" [formControl]="teamControl" />
+      </div>
+      <div>
+        <de-picker-control
+          idKey="id"
+          nameKey="name"
+          groupKey="folder"
+          [formControl]="etlForm.controls.rootForm.controls.parsingConfiguration"
+          [pickerTitle]="parsingDialogTitle"
+          [pickerDialogTitle]="parsingDialogTitle"
+          [dialogTemplate]="selectParsingDialogTemplate"
+          [deserialized]="parsingDeserialized"
+          [valueSelected]="parsingValueSelected"
+          (initialTableFilters)="parsingInitialTableFilters = $event"
+        />
+      </div>
+      <div>
+        <me-chips title="Tags (Optional)" [formControl]="tagsControl" />
+      </div>
+      <div>
+        <me-textarea
+          title="Description (Optional)"
+          [formControl]="etlForm.controls.rootForm.controls.description"
+        />
+      </div>
+      <div>
+        <mat-slide-toggle
+          color="primary"
+          (change)="onShowProbeLogicNode($event)"
+          [checked]="!!etlForm.controls.probeLogicForm"
+        >
+          Insert ETL Logic step
+        </mat-slide-toggle>
+      </div>
+      <div class="dummy h-2"></div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #selectParsingDialogTemplate>
+  <de-select-parsing-list
+    [tableComponentId]="parsingTableComponentId"
+    [initialTableFilters]="parsingInitialTableFilters"
+    [initialSelectionId]="etlForm.controls.rootForm.controls.parsingConfiguration.value?.id"
+    (selectionChanged)="onParsingChanged($event)"
+  />
+</ng-template>
+
+<ng-template #dataPrepForm>
+  <form #dataPrepFormElement [formGroup]="etlForm.controls.dataPrepForm">
+    <div class="data-prep-container space-y-4">
+      <div>
+        <me-autocomplete
+          title="Service"
+          (selectionChanged)="onServiceChanged($event, EtlServiceTypes.DataPrep)"
+          [options]="dataPrepServicesOptions"
+          [formControl]="etlForm.controls.dataPrepForm.controls.dataPrep"
+        />
+      </div>
+      <div>
+        <me-autocomplete
+          title="Version"
+          (selectionChanged)="
+            onVersionChanged(
+              $event,
+              etlForm.controls.dataPrepForm.controls.dataPrep.value?.name,
+              EtlServiceTypes.DataPrep
+            )
+          "
+          [options]="dataPrepVersionOptions"
+          [formControl]="etlForm.controls.dataPrepForm.controls.version"
+          [isLoading]="dataPrepVersionLoading$ | async"
+        >
+          @if (selectedDataPrepGitUrl) {
+            <a
+              class="left-icon relative top-[4px] left-[-4px]"
+              [href]="selectedDataPrepGitUrl | safe: 'url'"
+              target="_blank"
+              meTooltip="Open in Gitlab"
+            >
+              <mat-icon svgIcon="gitlab" />
+            </a>
+          }
+        </me-autocomplete>
+      </div>
+      <div>
+        <me-input
+          title="SDK Version"
+          [formControl]="etlForm.controls.dataPrepForm.controls.sdkVersion"
+          [forceErrorMsg]="etlForm.controls.dataPrepForm.controls?.sdkVersion?.[forceErrorMsgKey]"
+          [warning]="etlForm.controls.dataPrepForm.controls?.sdkVersion?.[warningKey]"
+          [hint]="etlForm.controls.dataPrepForm.controls?.sdkVersion?.[hintKey]"
+        />
+      </div>
+      <div class="flex flex-row gap-1 items-center">
+        <div class="flex-1">
+          <me-input
+            title="Docker Image Path"
+            [formControl]="etlForm.controls.dataPrepForm.controls.dockerImagePath"
+          />
+        </div>
+        <div class="flex-initial">
+          <button
+            mat-icon-button
+            color="primary"
+            aria-label="Copy To Clipboard"
+            class="copy-button relative top-[4px]"
+            (click)="
+              copyCmdToClipboard(etlForm.controls.dataPrepForm.controls.dockerImagePath?.value)
+            "
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+      </div>
+      @if (etlForm.get('dataPrepForm')) {
+        <ng-container
+          [ngTemplateOutlet]="resourcesDefinitionTmpl"
+          [ngTemplateOutletContext]="{
+            etlServiceType: EtlServiceTypes.DataPrep,
+            controlGroup: etlForm.get('dataPrepForm').get('resourcesDefinition'),
+            capacityCheckedControl: etlForm.get('dataPrepForm').get('capacityChecked'),
+          }"
+        />
+      }
+      <div>
+        <me-json-editor
+          title="Params"
+          [overrideOptions]="{readOnly: true, expand: true}"
+          [formControl]="etlForm.controls.dataPrepForm.controls.configuration"
+          [isTouched]="etlForm.controls.dataPrepForm.controls.configuration?.touched"
+          [errors]="etlForm.controls.dataPrepForm.controls.configuration?.errors"
+        />
+      </div>
+      <div class="h-2 w-full"></div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #probeLogicForm>
+  <form #probeLogicFormElement [formGroup]="etlForm.controls.probeLogicForm">
+    <div class="probe-logic-container space-y-4">
+      <div>
+        <me-autocomplete
+          title="Service"
+          (selectionChanged)="onServiceChanged($event, EtlServiceTypes.ProbeLogic)"
+          [options]="etlLogicServicesOptions"
+          [formControl]="etlForm.controls.probeLogicForm.controls.probeLogic"
+        />
+      </div>
+      <div>
+        <me-autocomplete
+          title="Version"
+          [options]="etlLogicVersionOptions"
+          [formControl]="etlForm.controls.probeLogicForm.controls.version"
+          [isLoading]="etlLogicVersionLoading$ | async"
+          (selectionChanged)="
+            onVersionChanged(
+              $event,
+              etlForm.controls.probeLogicForm.controls.probeLogic.value?.name,
+              EtlServiceTypes.ProbeLogic
+            )
+          "
+        >
+          @if (selectedProbeLogicGitUrl) {
+            <a
+              class="left-icon relative top-[4px] left-[-4px]"
+              [href]="selectedProbeLogicGitUrl | safe: 'url'"
+              target="_blank"
+              meTooltip="Open in Gitlab"
+            >
+              <mat-icon svgIcon="gitlab" />
+            </a>
+          }
+        </me-autocomplete>
+      </div>
+      <div>
+        <me-input
+          title="SDK Version"
+          [formControl]="etlForm.controls.probeLogicForm.controls.sdkVersion"
+          [forceErrorMsg]="etlForm.controls.probeLogicForm.controls?.sdkVersion?.[forceErrorMsgKey]"
+          [warning]="etlForm.controls.probeLogicForm.controls?.sdkVersion?.[warningKey]"
+          [hint]="etlForm.controls.probeLogicForm.controls?.sdkVersion?.[hintKey]"
+        />
+      </div>
+      <div class="flex flex-row gap-1 items-center">
+        <div class="flex-1">
+          <me-input
+            title="Docker Image Path"
+            [formControl]="etlForm.controls.probeLogicForm.controls.dockerImagePath"
+          />
+        </div>
+        <div class="flex-initial">
+          <button
+            mat-icon-button
+            color="primary"
+            aria-label="Copy To Clipboard"
+            class="copy-button relative top-[4px]"
+            (click)="
+              copyCmdToClipboard(etlForm.controls.probeLogicForm.controls.dockerImagePath?.value)
+            "
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </div>
+      </div>
+      @if (etlForm.get('probeLogicForm')) {
+        <ng-container
+          [ngTemplateOutlet]="resourcesDefinitionTmpl"
+          [ngTemplateOutletContext]="{
+            etlServiceType: EtlServiceTypes.ProbeLogic,
+            controlGroup: etlForm.get('probeLogicForm').get('resourcesDefinition'),
+            capacityCheckedControl: etlForm.get('probeLogicForm').get('capacityChecked'),
+          }"
+        />
+      }
+      <div>
+        <me-json-editor
+          title="Params"
+          [overrideOptions]="{readOnly: true, expand: true}"
+          [formControl]="etlForm.controls.probeLogicForm.controls.configuration"
+          [isTouched]="etlForm.controls.probeLogicForm.controls.configuration?.touched"
+          [errors]="etlForm.controls.probeLogicForm.controls.configuration?.errors"
+        />
+      </div>
+      <div class="h-2 w-full"></div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template
+  #resourcesDefinitionTmpl
+  let-etlServiceType="etlServiceType"
+  let-controlGroup="controlGroup"
+  let-capacityCheckedControl="capacityCheckedControl"
+>
+  <div>
+    <div class="toggle-config">
+      <mat-checkbox
+        disableRipple
+        color="primary"
+        [formControl]="capacityCheckedControl"
+        (change)="onCapacityCheckBoxChange($event, etlServiceType)"
+      >
+        Adjust Compute Resources
+      </mat-checkbox>
+      <me-hint-icon
+        class="ml-1"
+        tooltip="Set the required compute resources for handing a single input."
+      />
+    </div>
+    <div class="resources-capacity-controls mt-2">
+      <div class="grid items-center grid-cols-[45%_55%] gap-2 py-2 px-7">
+        <div>
+          <label
+            >RAM / Memory
+            <me-hint-icon tooltip=" How much RAM memory is needed." />
+            : {{ controlGroup.get('ram')?.value }} (GB)
+          </label>
+        </div>
+        <div class="ram-control">
+          <mat-slider
+            discrete
+            max="16"
+            class="custom-slider"
+            color="primary"
+            [min]="RAM_DEFAULT_VALUE"
+            [disabled]="!capacityCheckedControl.value"
+            ><input matSliderThumb [formControl]="controlGroup.get('ram')"
+          /></mat-slider>
+        </div>
+        <div>
+          <label
+            >Max input runtime
+            <me-hint-icon
+              tooltip="Define the max process time for a single input, DEEP will stop the input process after this timeout is reached."
+            />
+            : {{ controlGroup.get('runtime')?.value }} (minutes)
+          </label>
+        </div>
+        <div class="runtime-control">
+          <mat-slider
+            discrete
+            max="90"
+            class="custom-slider"
+            color="primary"
+            [min]="RUN_TIME_DEFAULT_VALUE"
+            [disabled]="!capacityCheckedControl.value"
+            ><input matSliderThumb [formControl]="controlGroup.get('runtime')"
+          /></mat-slider>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

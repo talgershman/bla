@@ -1,0 +1,23 @@
+.step-progress-bar-container {
+  display: flex;
+  vertical-align: center;
+  align-items: center;
+  width: 6.375rem;
+  .step-done {
+    background: var(--emerald);
+  }
+  .step-error {
+    background: var(--sys-error);
+  }
+  .step-in-progress {
+    background: linear-gradient(90deg, var(--emerald), var(--sys-surface-container-high) 50%);
+  }
+  div {
+    display: inline-block;
+    height: 0.25rem;
+    background: var(--sys-surface-container-high);
+    margin-left: 2px;
+    box-sizing: border-box;
+    flex: 1;
+  }
+}

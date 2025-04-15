@@ -1,0 +1,130 @@
+@if (flow === 'create') {
+  <form class="h-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="h-full w-full p-6 box-border flex flex-col gap-6">
+      <header class="mat-headline-small">Create Golden Labels Data Source</header>
+      <main class="h-full w-full flex flex-row gap-8">
+        <section class="h-full w-[33rem] flex flex-col gap-4">
+          <div class="name-control">
+            <me-input title="Name" [formControl]="form.controls.name" />
+          </div>
+          <div class="team-control">
+            <me-select
+              title="Team"
+              [options]="deepTeamOptions"
+              [formControl]="form.controls.team"
+            />
+          </div>
+          <div>
+            <me-select
+              title="Data level"
+              infoTooltip="Indicates what type of data is in the table"
+              [options]="dataSubTypesOptions"
+              [formControl]="form.controls.dataSubType"
+            />
+          </div>
+          <div class="tags-control">
+            <me-chips title="Tags (Optional)" [formControl]="form.controls.tags" />
+          </div>
+          <div class="description-control">
+            <me-textarea title="Description (Optional)" [formControl]="form.controls.description" />
+          </div>
+          <div class="overflow-y-auto">
+            @if (this.errorFeedbackMsg()) {
+              <mat-error
+                class="whitespace-pre-wrap"
+                [innerHTML]="this.errorFeedbackMsg() | safe: 'html'"
+              />
+            }
+          </div>
+        </section>
+        <section class="h-full flex-1 flex flex-col">
+          <mat-radio-group
+            color="primary"
+            class="flex flex-row gap-2 mt-2"
+            [value]="selectOption"
+            (change)="onSelectOptionChange($event)"
+          >
+            <mat-radio-button
+              [checked]="selectOption === GOLDEN_LABELS_FLOWS.EXISTING_DB"
+              [value]="GOLDEN_LABELS_FLOWS.EXISTING_DB"
+            >
+              Migrate existing table with data
+            </mat-radio-button>
+            <mat-radio-button
+              [checked]="selectOption === GOLDEN_LABELS_FLOWS.CREATE_BLANK"
+              [value]="GOLDEN_LABELS_FLOWS.CREATE_BLANK"
+            >
+              Create a blank data source
+            </mat-radio-button>
+          </mat-radio-group>
+          @if (selectOption === GOLDEN_LABELS_FLOWS.EXISTING_DB) {
+            <div class="data-path-control mt-[19px]">
+              <me-input
+                title="S3 data path"
+                warning="The specified path must include a bucket that DEEP has access to. Please use a valid bucket such as : s3://mobileye-deep.datasets.datalake-inputs.prod1.<MY_FILE>.parquet"
+                [formControl]="form.controls.s3Path"
+              />
+            </div>
+          }
+          @if (selectOption === GOLDEN_LABELS_FLOWS.CREATE_BLANK) {
+            <div class="mt-4">
+              <span class="mat-title-medium flex-1">Paste your schema below or</span>
+              <span class="upload-file-control relative top-[-2px]">
+                <me-upload-file-btn
+                  accept=".json"
+                  buttonText="select a JSON file"
+                  (fileChanges)="onFileChanged($event)"
+                />
+              </span>
+            </div>
+            <div class="flex-1 json-schema-control">
+              <me-json-editor
+                class="w-full h-full"
+                [formControl]="form.controls.schema"
+                [isTouched]="form.controls.schema.touched"
+                [errors]="form.controls.schema.errors"
+                [initialUpdate]="true"
+              />
+            </div>
+          }
+        </section>
+      </main>
+      <footer>
+        <div class="flex items-center justify-end gap-4 px-6">
+          <button mat-button mat-dialog-close type="button" color="primary">Cancel</button>
+          <button mat-flat-button color="primary" type="submit">Create</button>
+        </div>
+      </footer>
+    </div>
+  </form>
+} @else {
+  <form class="h-full" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="h-full w-full p-6 box-border flex flex-col gap-6">
+      <header class="mat-headline-small">Update Schema - {{ selectedDatasource.name }}</header>
+      <main class="h-full w-full flex flex-col gap-2">
+        <div class="flex-1 json-schema-control">
+          <me-json-editor
+            class="w-full h-full"
+            [formControl]="form.controls.schema"
+            [isTouched]="form.controls.schema.touched"
+            [errors]="form.controls.schema.errors"
+            [initialUpdate]="true"
+          />
+        </div>
+        <div class="overflow-y-auto">
+          @if (this.errorFeedbackMsg()) {
+            <mat-error class="whitespace-pre-wrap">{{ this.errorFeedbackMsg() }}</mat-error>
+          }
+        </div>
+      </main>
+      <footer>
+        <div class="flex items-center justify-end gap-4 px-6">
+          <button mat-button mat-dialog-close type="button" color="primary">Cancel</button>
+          <button mat-flat-button color="primary" type="submit">
+            {{ flow === 'create' ? 'Create' : 'Update' }}
+          </button>
+        </div>
+      </footer>
+    </div>
+  </form>
+}

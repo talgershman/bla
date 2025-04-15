@@ -1,0 +1,17 @@
+@if (viewState().derivedLogic()) {}
+<div class="p-6 box-border flex flex-col w-full h-full">
+  <div class="submit-job-step-container">
+    <div class="submit-job-step-items">
+      <de-submit-job-feedback
+        [items]="shouldShowStep ? items() : []"
+        (triggerNewJob)="triggerNewJob.emit($event)"
+      />
+    </div>
+  </div>
+  <div class="flex-1"></div>
+  <div class="step-buttons-container">
+    @if (shouldShowStep) {
+      <button mat-flat-button color="primary" (click)="dialog.closeAll()">Close</button>
+    }
+  </div>
+</div>

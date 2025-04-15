@@ -1,0 +1,66 @@
+<div class="mat-body-medium" [ngStyle]="{'margin-left': level > 0 ? '24px' : '0'}">
+  @for (item of items; track item.key; let index = $index) {
+    @if (item.itemDisplayType === 'value') {
+      <me-line-message
+        [key]="item.key"
+        [value]="item.value"
+        [valueType]="item.type"
+        [parentType]="parentType"
+        [parentKey]="parentKey"
+        [keyConfigs]="item.configs"
+        [valueConfigs]="item.valueConfigs"
+      />
+    }
+    @if (item.itemDisplayType === 'group') {
+      <cdk-accordion [multi]="true">
+        <cdk-accordion-item
+          #accordionItem="cdkAccordionItem"
+          role="button"
+          tabindex="0"
+          [expanded]="item.configs.expanded"
+          [attr.id]="'accordion-header-' + index"
+          [attr.aria-expanded]="accordionItem.expanded"
+          [attr.aria-controls]="'accordion-body-' + index"
+        >
+          <div class="flex flex-row gap-1 items-center">
+            <div
+              class="triangle-wrapper flex items-center justify-center"
+              (click)="onToggleGroupClicked(accordionItem, item)"
+            >
+              <div class="triangle" [class.rotate-triangle]="accordionItem.expanded"></div>
+            </div>
+            <div
+              [class.array-index]="item.type === 'array'"
+              [class.mat-body-large]="item.configs?.bold"
+              [ngClass]="item.configs.color + '-text'"
+            >
+              {{ item.configs.title }}
+              @if (item.configs?.tooltip) {
+                <me-hint-icon [meTooltip]="item.configs?.tooltip" />
+              }
+            </div>
+            @if (item.type === 'array') {
+              <div class="whitespace-nowrap">[{{ msg[item.key].length }}]</div>
+            }
+          </div>
+          <div
+            class="example-accordion-item-body"
+            role="region"
+            [style.display]="accordionItem.expanded ? '' : 'none'"
+            [attr.id]="'accordion-body-' + index"
+            [attr.aria-labelledby]="'accordion-header-' + index"
+          >
+            <me-group-message
+              [uiConfigs]="uiConfigs"
+              [msg]="item.value"
+              [level]="level + 1"
+              [valueType]="item.type"
+              [parentType]="item.type"
+              [parentKey]="item.key"
+            />
+          </div>
+        </cdk-accordion-item>
+      </cdk-accordion>
+    }
+  }
+</div>

@@ -1,0 +1,80 @@
+<mat-form-field
+  color="primary"
+  appearance="outline"
+  floatLabel="always"
+  class="me-chips w-full"
+  subscriptSizing="dynamic"
+  [class.is-floating-label]="!!title"
+>
+  @if (title) {
+    <mat-label>
+      {{ title }}
+      @if (infoTooltip) {
+        <me-hint-icon [tooltip]="infoTooltip" />
+      }
+    </mat-label>
+  }
+  <mat-chip-grid
+    [errorStateMatcher]="customErrorStateMatcher"
+    #chipList
+    [formControl]="innerController"
+  >
+    @for (chip of controls$ | async; track chip; let i = $index) {
+      <mat-chip-option
+        class="me-chip"
+        [selectable]="false"
+        [removable]="true"
+        (removed)="remove(i)"
+        [disabled]="innerController.disabled"
+      >
+        <div
+          meTooltipClass="no-truncate-tooltip"
+          [meTooltip]="chip"
+          [meTooltipOnEllipsis]="true"
+          class="truncate select-text"
+        >
+          {{ chip }}
+        </div>
+        <mat-icon title="" fontSet="material-icons-outlined" matChipRemove>cancel</mat-icon>
+      </mat-chip-option>
+    }
+    <input
+      #areaInput
+      matInput
+      [placeholder]="placeholder"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="true"
+      (keydown.enter)="$event.stopPropagation(); $event.preventDefault()"
+      (paste)="addPastedValue($event)"
+      (matChipInputTokenEnd)="add($event)"
+      (focusin)="onFocusIn()"
+      (focusout)="markAsTouched(); onFocusOut($event)"
+    />
+  </mat-chip-grid>
+  @if (errorMsg) {
+    <mat-error>
+      {{ errorMsg }}
+    </mat-error>
+  }
+</mat-form-field>
+@if (forceErrorMsg) {
+  <mat-error class="px-4 mt-2 force-error-msg" [@MeFadeInOut]="forceErrorMsg">
+    {{ forceErrorMsg }}
+  </mat-error>
+}
+@if (warning) {
+  <div [@MeFadeInOut]="warning" class="px-4 mt-2 warn-msg">
+    {{ warning }}
+  </div>
+}
+@if (hint) {
+  <div class="flex flex-row px-4 mt-2 space-x-1">
+    <div class="hint-icon mt-0.5 pr-0.5">
+      <mat-icon class="hint-icon">error_outline</mat-icon>
+    </div>
+    <div [@MeFadeInOut]="hint" class="hint-msg">
+      {{ hint }}
+    </div>
+  </div>
+}

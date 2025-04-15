@@ -1,0 +1,17 @@
+.condition-controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 2rem;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  .or-spacer {
+    margin: 1rem 0;
+  }
+}
+
+.custom-error {
+  margin-top: 1rem;
+}

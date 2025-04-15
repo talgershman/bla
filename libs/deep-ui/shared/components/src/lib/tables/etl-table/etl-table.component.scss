@@ -1,0 +1,13 @@
+:host::ng-deep {
+  .ag-cell-wrapper.ag-row-group {
+    align-items: baseline;
+    font-weight: bold;
+    .ag-group-contracted:has(> .ag-icon),
+    .ag-group-expanded:has(> .ag-icon) {
+      align-self: end;
+      .ag-icon {
+        align-self: baseline;
+      }
+    }
+  }
+}

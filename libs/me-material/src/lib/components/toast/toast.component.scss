@@ -1,0 +1,46 @@
+.toast-container {
+  width: 37.5rem;
+  @apply bg-sys-error-container text-sys-on-error-container;
+}
+
+.close-button {
+  --mat-icon-color: var(--sys-on-error-container);
+}
+
+.open-jira-btn.mat-mdc-unelevated-button:not(:disabled) {
+  --mdc-filled-button-container-color: var(--sys-surface);
+  --mdc-filled-button-label-text-color: var(--sys-on-surface);
+}
+
+.toast-container:hover {
+  box-shadow: 0 0 0.25rem #000;
+  opacity: 1;
+  cursor: default;
+}
+
+.mat-expansion-panel-header {
+  padding: 0.75rem;
+  height: initial;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  height: initial;
+}
+
+.toast-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  vertical-align: center;
+  button {
+    margin-right: 0.5rem;
+  }
+}
+
+.error-icon {
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}

@@ -1,0 +1,101 @@
+<div #expandContainer class="expand-container space-y-4">
+  @if (expanded()) {
+    <div
+      [@MeDynamicFadeInOut]="showMessagesAnimation"
+      class="w-full flex flex-row justify-between items-end"
+    >
+      <me-stepper-menu
+        (menuItemClick)="onMenuItemClick($event, job())"
+        [menus]="generateJobStepsMenuItems(job(), menuStepSummaryTmpl)"
+        [selectedId]="currentStepId()"
+      />
+      <div class="steps-buttons-container">
+        <!-- ETL step-->
+        <div class="step-buttons">
+          <ng-container *ngTemplateOutlet="stepActionsTmpl; context: {$implicit: job()}" />
+        </div>
+      </div>
+    </div>
+    <div [@MeDynamicFadeInOut]="showMessagesAnimation" class="step-details flex flex-col gap-4">
+      @if (!jsonStepDetailsControlValue()?.responsibility && jsonStickyMsgControlValue()) {
+        <ng-container *ngTemplateOutlet="stickyTmpl" />
+      }
+      @if (jsonStepDetailsControlValue()) {
+        <div [@MeDynamicFadeInOut]="showMessagesAnimation">
+          <me-json-message [msg]="jsonStepDetailsControlValue()" [hideParentKey]="true" />
+        </div>
+      }
+      @if (jsonStepDetailsControlValue()?.responsibility && jsonStickyMsgControlValue()) {
+        <ng-container *ngTemplateOutlet="stickyTmpl" />
+      }
+      <ng-template #stickyTmpl>
+        <div [@MeDynamicFadeInOut]="showMessagesAnimation">
+          <me-json-message [msg]="jsonStickyMsgControlValue()" [hideParentKey]="true" />
+        </div>
+      </ng-template>
+      @if (stepDetailsInfoInnerHtml()) {
+        <div
+          [@MeFadeInOutAnimation]="showMessagesAnimation"
+          [innerHTML]="stepDetailsInfoInnerHtml() | safe: 'html'"
+        ></div>
+      }
+    </div>
+  }
+</div>
+
+<ng-template let-item #menuStepSummaryTmpl>
+  @if (item?.data; as stepSummary) {
+    <div class="step-summary me-body-small">
+      @if (stepSummary.totalClips) {
+        <div>
+          Clips: &nbsp;{{ stepSummary.passed.toLocaleString() }} /
+          {{ stepSummary.totalClips.toLocaleString() }}
+        </div>
+      }
+      @if (stepSummary.totalLogs) {
+        <div>
+          Logs: &nbsp;{{ stepSummary.passed.toLocaleString() }} /
+          {{ stepSummary.totalLogs.toLocaleString() }}
+        </div>
+      }
+      <div>
+        Time: &nbsp;{{
+          stepSummary.time ? (secondsToTimeFormatter | memorize: stepSummary.time) : '-'
+        }}
+      </div>
+    </div>
+  }
+</ng-template>
+
+<ng-template #stepActionsTmpl let-item>
+  <button
+    mat-stroked-button
+    disableRipple
+    color="primary"
+    class="mat-stoke-button-custom"
+    [matMenuTriggerFor]="menu"
+  >
+    <div class="flex flex-row items-center gap-1">
+      <div>Actions</div>
+      <mat-icon fontSet="material-icons-outlined">arrow_drop_down</mat-icon>
+    </div>
+  </button>
+  <mat-menu #menu xPosition="before" yPosition="below">
+    <button
+      disableRipple
+      mat-menu-item
+      [disabled]="!item.probeErrors"
+      (click)="downloadEtlErrorLogs()"
+    >
+      Error Logs
+    </button>
+    <button
+      disableRipple
+      mat-menu-item
+      [disabled]="!item.probeLogs"
+      (click)="openDownloadClipLogsDialog(item)"
+    >
+      ETL Logs
+    </button>
+  </mat-menu>
+</ng-template>

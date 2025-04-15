@@ -1,0 +1,31 @@
+<div class="w-full border-0 border-t border-solid border-sys-outline-variant"></div>
+<div class="flex items-center justify-between gap-2 px-4 py-2">
+  <span class="mat-title-medium font-bold">Selected:</span>
+  <mat-chip-listbox class="active-chips flex-1" aria-label="Active filters">
+    @for (selection of chipsSelectionData(); track i; let i = $index) {
+      <mat-chip-option
+        class="cursor-default"
+        [selectable]="false"
+        (removed)="onSelectionRemoved(selection)"
+      >
+        <div
+          class="ellipsis max-w-48"
+          meTooltipPosition="top"
+          meTooltipClass="no-truncate-tooltip"
+          [meTooltip]="
+            !selection.hideTypeName
+              ? selection.name + ' - ' + selection.userFacingVersion
+              : selection.typeName + ': ' + selection.name + ' - ' + selection.userFacingVersion
+          "
+          [meTooltipOnEllipsis]="true"
+        >
+          @if (!selection.hideTypeName) {
+            <span class="mat-body-medium">{{ selection.typeName }}:</span>
+          }
+          {{ selection.name }} - {{ selection.userFacingVersion }}
+        </div>
+        <mat-icon class="cursor-pointer" matChipRemove>cancel</mat-icon>
+      </mat-chip-option>
+    }
+  </mat-chip-listbox>
+</div>

@@ -1,0 +1,29 @@
+<div class="h-full flex flex-col">
+  <main class="flex-1 border-box">
+    <de-query-dashboard-control
+      [formControl]="queryDashboardControl"
+      [(subQueries)]="subQueries"
+      [(selectedDataSources)]="selectedDataSources"
+      (editSubQuery)="editSubQuery.emit($event)"
+      (addSubQueryClicked)="addSubQueryClicked.emit()"
+      (deleteSubQuery)="deleteSubQuery.emit($event)"
+    />
+  </main>
+  <footer
+    class="p-6 flex gap-4 items-center flex-row border-0 border-t border-solid border-sys-outline-variant"
+  >
+    <div class="grow"></div>
+    <div class="flex flex-row gap-4">
+      <div>
+        <button mat-flat-button type="button" color="primary" (click)="exportToClipListClicked()">
+          Export To Clip List Catalog
+        </button>
+      </div>
+      <div>
+        <button mat-flat-button type="button" color="primary" (click)="exportToDatasetClicked()">
+          Export To Dataset
+        </button>
+      </div>
+    </div>
+  </footer>
+</div>

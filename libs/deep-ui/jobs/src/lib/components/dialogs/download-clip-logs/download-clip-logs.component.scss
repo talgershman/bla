@@ -1,0 +1,53 @@
+.etl-logs-container {
+  > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+  .json-etl-logs {
+    overflow-y: hidden;
+    height: 32rem;
+    width: 59rem;
+  }
+
+  .json-etl-logs--empty {
+    overflow-y: hidden;
+    height: 35.5rem;
+    width: 59rem;
+  }
+
+  .progress-spinner-container {
+    height: calc(32rem + 56px);
+    width: 59rem;
+  }
+
+  @media screen and (max-height: 610px) {
+    .json-etl-logs {
+      height: 19rem;
+      width: 59rem;
+    }
+    .json-etl-logs--empty {
+      overflow-y: hidden;
+      height: 35.5rem;
+      width: 59rem;
+    }
+    .progress-spinner-container {
+      height: calc(19rem + 56px);
+      width: 59rem;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+  div.mat-headline-small {
+    margin-bottom: 0;
+  }
+}
+
+.mat-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}

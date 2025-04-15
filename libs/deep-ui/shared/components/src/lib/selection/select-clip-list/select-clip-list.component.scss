@@ -1,0 +1,10 @@
+:host::ng-deep {
+  .ag-pinned-left-header {
+    .ag-header-cell-text {
+      padding-left: 1rem;
+    }
+  }
+  .ag-row:has(.checkbox-disabled-cell) {
+    pointer-events: none;
+  }
+}

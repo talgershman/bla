@@ -1,0 +1,41 @@
+<div class="wizard-container flex flex-col w-full h-full">
+  <header class="wizard-header flex-initial mb-2">
+    @if (!!selectedStep?.stepLabel) {
+      <ng-container [ngTemplateOutlet]="selectedStep?.stepLabel.template" />
+    } @else {
+      <div class="flex flex-row justify-between items-center px-6 py-1 min-h-[5rem] box-border">
+        <div class="mat-headline-small step-label text-sys-on-surface">
+          {{ selectedStep?.label }}
+          @if (selectedStep?.hint) {
+            <me-hint-icon class="ml-2" size="large" [tooltip]="selectedStep?.hint" />
+          }
+        </div>
+        @if (!selectedStep?.hideCloseButton) {
+          <div class="relative left-[0.6rem] text-sys-secondary">
+            <button mat-icon-button mat-dialog-close>
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+      <div class="w-full border-0 border-t border-solid border-sys-outline-variant"></div>
+    }
+  </header>
+  <main class="wizard-content flex-1 overflow-auto">
+    <ng-container [ngTemplateOutlet]="selectedStep?.content" />
+  </main>
+  @if (!selectedStep?.hideWizardButtons) {
+    <footer class="flex-initial">
+      <me-wizard-buttons
+        [hidePrev]="selectedStep?.hidePrev"
+        [hideNext]="selectedStep?.hideNext"
+        [isNextDisabled]="selectedStep?.isNextDisabled"
+        [isPrevDisabled]="selectedStep?.isPrevDisabled"
+        [nextLabel]="selectedStep?.nextLabel"
+        [prevLabel]="selectedStep?.prevLabel"
+        (nextClicked)="selectedStep?.nextClicked.emit()"
+        (prevClicked)="selectedStep?.prevClicked.emit()"
+      />
+    </footer>
+  }
+</div>

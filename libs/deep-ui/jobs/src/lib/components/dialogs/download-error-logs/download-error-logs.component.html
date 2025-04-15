@@ -1,0 +1,53 @@
+<div class="w-full h-full">
+  <div class="actions px-6 py-6 pb-4">
+    <div class="mat-headline-small text-sys-on-surface flex-1">Error Logs</div>
+    @if (!errorMsg()) {
+      <button
+        mat-icon-button
+        color="primary"
+        aria-label="Copy To Clipboard"
+        class="download-button"
+        [disabled]="!jsonControl.value"
+        (click)="downloadErrorLogs()"
+      >
+        <mat-icon class="top-0.5">download</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        color="primary"
+        aria-label="Copy To Clipboard"
+        class="copy-button"
+        [disabled]="disableCopyBtn()"
+        (click)="copyCmdToClipboard()"
+      >
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    }
+    <button class="dialog-close" mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="w-full border-0 border-t border-solid border-sys-outline-variant"></div>
+
+  <div class="px-6 pb-6 pt-4 box-border error-logs-container">
+    @if (initialized()) {
+      <div class="json-error-logs">
+        <me-json-editor
+          showEvenInError="true"
+          [formControl]="jsonControl"
+          [isTouched]="jsonControl?.touched"
+          [errors]="jsonControl?.errors"
+          [overrideOptions]="{readOnly: true, meExpandLevel: 2}"
+        />
+      </div>
+    } @else {
+      <div class="progress-spinner-container flex justify-center items-center h-full">
+        @if (errorMsg()) {
+          <me-error-feedback [error]="errorMsg()" />
+        } @else {
+          <mat-progress-spinner diameter="50" mode="indeterminate" color="primary" />
+        }
+      </div>
+    }
+  </div>
+</div>

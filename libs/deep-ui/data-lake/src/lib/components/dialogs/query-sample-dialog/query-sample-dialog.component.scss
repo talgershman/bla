@@ -1,0 +1,28 @@
+:host {
+  .info-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    --mat-icon-color: var(--warning);
+  }
+  .image-text-conatiner {
+    color: #fff;
+  }
+  .disable-refresh-button {
+    pointer-events: none;
+    @apply text-sys-outline-variant;
+  }
+  .image-service-container {
+    .visible-img-container {
+      .img-caption {
+        display: none;
+      }
+
+      &:hover {
+        .img-caption {
+          display: block;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+@use '../base-jobs-table/base-jobs-table';
+
+@include base-jobs-table.ag-jobs-table;
+
+:host ::ng-deep {
+  .status-column {
+    .step-progress-bar-container {
+      width: 9.5rem;
+    }
+  }
+}

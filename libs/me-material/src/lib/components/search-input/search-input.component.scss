@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  --elem-width: 360px;
+  min-width: var(--elem-width);
+
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 4px;
+  --mdc-outlined-text-field-container-shape: 28px;
+  --mdc-outlined-text-field-outline-width: 0;
+  .mat-mdc-form-field {
+    border-radius: 28px;
+    @apply bg-sys-surface-container-highest text-sys-on-surface-variant;
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        padding: 0 16px;
+      }
+    }
+  }
+  input {
+    padding-left: 2px;
+    font-family: var(--mat-form-field-container-text-font);
+    line-height: var(--mat-form-field-container-text-line-height);
+    font-size: var(--mat-form-field-container-text-size);
+    letter-spacing: var(--mat-form-field-container-text-tracking);
+    font-weight: var(--mat-form-field-container-text-weight);
+  }
+  .dummy-content {
+    font-family: var(--mat-form-field-container-text-font);
+    line-height: var(--mat-form-field-container-text-line-height);
+    font-size: var(--mat-form-field-container-text-size);
+    letter-spacing: var(--mat-form-field-container-text-tracking);
+    font-weight: var(--mat-form-field-container-text-weight);
+    position: absolute;
+    left: -9999px;
+    display: inline-block;
+    padding-right: 64px;
+    padding-left: 52px;
+    box-sizing: border-box;
+    min-width: var(--elem-width);
+  }
+}

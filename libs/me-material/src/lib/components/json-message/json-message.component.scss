@@ -1,0 +1,19 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+.json-message-container {
+  background: var(--sys-surface);
+}
+
+.mat-mdc-outlined-button:not(:disabled) {
+  height: 26px;
+}
+
+.show-container {
+  visibility: visible;
+}
+
+.hide-container {
+  visibility: hidden;
+}

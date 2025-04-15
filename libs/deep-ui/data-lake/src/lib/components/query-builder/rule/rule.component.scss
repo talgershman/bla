@@ -1,0 +1,30 @@
+.query-rule {
+  hr {
+    width: 1rem;
+    border-bottom: none;
+  }
+  .show-icons {
+    @apply visible;
+  }
+  .empty-control {
+    width: 15rem;
+  }
+}
+.query-rule:hover {
+  border-radius: 0.25rem;
+}
+
+:host ::ng-deep {
+  .delete-rule.mat-mdc-icon-button.mat-mdc-button-base {
+    --mat-icon-button-state-layer-color: transparent;
+    --mdc-icon-button-state-layer-size: 28px;
+    padding: 6px;
+  }
+  .delete-rule {
+    .mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
